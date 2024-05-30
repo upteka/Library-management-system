@@ -111,7 +111,7 @@ public class ClientHandler implements Runnable {
         return books;
     }
 
-    private Object handleRegisterUserRequest(RegisterUserRequest request) {
+    private String handleRegisterUserRequest(RegisterUserRequest request) {
         boolean result = userService.registerUser(request.getUser());
         return result ? "User registered successfully" : "Failed to register user";
     }

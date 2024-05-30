@@ -6,7 +6,7 @@ import main.java.com.library.server.model.User;
 import java.util.List;
 
 public class UserService {
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
     public UserService() {
         userDAO = new UserDAO();

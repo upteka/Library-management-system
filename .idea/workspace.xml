@@ -4,20 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="已删除日志服务相关代码，简化请求处理程序。">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/RequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/RequestHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/AddBookRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/AddBookRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/DeleteBookRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/DeleteBookRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetAllUsersRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetAllUsersRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetBorrowRecordRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetBorrowRecordRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/LoginRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/ReturnBookRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/ReturnBookRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/model/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/BookService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/BorrowService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/BorrowService.java" afterDir="false" />
+    <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="已简化请求处理程序，提高效率。">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,15 +106,35 @@
       <option name="project" value="LOCAL" />
       <updated>1717079352383</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="已简化请求处理程序，提高效率。">
+      <option name="closed" value="true" />
+      <created>1717082048120</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1717082048120</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="已删除日志服务相关代码，简化请求处理程序。" />
-    <option name="LAST_COMMIT_MESSAGE" value="已删除日志服务相关代码，简化请求处理程序。" />
+    <MESSAGE value="已简化请求处理程序，提高效率。" />
+    <option name="LAST_COMMIT_MESSAGE" value="已简化请求处理程序，提高效率。" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetUserRequest.java</url>
+          <line>16</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
