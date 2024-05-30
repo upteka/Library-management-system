@@ -4,17 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="Initial commit">
+    <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="已删除日志服务相关代码，简化请求处理程序。">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/LogDAO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/ClientHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/RequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/RequestHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/BorrowBookRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/BorrowBookRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetAllBooksRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetAllBooksRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/Log.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/LogService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/untitled.iml" beforeDir="false" afterPath="$PROJECT_DIR$/untitled.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/AddBookRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/AddBookRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/DeleteBookRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/DeleteBookRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetAllUsersRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetAllUsersRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetBorrowRecordRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetBorrowRecordRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/LoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/ReturnBookRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/ReturnBookRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/model/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/BookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/BorrowService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/BorrowService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +69,9 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="main.java.com.library.server.handler" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="main.java.com.library.server.handler.requestHandler" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -104,12 +110,21 @@
       <option name="project" value="LOCAL" />
       <updated>1717068349196</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="已删除日志服务相关代码，简化请求处理程序。">
+      <option name="closed" value="true" />
+      <created>1717079352383</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1717079352383</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
+    <MESSAGE value="已删除日志服务相关代码，简化请求处理程序。" />
+    <option name="LAST_COMMIT_MESSAGE" value="已删除日志服务相关代码，简化请求处理程序。" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

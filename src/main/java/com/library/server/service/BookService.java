@@ -6,7 +6,7 @@ import main.java.com.library.server.model.Book;
 import java.util.List;
 
 public class BookService {
-    private BookDAO bookDAO;
+    private final BookDAO bookDAO;
 
     public BookService() {
         bookDAO = new BookDAO();

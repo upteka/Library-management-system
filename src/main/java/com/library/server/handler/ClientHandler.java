@@ -21,11 +21,11 @@ import java.util.Set;
 
 public class ClientHandler implements Runnable {
 
-    private Socket clientSocket;
-    private BookService bookService;
-    private UserService userService;
-    private BorrowService borrowService;
-    private RequestHandler requestHandler;
+    private final Socket clientSocket;
+    private final BookService bookService;
+    private final UserService userService;
+    private final BorrowService borrowService;
+    private final RequestHandler requestHandler;
 
     public ClientHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -85,13 +85,14 @@ public class ClientHandler implements Runnable {
         }
     }
 
+
     private Object handleAddBookRequest(AddBookRequest request) {
-        boolean result = bookService.addBook(request.getBook());
+        boolean result = bookService.addBook(request.book());
         return result ? "Book added successfully" : "Failed to add book";
     }
 
     private Object handleDeleteBookRequest(DeleteBookRequest request) {
-        boolean result = bookService.deleteBook(request.getBookId());
+        boolean result = bookService.deleteBook(request.bookId());
         return result ? "Book deleted successfully" : "Failed to delete book";
     }
 
@@ -116,24 +117,18 @@ public class ClientHandler implements Runnable {
     }
 
     private Object handleLoginRequest(LoginRequest request) {
-        boolean result = userService.login(request.getUsername(), request.getPassword());
+        boolean result = userService.login(request.username(), request.password());
         return result ? "Login successful" : "Invalid username or password";
     }
 
     private Object handleBorrowBookRequest(BorrowBookRequest request) {
-        BorrowRecord record = new BorrowRecord(
-                request.getRecordID(),
-                request.getUserID(),
-                request.getBookID(),
-                new java.util.Date(),
-                null
-        );
+        BorrowRecord record = request.getBorrowRecord();
         boolean result = borrowService.addBorrowRecord(record);
         return result ? "Book borrowed successfully" : "Failed to borrow book";
     }
 
     private Object handleReturnBookRequest(ReturnBookRequest request) {
-        boolean result = borrowService.returnBook(request.getRecordID());
+        boolean result = borrowService.returnBook(request.recordID());
         return result ? "Book returned successfully" : "Failed to return book";
     }
 
@@ -148,8 +143,7 @@ public class ClientHandler implements Runnable {
     }
 
     private Object handleGetAllUsersRequest() {
-        List<User> users = userService.getAllUsers();
-        return users;
+        return userService.getAllUsers();
     }
 
     private Object handleGetAllBorrowRecordsRequest() {
@@ -176,4 +170,14 @@ public class ClientHandler implements Runnable {
         boolean result = userService.updateRole(request.getUserID(), request.getNewRole());
         return result ? "Role updated successfully" : "Failed to update role";
     }
+
+    private List<BorrowRecord> handleGetAllBorrowRecordsRequest(GetAllBorrowRecordsRequest request) {
+        return borrowService.getAllBorrowRecords();
+    }
+
+    private List<Book> handleGetAllBookRequest(GetAllBorrowRecordsRequest request) {
+        return bookService.getAllBooks();
+    }
+
+
 }

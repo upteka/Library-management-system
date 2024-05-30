@@ -3,7 +3,7 @@ package main.java.com.library.server.model;
 import java.io.Serializable;
 
 public class Book implements Serializable {
-    private String bookID;
+    private final String bookID;
     private String title;
     private String author;
     private String ISBN;
@@ -21,9 +21,6 @@ public class Book implements Serializable {
         return bookID;
     }
 
-    public void setBookID(String bookID) {
-        this.bookID = bookID;
-    }
 
     public String getTitle() {
         return title;

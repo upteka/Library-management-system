@@ -9,8 +9,8 @@ import java.util.List;
 
 
 public class BorrowService {
-    private BorrowRecordDAO borrowRecordDAO;
-    private BookDAO bookDAO;
+    private final BorrowRecordDAO borrowRecordDAO;
+    private final BookDAO bookDAO;
 
     public BorrowService() {
         borrowRecordDAO = new BorrowRecordDAO();

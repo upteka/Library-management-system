@@ -16,4 +16,5 @@ public class GetBorrowRecordRequest implements Serializable {
     public void setRecordID(String recordID) {
         this.recordID = recordID;
     }
+
 }
