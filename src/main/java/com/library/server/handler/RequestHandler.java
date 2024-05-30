@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class RequestHandler {
-    private Map<Class<?>, Function<?, ?>> handlers;
+    private final Map<Class<?>, Function<?, ?>> handlers;
 
     public RequestHandler() {
         handlers = new HashMap<>();

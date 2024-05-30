@@ -52,15 +52,6 @@ public class DatabaseManager {
                     + ")";
             conn.createStatement().execute(createBorrowRecordsTable);
 
-            String createLogsTable = "CREATE TABLE IF NOT EXISTS logs ("
-                    + "logID VARCHAR(255) PRIMARY KEY,"
-                    + "userID VARCHAR(255),"
-                    + "action VARCHAR(255) NOT NULL,"
-                    + "timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
-                    + "FOREIGN KEY (userID) REFERENCES users(userID)"
-                    + ")";
-            conn.createStatement().execute(createLogsTable);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

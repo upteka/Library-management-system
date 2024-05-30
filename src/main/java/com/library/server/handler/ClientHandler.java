@@ -7,12 +7,17 @@ import main.java.com.library.server.model.User;
 import main.java.com.library.server.service.BookService;
 import main.java.com.library.server.service.BorrowService;
 import main.java.com.library.server.service.UserService;
+import org.reflections.Reflections;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.List;
+import java.util.Set;
+
 
 public class ClientHandler implements Runnable {
 
@@ -59,23 +64,25 @@ public class ClientHandler implements Runnable {
     }
 
     private void registerHandlers() {
-        requestHandler.registerHandler(AddBookRequest.class, this::handleAddBookRequest);
-        requestHandler.registerHandler(DeleteBookRequest.class, this::handleDeleteBookRequest);
-        requestHandler.registerHandler(UpdateBookRequest.class, this::handleUpdateBookRequest);
-        requestHandler.registerHandler(GetBookRequest.class, this::handleGetBookRequest);
-        requestHandler.registerHandler(GetAllBooksRequest.class, request -> handleGetAllBooksRequest());
-        requestHandler.registerHandler(RegisterUserRequest.class, this::handleRegisterUserRequest);
-        requestHandler.registerHandler(LoginRequest.class, this::handleLoginRequest);
-        requestHandler.registerHandler(BorrowBookRequest.class, this::handleBorrowBookRequest);
-        requestHandler.registerHandler(ReturnBookRequest.class, this::handleReturnBookRequest);
-        requestHandler.registerHandler(DeleteBorrowRecordRequest.class, this::handleDeleteBorrowRecordRequest);
-        requestHandler.registerHandler(GetBorrowRecordRequest.class, this::handleGetBorrowRecordRequest);
-        requestHandler.registerHandler(GetAllUsersRequest.class, request -> handleGetAllUsersRequest());
-        requestHandler.registerHandler(GetAllBorrowRecordsRequest.class, request -> handleGetAllBorrowRecordsRequest());
-        requestHandler.registerHandler(UpdateUserRequest.class, this::handleUpdateUserRequest);
-        requestHandler.registerHandler(GetUserRequest.class, this::handleGetUserRequest);
-        requestHandler.registerHandler(UpdatePasswordRequest.class, this::handleUpdatePasswordRequest);
-        requestHandler.registerHandler(UpdateRoleRequest.class, this::handleUpdateRoleRequest);
+        Reflections reflections = new Reflections("main.java.com.library.server.handler.requestHandler");
+        Set<Class<? extends Serializable>> requestClasses = reflections.getSubTypesOf(Serializable.class);
+
+        for (Class<? extends Serializable> requestClass : requestClasses) {
+            try {
+                String methodName = "handle" + requestClass.getSimpleName().replace("Request", "") + "Request";
+                Method method = this.getClass().getDeclaredMethod(methodName, requestClass);
+                requestHandler.registerHandler(requestClass, req -> {
+                    try {
+                        return method.invoke(this, req);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return "Error handling request";
+                    }
+                });
+            } catch (NoSuchMethodException e) {
+                System.out.println("No handler method found for: " + requestClass.getSimpleName());
+            }
+        }
     }
 
     private Object handleAddBookRequest(AddBookRequest request) {

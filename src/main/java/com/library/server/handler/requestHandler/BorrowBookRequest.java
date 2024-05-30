@@ -1,40 +1,38 @@
 package main.java.com.library.server.handler.requestHandler;
 
+import main.java.com.library.server.model.BorrowRecord;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class BorrowBookRequest implements Serializable {
-    private String recordID;
-    private String userID;
-    private String bookID;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-    public BorrowBookRequest(String recordID, String userID, String bookID) {
-        this.recordID = recordID;
-        this.userID = userID;
-        this.bookID = bookID;
+    private BorrowRecord borrowRecord;
+
+    // 默认构造函数
+    public BorrowBookRequest() {
     }
 
-    public String getRecordID() {
-        return recordID;
+    // 带参数的构造函数
+    public BorrowBookRequest(BorrowRecord borrowRecord) {
+        this.borrowRecord = borrowRecord;
     }
 
-    public void setRecordID(String recordID) {
-        this.recordID = recordID;
+    // Getter 和 Setter 方法
+    public BorrowRecord getBorrowRecord() {
+        return borrowRecord;
     }
 
-    public String getUserID() {
-        return userID;
+    public void setBorrowRecord(BorrowRecord borrowRecord) {
+        this.borrowRecord = borrowRecord;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public String getBookID() {
-        return bookID;
-    }
-
-    public void setBookID(String bookID) {
-        this.bookID = bookID;
+    @Override
+    public String toString() {
+        return "BorrowBookRequest{" +
+                "borrowRecord=" + borrowRecord +
+                '}';
     }
 }
