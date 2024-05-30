@@ -8,7 +8,7 @@ public class User implements Serializable {
     private String password;
     private String role; // "admin" or "user"
 
-    public User(String userID, String username, String password, String role) {
+    public User(String userID, String username, String password) {
         this.userID = userID;
         this.username = username;
         this.password = password;

@@ -5,6 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="已简化请求处理程序，提高效率。">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/model/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,7 +54,7 @@
     "project.structure.last.edited": "库",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "co.fitten.llmintellij.LlmSettingsConfigurable"
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -114,7 +118,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717082048120</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="已简化请求处理程序，提高效率。">
+      <option name="closed" value="true" />
+      <created>1717082464660</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1717082464660</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

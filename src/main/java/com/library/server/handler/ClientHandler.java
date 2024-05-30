@@ -166,10 +166,6 @@ public class ClientHandler implements Runnable {
         return result ? "Password updated successfully" : "Failed to update password";
     }
 
-    private Object handleUpdateRoleRequest(UpdateRoleRequest request) {
-        boolean result = userService.updateRole(request.getUserID(), request.getNewRole());
-        return result ? "Role updated successfully" : "Failed to update role";
-    }
 
     private List<BorrowRecord> handleGetAllBorrowRecordsRequest(GetAllBorrowRecordsRequest request) {
         return borrowService.getAllBorrowRecords();

@@ -13,8 +13,7 @@ public class UserDAO extends BaseDAO<User> {
         return new User(
                 rs.getString("userID"),
                 rs.getString("username"),
-                rs.getString("password"),
-                rs.getString("role")
+                rs.getString("password")
         );
     }
 
@@ -48,8 +47,4 @@ public class UserDAO extends BaseDAO<User> {
         return executeUpdate(query, newPassword, userID);
     }
 
-    public boolean updateRole(String userID, String newRole) {
-        String query = "UPDATE users SET role = ? WHERE userID = ?";
-        return executeUpdate(query, newRole, userID);
-    }
 }
