@@ -17,17 +17,12 @@ public class DatabaseManager {
             + "role VARCHAR(50) NOT NULL"
             + ")";
 
-    private static final String CREATE_CATEGORIES_TABLE = "CREATE TABLE IF NOT EXISTS categories ("
-            + "categoryID VARCHAR(255) PRIMARY KEY,"
-            + "categoryName VARCHAR(255) UNIQUE NOT NULL"
-            + ")";
 
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE IF NOT EXISTS books ("
             + "bookID VARCHAR(255) PRIMARY KEY,"
             + "title VARCHAR(255) NOT NULL,"
             + "author VARCHAR(255) NOT NULL,"
             + "ISBN VARCHAR(255) UNIQUE NOT NULL,"
-            + "categoryID VARCHAR(255),"
             + "status VARCHAR(50) NOT NULL,"
             + "FOREIGN KEY (categoryID) REFERENCES categories(categoryID)"
             + ")";
@@ -42,10 +37,19 @@ public class DatabaseManager {
             + "FOREIGN KEY (bookID) REFERENCES books(bookID)"
             + ")";
 
-    private static final String CREATE_ADMINS_TABLE = "CREATE TABLE IF NOT EXISTS admins ("
-            + "adminID VARCHAR(255) PRIMARY KEY,"
-            + "username VARCHAR(255) UNIQUE NOT NULL,"
-            + "password VARCHAR(255) NOT NULL,"
+    private static final String CREATE_RETURN_RECORDS_TABLE = "CREATE TABLE IF NOT EXISTS return_records ("
+            + "returnID VARCHAR(255) PRIMARY KEY,"
+            + "recordID VARCHAR(255) NOT NULL,"
+            + "returnDate DATE NOT NULL,"
+            + "FOREIGN KEY (recordID) REFERENCES borrow_records(recordID)"
+            + ")";
+
+    private static final String CREATE_RECOMMENDATION_SCORES_TABLE = "CREATE TABLE IF NOT EXISTS recommendation_scores ("
+            + "bookID VARCHAR(255) PRIMARY KEY,"
+            + "borrowCount INT NOT NULL,"
+            + "queryCount INT NOT NULL,"
+            + "recommendationScore DOUBLE NOT NULL,"
+            + "FOREIGN KEY (bookID) REFERENCES books(bookID)"
             + ")";
 
     public static Connection getConnection() throws SQLException {
@@ -57,10 +61,10 @@ public class DatabaseManager {
              Statement stmt = conn.createStatement()) {
 
             stmt.execute(CREATE_USERS_TABLE);
-            stmt.execute(CREATE_CATEGORIES_TABLE);
             stmt.execute(CREATE_BOOKS_TABLE);
             stmt.execute(CREATE_BORROW_RECORDS_TABLE);
-            stmt.execute(CREATE_ADMINS_TABLE);
+            stmt.execute(CREATE_RETURN_RECORDS_TABLE);
+            stmt.execute(CREATE_RECOMMENDATION_SCORES_TABLE);
 
             System.out.println("Tables created successfully");
 

@@ -7,7 +7,6 @@ import main.java.com.library.server.model.BorrowRecord;
 
 import java.util.List;
 
-
 public class BorrowService {
     private final BorrowRecordDAO borrowRecordDAO;
     private final BookDAO bookDAO;
@@ -24,19 +23,6 @@ public class BorrowService {
         }
         if (borrowRecordDAO.addBorrowRecord(record)) {
             book.setStatus("borrowed");
-            return bookDAO.updateBook(book);
-        }
-        return false;
-    }
-
-    public boolean returnBook(String recordID) {
-        BorrowRecord record = borrowRecordDAO.getBorrowRecord(recordID);
-        if (record == null) {
-            return false; // 借阅记录不存在
-        }
-        if (borrowRecordDAO.returnBook(recordID)) {
-            Book book = bookDAO.getBook(record.getBookID());
-            book.setStatus("available");
             return bookDAO.updateBook(book);
         }
         return false;
