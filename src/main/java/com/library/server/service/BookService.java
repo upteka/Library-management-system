@@ -1,44 +1,31 @@
 package main.java.com.library.server.service;
 
-import main.java.com.library.server.database.BookDAO;
+import main.java.com.library.server.database.impl.BaseDAO;
 import main.java.com.library.server.model.Book;
 
 import java.util.List;
 
 public class BookService {
-    private final BookDAO bookDAO;
+    private final BaseDAO<Book> bookDAO = new BaseDAO<>(Book.class);
 
-    public BookService() {
-        bookDAO = new BookDAO();
+    public boolean add(Book book) {
+        return bookDAO.add(book);
     }
 
-    public boolean addBook(Book book) {
-        return bookDAO.addBook(book);
+    public boolean delete(String bookID) {
+        return bookDAO.delete(bookID);
     }
 
-    public boolean deleteBook(String bookId) {
-        return bookDAO.deleteBook(bookId);
+    public Book get(String bookID) {
+        return bookDAO.get(bookID);
     }
 
-    public boolean updateBook(Book book) {
-        Book existingBook = bookDAO.getBook(book.getBookID());
-        if (existingBook != null) {
-
-            if (book.getTitle() != null) existingBook.setTitle(book.getTitle());
-            if (book.getAuthor() != null) existingBook.setAuthor(book.getAuthor());
-            if (book.getISBN() != null) existingBook.setISBN(book.getISBN());
-            if (book.getStatus() != null) existingBook.setStatus(book.getStatus());
-
-            return bookDAO.updateBook(existingBook);
-        }
-        return false;
+    public List<Book> getAll() {
+        return bookDAO.getAll();
     }
 
-    public Book getBook(String identifier) {
-        return bookDAO.getBook(identifier);
+    public boolean update(Book book) {
+        return bookDAO.update(book);
     }
 
-    public List<Book> getAllBooks() {
-        return bookDAO.getAllBooks();
-    }
 }

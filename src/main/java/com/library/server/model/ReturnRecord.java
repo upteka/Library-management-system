@@ -3,7 +3,7 @@ package main.java.com.library.server.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ReturnRecord implements Serializable {
+public class ReturnRecord implements Serializable, Entity {
     private String returnID;
     private String recordID;
     private Date returnDate;
@@ -36,5 +36,10 @@ public class ReturnRecord implements Serializable {
 
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
+    }
+
+    @Override
+    public String getId() {
+        return returnID;
     }
 }

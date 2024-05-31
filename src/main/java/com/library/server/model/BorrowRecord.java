@@ -3,7 +3,7 @@ package main.java.com.library.server.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class BorrowRecord implements Serializable {
+public class BorrowRecord implements Serializable, Entity {
     private String recordID;
     private String userID;
     private String bookID;
@@ -67,5 +67,10 @@ public class BorrowRecord implements Serializable {
                 ", borrowDate=" + borrowDate +
                 ", returnDate=" + returnDate +
                 '}';
+    }
+
+    @Override
+    public String getId() {
+        return recordID;
     }
 }

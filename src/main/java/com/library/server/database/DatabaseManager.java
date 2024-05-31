@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DatabaseManager {
+    private static final Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
     private static final String URL = "jdbc:mysql://localhost:3306/library";
     private static final String USER = "root";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "81780937ma";
 
     private static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users ("
             + "userID VARCHAR(255) PRIMARY KEY,"
@@ -24,7 +27,7 @@ public class DatabaseManager {
             + "author VARCHAR(255) NOT NULL,"
             + "ISBN VARCHAR(255) UNIQUE NOT NULL,"
             + "status VARCHAR(50) NOT NULL,"
-            + "FOREIGN KEY (categoryID) REFERENCES categories(categoryID)"
+//            + "FOREIGN KEY (categoryID) REFERENCES categories(categoryID)"
             + ")";
 
     private static final String CREATE_BORROW_RECORDS_TABLE = "CREATE TABLE IF NOT EXISTS borrow_records ("
@@ -69,7 +72,7 @@ public class DatabaseManager {
             System.out.println("Tables created successfully");
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Database error", e);
             System.err.println("Error creating tables: " + e.getMessage());
         }
     }

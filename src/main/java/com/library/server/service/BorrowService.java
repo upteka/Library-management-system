@@ -1,53 +1,30 @@
 package main.java.com.library.server.service;
 
-import main.java.com.library.server.database.BookDAO;
-import main.java.com.library.server.database.BorrowRecordDAO;
-import main.java.com.library.server.model.Book;
+import main.java.com.library.server.database.impl.BaseDAO;
 import main.java.com.library.server.model.BorrowRecord;
 
 import java.util.List;
 
 public class BorrowService {
-    private final BorrowRecordDAO borrowRecordDAO;
-    private final BookDAO bookDAO;
+    private final BaseDAO<BorrowRecord> BorrowRecordDAO = new BaseDAO<>(BorrowRecord.class);
 
-    public BorrowService() {
-        borrowRecordDAO = new BorrowRecordDAO();
-        bookDAO = new BookDAO();
+    public boolean add(BorrowRecord BorrowRecord) {
+        return BorrowRecordDAO.add(BorrowRecord);
     }
 
-    public boolean addBorrowRecord(BorrowRecord record) {
-        Book book = bookDAO.getBook(record.getBookID());
-        if (book == null || "borrowed".equals(book.getStatus())) {
-            return false; // 书籍不存在或已被借出
-        }
-        if (borrowRecordDAO.addBorrowRecord(record)) {
-            book.setStatus("borrowed");
-            return bookDAO.updateBook(book);
-        }
-        return false;
+    public boolean delete(String BorrowRecordID) {
+        return BorrowRecordDAO.delete(BorrowRecordID);
     }
 
-    public boolean deleteBorrowRecord(String recordID) {
-        BorrowRecord record = borrowRecordDAO.getBorrowRecord(recordID);
-        if (record == null) {
-            return false; // 借阅记录不存在
-        }
-        if (borrowRecordDAO.deleteBorrowRecord(recordID)) {
-            Book book = bookDAO.getBook(record.getBookID());
-            if (book != null) {
-                book.setStatus("available");
-                return bookDAO.updateBook(book);
-            }
-        }
-        return false;
+    public BorrowRecord get(String BorrowRecordID) {
+        return BorrowRecordDAO.get(BorrowRecordID);
     }
 
-    public BorrowRecord getBorrowRecord(String recordID) {
-        return borrowRecordDAO.getBorrowRecord(recordID);
+    public List<BorrowRecord> getAll() {
+        return BorrowRecordDAO.getAll();
     }
 
-    public List<BorrowRecord> getAllBorrowRecords() {
-        return borrowRecordDAO.getAllBorrowRecords();
+    public boolean update(BorrowRecord BorrowRecord) {
+        return BorrowRecordDAO.update(BorrowRecord);
     }
 }

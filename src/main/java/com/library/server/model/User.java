@@ -2,7 +2,7 @@ package main.java.com.library.server.model;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable, Entity {
     private String userID;
     private String username;
     private String password;
@@ -12,7 +12,7 @@ public class User implements Serializable {
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.role = "user"; // Default role is "user"
     }
 
     public String getUserID() {
@@ -55,5 +55,10 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getId() {
+        return userID;
     }
 }

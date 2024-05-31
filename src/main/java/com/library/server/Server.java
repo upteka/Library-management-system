@@ -9,11 +9,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-
     private static final int PORT = 12345;  // 服务器监听的端口
     private boolean running = false;  // 服务器运行状态
     private ServerSocket serverSocket;
-    private ExecutorService threadPool;
+    private final ExecutorService threadPool;
 
     public Server() {
         threadPool = Executors.newCachedThreadPool();  // 创建一个缓存线程池

@@ -2,12 +2,14 @@ package main.java.com.library.server.model;
 
 import java.io.Serializable;
 
-public class Book implements Serializable {
+public class Book implements Serializable, Entity {
     private final String bookID;
     private String title;
     private String author;
     private String ISBN;
     private String status; // "available" or "borrowed"
+
+    // Constructor, getters, setters, and toString() omitted for brevity
 
     public Book(String bookID, String title, String author, String ISBN, String status) {
         this.bookID = bookID;
@@ -63,5 +65,10 @@ public class Book implements Serializable {
                 ", ISBN='" + ISBN + '\'' +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getId() {
+        return bookID;
     }
 }

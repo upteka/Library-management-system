@@ -4,13 +4,53 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="已简化请求处理程序，提高效率。">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/ReturnRecordDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/model/ReturnRecord.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/ReturnService.java" afterDir="false" />
+    <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="大幅重构!">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/reflections.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/DAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BaseDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BookDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BorrowRecordDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/ReturnRecordDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/UserDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/Request.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/impl/AuthRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/impl/CRUDRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/model/Entity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/BaseDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/BookDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/BorrowRecordDAO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/ReturnRecordDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/UserDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/RequestHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/AddBookRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/BorrowBookRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/DeleteBookRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/DeleteBorrowRecordRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetAllBooksRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetAllBorrowRecordsRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetAllUsersRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetBookRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetBorrowRecordRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetUserRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/LoginRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/RegisterUserRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/ReturnBookRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/UpdateBookRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/UpdatePasswordRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/UpdateRoleRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/UpdateUserRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/model/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/BorrowRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/model/BorrowRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/ReturnRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/model/ReturnRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/BookService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/BorrowService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/BorrowService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/ReturnService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/ReturnService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,12 +60,27 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;upteka&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="f51ed211-1c23-49f0-b9f1-8d0c2353e3cf" />
+        <option name="url" value="https://github.com/upteka/Library-management-system" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -55,7 +110,7 @@
     &quot;project.structure.last.edited&quot;: &quot;库&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -134,7 +189,8 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="已删除日志服务相关代码，简化请求处理程序。" />
     <MESSAGE value="已简化请求处理程序，提高效率。" />
-    <option name="LAST_COMMIT_MESSAGE" value="已简化请求处理程序，提高效率。" />
+    <MESSAGE value="大幅重构!" />
+    <option name="LAST_COMMIT_MESSAGE" value="大幅重构!" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
