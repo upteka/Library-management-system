@@ -28,20 +28,14 @@ public class CRUDRequest<T extends Entity> extends Request {
 
     @Override
     public Object handle() {
-        switch (action.toLowerCase()) {
-            case "add":
-                return dao.add(data) ? "Create successful" : "Create failed";
-            case "get":
-                return dao.get(id);
-            case "update":
-                return dao.update(data) ? "Update successful" : "Update failed";
-            case "delete":
-                return dao.delete(id) ? "Delete successful" : "Delete failed";
-            case "list":
-                return dao.getAll();
-            default:
-                throw new IllegalArgumentException("Unknown action: " + action);
-        }
+        return switch (action.toLowerCase()) {
+            case "add" -> dao.add(data) ? "Create successful" : "Create failed";
+            case "get" -> dao.get(id);
+            case "update" -> dao.update(data) ? "Update successful" : "Update failed";
+            case "delete" -> dao.delete(id) ? "Delete successful" : "Delete failed";
+            case "list" -> dao.getAll();
+            default -> throw new IllegalArgumentException("Unknown action: " + action);
+        };
     }
 
     public T getData() {

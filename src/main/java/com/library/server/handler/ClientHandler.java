@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
-
+    private static final Logger LOGGER = Logger.getLogger(ClientHandler.class.getName());
     public ClientHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
@@ -30,19 +32,18 @@ public class ClientHandler implements Runnable {
                 outputStream.flush();
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error handling client request", e);
         } finally {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Close socket error", e);
             }
         }
     }
 
     private Object handleRequest(Object request) {
-        if (request instanceof Request) {
-            Request baseRequest = (Request) request;
+        if (request instanceof Request baseRequest) {
             return baseRequest.handle();
         }
         return null; // 或者返回适当的错误信息
