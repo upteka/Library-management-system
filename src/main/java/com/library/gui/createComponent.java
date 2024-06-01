@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-import static main.java.com.library.gui.mainPage.setCustomFont;
+import static main.java.com.library.gui.MainPage.setCustomFont;
 
 public class createComponent {
     public static GridBagConstraints setFormat(JComponent component, JComponent target, Insets insets, int gridx, int gridy, int weightx, int weighty, int gridwidth, int gridheight, int ipadx, int ipady, int anchor, int fill, int font_size, int font_type) {

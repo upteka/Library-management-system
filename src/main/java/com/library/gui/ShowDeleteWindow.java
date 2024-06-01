@@ -5,8 +5,8 @@ import java.awt.*;
 
 import static main.java.com.library.gui.createComponent.setFormat;
 
-public class showDeleteWindow {
-    public showDeleteWindow(String id, String title, String author, String isbn) {
+public class ShowDeleteWindow {
+    public ShowDeleteWindow(String id, String title, String author, String isbn) {
         JFrame deleteFrame = new JFrame();
         deleteFrame.setTitle("删除确认");
         deleteFrame.setSize(300, 400);

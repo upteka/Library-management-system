@@ -5,8 +5,8 @@ import java.awt.*;
 
 import static main.java.com.library.gui.createComponent.setFormat;
 
-public class showEditWindow {
-    public showEditWindow(String id, String title, String author, String isbn) {
+public class ShowEditWindow {
+    public ShowEditWindow(String id, String title, String author, String isbn) {
         JFrame editFrame = new JFrame();
         editFrame.setTitle("编辑图书信息");
         editFrame.setSize(300, 400);
