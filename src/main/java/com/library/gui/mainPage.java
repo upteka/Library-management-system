@@ -4,6 +4,8 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
@@ -17,7 +19,7 @@ public class mainPage {
     public static void main(String[] args) {
         FlatLightLaf.setup();
         try {
-            File fontFile = new File("C:\\Users\\Administrator\\IdeaProjects\\pf.ttf");
+            File fontFile = new File(".\\lib\\pf.ttf");
             customFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(customFont);
@@ -45,19 +47,19 @@ public class mainPage {
         JTextField usernameField = new JTextField(50);
         createComponent.setFormat(usernameField, loginPanel, new Insets(190, 20, 10, 20),
                 0, 0, 1, 1, 1, 1, 40, 15,
-                GridBagConstraints.CENTER, 13, Font.PLAIN);
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 13, Font.PLAIN);
 
         JPasswordField passwordField = new JPasswordField(30);
         createComponent.setFormat(passwordField, loginPanel, new Insets(0, 20, 10, 20),
                 0, 1, 1, 1, 1, 1, 40, 15,
-                GridBagConstraints.CENTER, 13, Font.PLAIN);
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 13, Font.PLAIN);
 
         JButton loginButton = new JButton("继续");
         loginButton.setBackground(new Color(15, 163, 127));
         loginButton.setForeground(Color.WHITE);
         createComponent.setFormat(loginButton, loginPanel, new Insets(0, 20, 20, 20),
                 0, 2, 1, 1, 1, 1, 40, 15,
-                GridBagConstraints.CENTER, 14, Font.BOLD);
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 14, Font.BOLD);
 
         JLabel noAccountLabel = new JLabel("还没有账户?", SwingConstants.CENTER);
         setCustomFont(noAccountLabel, 12, Font.BOLD);
@@ -72,14 +74,14 @@ public class mainPage {
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         createComponent.setFormat(separator, loginPanel1, new Insets(5, 20, 0, 20),
                 0, 0, 1, 0, 1, 1, 0, 0,
-                GridBagConstraints.CENTER, 0, 0);
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0);
 
         JButton signupButton = new JButton("注册");
         signupButton.setBackground(new Color(15, 163, 127));
         signupButton.setForeground(Color.WHITE);
         createComponent.setFormat(signupButton, loginPanel1, new Insets(0, 20, 20, 20),
                 0, 1, 0, 1, 1, 1, 40, 15,
-                GridBagConstraints.CENTER, 14, Font.BOLD);
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 14, Font.BOLD);
 
         loginButton.addActionListener(e -> {
             frame.dispose();
@@ -131,7 +133,6 @@ public class mainPage {
         frame.setVisible(true);
     }
 
-
     public static void setCustomFont(JComponent component, float size, int style) {
         Font resizedFont = customFont.deriveFont(style, size);
         component.setFont(resizedFont);
@@ -146,9 +147,27 @@ public class mainPage {
         mainFrame.setLayout(new BorderLayout());
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        tabbedPane.addTab("Tab 1", new showTable());
-
+        showTable tablePanel = new showTable();
+        tabbedPane.addTab("Tab 1", tablePanel);
         mainFrame.add(tabbedPane, BorderLayout.CENTER);
+
+        mainFrame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (mainFrame.getWidth() > 800) {
+                    for (JButton editButton : tablePanel.editButtons) {
+                        System.out.println(150 + mainFrame.getWidth() - 800);
+                        GridBagConstraints gbc = tablePanel.gbcMap.get(editButton);
+                        gbc.insets = new Insets(0, 150 + mainFrame.getWidth() - 800, 0, 0);
+                        GridBagLayout layout = new GridBagLayout();
+                        layout.setConstraints(editButton, gbc);
+                        editButton.getParent().revalidate();
+                        editButton.getParent().repaint();
+                    }
+                }
+            }
+        });
+
         mainFrame.setVisible(true);
     }
 }
