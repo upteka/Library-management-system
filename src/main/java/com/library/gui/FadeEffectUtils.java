@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 public class FadeEffectUtils {
 
     // 可调整的动画参数
@@ -11,34 +12,21 @@ public class FadeEffectUtils {
     private static final float ALPHA_INCREMENT = 0.1f;  // 透明度变化增量
 
     public static void applyFadeEffect(JComponent component, boolean fadeIn) {
-        Timer timer = fadeIn ? createFadeInTimer(component) : createFadeOutTimer(component);
+        Timer timer = createFadeTimer(component, fadeIn);
         timer.start();
     }
 
-    private static Timer createFadeInTimer(JComponent component) {
+    private static Timer createFadeTimer(JComponent component, boolean fadeIn) {
         return new Timer(TIMER_DELAY, new ActionListener() {
-            private float alpha = 0.0f;
+            private float alpha = fadeIn ? 0.0f : 1.0f;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                alpha += ALPHA_INCREMENT;
-                if (alpha >= 1.0f) {
+                alpha = fadeIn ? alpha + ALPHA_INCREMENT : alpha - ALPHA_INCREMENT;
+                if (fadeIn && alpha >= 1.0f) {
                     alpha = 1.0f;
                     ((Timer) e.getSource()).stop();
-                }
-                setComponentAlpha(component, alpha);
-            }
-        });
-    }
-
-    private static Timer createFadeOutTimer(JComponent component) {
-        return new Timer(TIMER_DELAY, new ActionListener() {
-            private float alpha = 1.0f;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                alpha -= ALPHA_INCREMENT;
-                if (alpha <= 0.0f) {
+                } else if (!fadeIn && alpha <= 0.0f) {
                     alpha = 0.0f;
                     ((Timer) e.getSource()).stop();
                 }
@@ -48,10 +36,11 @@ public class FadeEffectUtils {
     }
 
     private static void setComponentAlpha(JComponent component, float alpha) {
+        Color foreground = component.getForeground();
         component.setForeground(new Color(
-                component.getForeground().getRed(),
-                component.getForeground().getGreen(),
-                component.getForeground().getBlue(),
+                foreground.getRed(),
+                foreground.getGreen(),
+                foreground.getBlue(),
                 (int) (255 * alpha)
         ));
         component.repaint();
