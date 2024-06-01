@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static main.java.com.library.gui.createComponent.setFormat;
+import static main.java.com.library.gui.mainPage.addFocusListenerToField;
 
 public class showEditWindow {
     public showEditWindow(String id, String title, String author, String isbn) {
@@ -42,6 +43,10 @@ public class showEditWindow {
         cancelButton.setBorder(BorderFactory.createEmptyBorder());
 
         cancelButton.addActionListener(e -> editFrame.dispose());
+        addFocusListenerToField(idField);
+        addFocusListenerToField(titleField);
+        addFocusListenerToField(authorField);
+        addFocusListenerToField(isbnField);
 
         setFormat(saveButton, panel, new Insets(10, 10, 10, 10),
                 0, 4, 0, 0, 0, 0, 40, 15,

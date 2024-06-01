@@ -20,6 +20,9 @@ public class createComponent {
         if (ipady > 0) gbc.ipady = ipady;
         if (insets != null) gbc.insets = insets;
         if (anchor > 0) gbc.anchor = anchor;
+        if (component == null || target == null) {
+            return gbc;
+        }
         if (font_size > 0 && font_type > 0)
             setCustomFont(component, font_size, font_type);
         if (component instanceof JSeparator)
@@ -27,9 +30,7 @@ public class createComponent {
         else if (component instanceof JTextField)
             component.setBorder(new LineBorder(Color.LIGHT_GRAY, 1, true));
 
-        if (target != null)
-            target.add(component, gbc);
-
+        target.add(component, gbc);
         return gbc;
     }
 }

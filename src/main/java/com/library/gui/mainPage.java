@@ -4,8 +4,6 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
@@ -34,6 +32,7 @@ public class mainPage {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(new Color(255, 255, 255));
         frame.setLayout(null);
+        frame.setResizable(false);
 
         JLabel welcomeLabel = new JLabel("欢迎回来", JLabel.CENTER);
         setCustomFont(welcomeLabel, 28, Font.PLAIN);
@@ -83,33 +82,12 @@ public class mainPage {
                 0, 1, 0, 1, 1, 1, 40, 15,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 14, Font.BOLD);
 
+        addFocusListenerToField(usernameField);
+        addFocusListenerToField(passwordField);
+
         loginButton.addActionListener(e -> {
             frame.dispose();
-            showMainFrame();
-        });
-
-        usernameField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                usernameField.setBorder(BorderFactory.createLineBorder(new Color(15, 163, 127), 1, true));
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                usernameField.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true));
-            }
-        });
-
-        passwordField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                passwordField.setBorder(BorderFactory.createLineBorder(new Color(15, 163, 127), 1, true));
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                passwordField.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true));
-            }
+            new showTable1();
         });
 
         signupButton.addActionListener(e -> {
@@ -138,36 +116,17 @@ public class mainPage {
         component.setFont(resizedFont);
     }
 
-    public static void showMainFrame() {
-        JFrame mainFrame = new JFrame("Main Application");
-        mainFrame.setSize(800, 600);
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.getContentPane().setBackground(new Color(255, 255, 255));
-        mainFrame.setLayout(new BorderLayout());
-
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        showTable tablePanel = new showTable();
-        tabbedPane.addTab("Tab 1", tablePanel);
-        mainFrame.add(tabbedPane, BorderLayout.CENTER);
-
-        mainFrame.addComponentListener(new ComponentAdapter() {
+    public static void addFocusListenerToField(JTextField field) {
+        field.addFocusListener(new FocusListener() {
             @Override
-            public void componentResized(ComponentEvent e) {
-                if (mainFrame.getWidth() > 800) {
-                    for (JButton editButton : tablePanel.editButtons) {
-                        System.out.println(150 + mainFrame.getWidth() - 800);
-                        GridBagConstraints gbc = tablePanel.gbcMap.get(editButton);
-                        gbc.insets = new Insets(0, 150 + mainFrame.getWidth() - 800, 0, 0);
-                        GridBagLayout layout = new GridBagLayout();
-                        layout.setConstraints(editButton, gbc);
-                        editButton.getParent().revalidate();
-                        editButton.getParent().repaint();
-                    }
-                }
+            public void focusGained(FocusEvent e) {
+                field.setBorder(BorderFactory.createLineBorder(new Color(15, 163, 127), 1, true));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                field.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true));
             }
         });
-
-        mainFrame.setVisible(true);
     }
 }
