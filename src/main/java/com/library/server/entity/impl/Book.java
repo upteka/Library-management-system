@@ -1,8 +1,8 @@
-package main.java.com.library.server.model;
+package main.java.com.library.server.entity.impl;
 
-import java.io.Serializable;
+import main.java.com.library.server.entity.Entity;
 
-public class Book implements Serializable, Entity {
+public class Book implements Entity {
     private final String bookID;
     private String title;
     private String author;

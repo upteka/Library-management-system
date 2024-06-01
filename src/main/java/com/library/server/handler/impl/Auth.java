@@ -1,16 +1,16 @@
 package main.java.com.library.server.handler.impl;
 
-import main.java.com.library.server.handler.Request;
-import main.java.com.library.server.model.User;
-import main.java.com.library.server.service.UserService;
+import main.java.com.library.server.entity.impl.User;
+import main.java.com.library.server.entity.service.impl.UserService;
+import main.java.com.library.server.handler.Requests;
 
-public class AuthRequest extends Request {
+public class Auth extends Request implements Requests {
 
     private final String username;
     private final String password;
     UserService userService = new UserService();
 
-    public AuthRequest(String username, String password) {
+    public Auth(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -28,9 +28,10 @@ public class AuthRequest extends Request {
         return "auth";
     }
 
+
     @Override
     public Object handle() {
-        User user = userService.getBy("username", username);
+        User user = userService.getByField("username", username);
         if (user != null && user.getPassword().equals(password)) {
             return "Authentication successful";
         } else {

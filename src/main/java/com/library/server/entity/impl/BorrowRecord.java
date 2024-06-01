@@ -1,9 +1,10 @@
-package main.java.com.library.server.model;
+package main.java.com.library.server.entity.impl;
 
-import java.io.Serializable;
+import main.java.com.library.server.entity.Entity;
+
 import java.util.Date;
 
-public class BorrowRecord implements Serializable, Entity {
+public class BorrowRecord implements Entity {
     private String recordID;
     private String userID;
     private String bookID;

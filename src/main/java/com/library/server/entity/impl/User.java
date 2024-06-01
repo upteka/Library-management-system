@@ -1,8 +1,8 @@
-package main.java.com.library.server.model;
+package main.java.com.library.server.entity.impl;
 
-import java.io.Serializable;
+import main.java.com.library.server.entity.Entity;
 
-public class User implements Serializable, Entity {
+public class User implements Entity {
     private String userID;
     private String username;
     private String password;

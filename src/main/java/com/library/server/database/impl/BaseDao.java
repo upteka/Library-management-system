@@ -1,8 +1,8 @@
 package main.java.com.library.server.database.impl;
 
-import main.java.com.library.server.database.DAO;
+import main.java.com.library.server.database.Dao;
 import main.java.com.library.server.database.DatabaseManager;
-import main.java.com.library.server.model.Entity;
+import main.java.com.library.server.entity.Entity;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BaseDAO<T extends Entity> implements DAO<T> {
-    private static final Logger LOGGER = Logger.getLogger(BaseDAO.class.getName());
+public class BaseDao<T extends Entity> implements Dao<T> {
+    private static final Logger LOGGER = Logger.getLogger(BaseDao.class.getName());
     private final Class<T> type;
 
-    public BaseDAO(Class<T> type) {
+    public BaseDao(Class<T> type) {
         this.type = type;
     }
 
