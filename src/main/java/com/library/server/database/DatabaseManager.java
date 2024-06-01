@@ -11,7 +11,7 @@ public class DatabaseManager {
     private static final Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
     private static final String URL = "jdbc:mysql://localhost:3306/library";
     private static final String USER = "root";
-    private static final String PASSWORD = "81780937ma";
+    private static final String PASSWORD = "password";
 
     private static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users ("
             + "userID VARCHAR(255) PRIMARY KEY,"
