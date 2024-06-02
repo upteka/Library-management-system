@@ -11,9 +11,18 @@ public class FadeEffectUtils {
     private static final int TIMER_DELAY = 1;  // 定时器延迟，单位为毫秒
     private static final float ALPHA_INCREMENT = 0.1f;  // 透明度变化增量
 
+    private static Timer currentTimer = null;
+
     public static void applyFadeEffect(JComponent component, boolean fadeIn) {
+        // 如果当前有渐变效果正在执行，则取消之前的渐变
+        if (currentTimer != null && currentTimer.isRunning()) {
+            currentTimer.stop();
+        }
+
+        // 创建新的渐变效果定时器
         Timer timer = fadeIn ? createFadeInTimer(component) : createFadeOutTimer(component);
         timer.start();
+        currentTimer = timer;
     }
 
     private static Timer createFadeInTimer(JComponent component) {
