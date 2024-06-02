@@ -4,44 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="Refactor `ShowDeleteWindow` and `ShowEditWindow` classes&#10;&#10;- Remove unused static import for `setFormat`&#10;- Add methods `createLabel`, `createButton`, `createTextField`, and `addComponent`&#10;- Replace direct component formatting with new helper methods&#10;- Simplify layout management with reusable utility methods">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/book.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qodana.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/Entity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/Service.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/service/impl/BaseService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/service/impl/BookService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/service/impl/BorrowService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/service/impl/ReturnService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/service/impl/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/Requests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="Refactor package imports and update entity models and service implementations for database and request handling improvements.">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/DAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/Dao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BaseDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BaseDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BookDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BookDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BorrowRecordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BorrowRecordDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/ReturnRecordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/ReturnRecordDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/UserDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/impl/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/impl/AuthRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/impl/Auth.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/handler/impl/CRUDRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/handler/impl/Crud.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/BorrowRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/BorrowRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/Entity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/ReturnRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/ReturnRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/BookService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/BorrowService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/ReturnService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/UserService.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,12 +17,19 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="Test" />
@@ -77,7 +50,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
     <option name="showPreview" value="true" />
   </component>
   <component name="ProjectColorInfo">{
@@ -91,48 +64,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "true",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "项目",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "settings.codegpt.services.custom",
-    "vue.rearranger.settings.migration": "true",
-    "应用程序.MainPage.executor": "Run",
-    "应用程序.Server.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/WORK/JAVA PROJECTS/untitled/src/main/java/com/library/client&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;应用程序.MainPage.executor&quot;: &quot;Run&quot;,
+    &quot;应用程序.Server.executor&quot;: &quot;Run&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
   }
-}]]></component>
-  <component name="QodanaHighlightedReportService">
-    <option name="localRunNotPublishedPersistedInfo">
-      <LocalReportPersistedInfo>
-        <option name="path" value="C:\Users\PC\AppData\Local\Temp\qodana_output\qodana.sarif.json" />
-        <option name="reportGuid" value="dad976f6-8b47-4c4c-bf9c-9484e13d5575" />
-        <option name="reportName" value="untitled/qodana/2024-06-02" />
-      </LocalReportPersistedInfo>
-    </option>
-  </component>
-  <component name="QodanaIsSelectedPersistenceService">
-    <option name="selectedOrLoading" value="true" />
-  </component>
-  <component name="QodanaReportsService">
-    <option name="descriptions">
-      <ReportDescription localRun="true" path="C:\Users\PC\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="dad976f6-8b47-4c4c-bf9c-9484e13d5575" reportId="untitled/qodana/2024-06-02" />
-    </option>
-  </component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="main.java.com.library.server.handler" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\WORK\JAVA PROJECTS\untitled\src\main\java\com\library\client" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="main.java.com.library.server.handler.requestHandler" />
@@ -141,10 +108,10 @@
   <component name="RunManager">
     <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="main.java.com.library.server.Server" />
-      <module name="untitled" />
+      <module name="book" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="main.java.com.library.server.*" />
+          <option name="PATTERN" value="main.java.com.library.server.network.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -175,7 +142,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1717051952139</updated>
-      <workItem from="1717264479401" duration="119000" />
+      <workItem from="1717264479401" duration="3451000" />
+      <workItem from="1717302984985" duration="11256000" />
+      <workItem from="1717314675602" duration="5818000" />
+      <workItem from="1717320531095" duration="905000" />
+      <workItem from="1717323739085" duration="2138000" />
+      <workItem from="1717325907117" duration="1267000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -209,18 +181,47 @@
       <option name="project" value="LOCAL" />
       <updated>1717082464660</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Refactor package structure and class imports for consistency">
+      <option name="closed" value="true" />
+      <created>1717264704697</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1717264704697</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Refactor package imports and update entity models and service implementations for database and request handling improvements.">
+      <option name="closed" value="true" />
+      <created>1717327169898</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1717327169898</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="已删除日志服务相关代码，简化请求处理程序。" />
     <MESSAGE value="已简化请求处理程序，提高效率。" />
     <MESSAGE value="大幅重构!" />
-    <option name="LAST_COMMIT_MESSAGE" value="大幅重构!" />
+    <MESSAGE value="Refactor package structure and class imports for consistency" />
+    <MESSAGE value="Refactor package imports and update entity models and service implementations for database and request handling improvements." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor package imports and update entity models and service implementations for database and request handling improvements." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -229,7 +230,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetUserRequest.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/com/library/server/network/requestHandler/GetUserRequest.java</url>
           <line>16</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>

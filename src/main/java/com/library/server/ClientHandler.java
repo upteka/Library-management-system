@@ -1,6 +1,6 @@
 package main.java.com.library.server;
 
-import main.java.com.library.server.handler.impl.Request;
+import main.java.com.library.server.requests.impl.Request;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
