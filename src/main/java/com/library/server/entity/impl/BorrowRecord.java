@@ -1,29 +1,30 @@
-package main.java.com.library.server.model;
+package main.java.com.library.server.entity.impl;
 
-import java.io.Serializable;
+import main.java.com.library.server.entity.Entity;
+
 import java.util.Date;
 
-public class BorrowRecord implements Serializable, Entity {
-    private String recordID;
+public class BorrowRecord implements Entity {
+    private String borrowID;
     private String userID;
     private String bookID;
     private Date borrowDate;
     private Date returnDate;
 
     public BorrowRecord(String recordID, String userID, String bookID, Date borrowDate, Date returnDate) {
-        this.recordID = recordID;
+        this.borrowID = recordID;
         this.userID = userID;
         this.bookID = bookID;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
     }
 
-    public String getRecordID() {
-        return recordID;
+    public String getBorrowID() {
+        return borrowID;
     }
 
-    public void setRecordID(String recordID) {
-        this.recordID = recordID;
+    public void setBorrowID(String borrowID) {
+        this.borrowID = borrowID;
     }
 
     public String getUserID() {
@@ -61,7 +62,7 @@ public class BorrowRecord implements Serializable, Entity {
     @Override
     public String toString() {
         return "BorrowRecord{" +
-                "recordID='" + recordID + '\'' +
+                "recordID='" + borrowID + '\'' +
                 ", userID='" + userID + '\'' +
                 ", bookID='" + bookID + '\'' +
                 ", borrowDate=" + borrowDate +
@@ -71,6 +72,6 @@ public class BorrowRecord implements Serializable, Entity {
 
     @Override
     public String getId() {
-        return recordID;
+        return borrowID;
     }
 }

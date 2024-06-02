@@ -30,6 +30,7 @@
       <list>
         <option value="Interface" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -62,14 +63,12 @@
     &quot;assignee&quot;: &quot;upteka&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="f51ed211-1c23-49f0-b9f1-8d0c2353e3cf" />
-        <option name="url" value="https://github.com/upteka/Library-management-system" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/upteka/Library-management-system&quot;,
+    &quot;accountId&quot;: &quot;43df27c2-53ae-41fa-a1c8-df62dc145af3&quot;
+  }
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
     <option name="showPreview" value="true" />
@@ -115,6 +114,9 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="main.java.com.library.server.handler" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\WORK\JAVA PROJECTS\untitled\src\main\java\com\library\client" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="main.java.com.library.server.handler.requestHandler" />
     </key>
@@ -146,6 +148,14 @@
       <set>
         <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
         <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
       </set>
     </attachedChunks>
   </component>
@@ -191,7 +201,23 @@
       <option name="project" value="LOCAL" />
       <updated>1717082464660</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Refactor package structure and class imports for consistency">
+      <option name="closed" value="true" />
+      <created>1717264704697</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1717264704697</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Refactor package imports and update entity models and service implementations for database and request handling improvements.">
+      <option name="closed" value="true" />
+      <created>1717327169898</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1717327169898</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -225,7 +251,9 @@
     <MESSAGE value="已删除日志服务相关代码，简化请求处理程序。" />
     <MESSAGE value="已简化请求处理程序，提高效率。" />
     <MESSAGE value="大幅重构!" />
-    <option name="LAST_COMMIT_MESSAGE" value="大幅重构!" />
+    <MESSAGE value="Refactor package structure and class imports for consistency" />
+    <MESSAGE value="Refactor package imports and update entity models and service implementations for database and request handling improvements." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor package imports and update entity models and service implementations for database and request handling improvements." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -234,11 +262,15 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/library/server/handler/requestHandler/GetUserRequest.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/com/library/server/network/requestHandler/GetUserRequest.java</url>
           <line>16</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

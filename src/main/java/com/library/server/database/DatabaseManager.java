@@ -20,18 +20,18 @@ public class DatabaseManager {
             + "role VARCHAR(50) NOT NULL"
             + ")";
 
-
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE IF NOT EXISTS books ("
             + "bookID VARCHAR(255) PRIMARY KEY,"
             + "title VARCHAR(255) NOT NULL,"
             + "author VARCHAR(255) NOT NULL,"
             + "ISBN VARCHAR(255) UNIQUE NOT NULL,"
             + "status VARCHAR(50) NOT NULL,"
-//            + "FOREIGN KEY (categoryID) REFERENCES categories(categoryID)"
+            + "count INTEGER NOT NULL,"
+            + "introduction VARCHAR(255) NOT NULL"
             + ")";
 
     private static final String CREATE_BORROW_RECORDS_TABLE = "CREATE TABLE IF NOT EXISTS borrow_records ("
-            + "recordID VARCHAR(255) PRIMARY KEY,"
+            + "borrowID VARCHAR(255) PRIMARY KEY,"
             + "userID VARCHAR(255) NOT NULL,"
             + "bookID VARCHAR(255) NOT NULL,"
             + "borrowDate DATE NOT NULL,"
@@ -42,16 +42,17 @@ public class DatabaseManager {
 
     private static final String CREATE_RETURN_RECORDS_TABLE = "CREATE TABLE IF NOT EXISTS return_records ("
             + "returnID VARCHAR(255) PRIMARY KEY,"
-            + "recordID VARCHAR(255) NOT NULL,"
+            + "borrowID VARCHAR(255) NOT NULL,"
             + "returnDate DATE NOT NULL,"
-            + "FOREIGN KEY (recordID) REFERENCES borrow_records(recordID)"
+            + "FOREIGN KEY (borrowID) REFERENCES borrow_records(recordID)"
             + ")";
 
-    private static final String CREATE_RECOMMENDATION_SCORES_TABLE = "CREATE TABLE IF NOT EXISTS recommendation_scores ("
-            + "bookID VARCHAR(255) PRIMARY KEY,"
-            + "borrowCount INT NOT NULL,"
-            + "queryCount INT NOT NULL,"
-            + "recommendationScore DOUBLE NOT NULL,"
+
+    private static final String CREATE_FAVORITES_TABLE = "CREATE TABLE IF NOT EXISTS favorites ("
+            + "favoriteID VARCHAR(255) PRIMARY KEY,"
+            + "userID VARCHAR(255) NOT NULL,"
+            + "bookID VARCHAR(255) NOT NULL,"
+            + "FOREIGN KEY (userID) REFERENCES users(userID),"
             + "FOREIGN KEY (bookID) REFERENCES books(bookID)"
             + ")";
 
@@ -67,7 +68,7 @@ public class DatabaseManager {
             stmt.execute(CREATE_BOOKS_TABLE);
             stmt.execute(CREATE_BORROW_RECORDS_TABLE);
             stmt.execute(CREATE_RETURN_RECORDS_TABLE);
-            stmt.execute(CREATE_RECOMMENDATION_SCORES_TABLE);
+            stmt.execute(CREATE_FAVORITES_TABLE);
 
             System.out.println("Tables created successfully");
 

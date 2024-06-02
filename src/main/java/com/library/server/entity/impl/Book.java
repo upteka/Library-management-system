@@ -1,22 +1,25 @@
-package main.java.com.library.server.model;
+package main.java.com.library.server.entity.impl;
 
-import java.io.Serializable;
+import main.java.com.library.server.entity.Entity;
 
-public class Book implements Serializable, Entity {
+public class Book implements Entity {
     private final String bookID;
     private String title;
     private String author;
     private String ISBN;
     private String status; // "available" or "borrowed"
+    private Integer count; // number of copies available
+    private String introduction; // brief description of the book optional
 
-    // Constructor, getters, setters, and toString() omitted for brevity
 
-    public Book(String bookID, String title, String author, String ISBN, String status) {
+    public Book(String bookID, String title, String author, String ISBN, String status, Integer count, String introduction) {
         this.bookID = bookID;
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
         this.status = status;
+        this.count = count;
+        this.introduction = introduction;
     }
 
     public String getBookID() {
@@ -56,6 +59,24 @@ public class Book implements Serializable, Entity {
         this.status = status;
     }
 
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+
+
     @Override
     public String toString() {
         return "Book{" +
@@ -64,6 +85,8 @@ public class Book implements Serializable, Entity {
                 ", author='" + author + '\'' +
                 ", ISBN='" + ISBN + '\'' +
                 ", status='" + status + '\'' +
+                ", count=" + count +
+                ", introduction='" + introduction + '\'' +
                 '}';
     }
 

@@ -1,19 +1,33 @@
-package main.java.com.library.server.model;
+package main.java.com.library.server.entity.impl;
 
-import java.io.Serializable;
+import main.java.com.library.server.entity.Entity;
 
-public class User implements Serializable, Entity {
+
+public class User implements Entity {
     private String userID;
     private String username;
     private String password;
-    private String role; // "admin" or "user"
+    private String role; // "admin" or "user" or "root"
+    private String phone;
+    private String email; // optional
 
-    public User(String userID, String username, String password) {
+    public User(String userID, String username, String password, String role, String email) {
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.role = "user"; // Default role is "user"
+        this.email = email; // 设置 email 字段
+        this.role = role;
     }
+
+    public User(String userID, String username, String password, String role, String email, String phone) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.phone = phone; // 设置 phone 字段
+        this.email = email;
+    }
+
 
     public String getUserID() {
         return userID;
@@ -46,6 +60,24 @@ public class User implements Serializable, Entity {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+
 
     @Override
     public String toString() {

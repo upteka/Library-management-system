@@ -1,9 +1,10 @@
-package main.java.com.library.server.model;
+package main.java.com.library.server.entity.impl;
 
-import java.io.Serializable;
+import main.java.com.library.server.entity.Entity;
+
 import java.util.Date;
 
-public class ReturnRecord implements Serializable, Entity {
+public class ReturnRecord implements Entity {
     private String returnID;
     private String recordID;
     private Date returnDate;
@@ -36,6 +37,14 @@ public class ReturnRecord implements Serializable, Entity {
 
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public String toString() {
+        return "ReturnRecord{" +
+                "returnID='" + returnID + '\'' +
+                ", recordID='" + recordID + '\'' +
+                ", returnDate=" + returnDate +
+                '}';
     }
 
     @Override
