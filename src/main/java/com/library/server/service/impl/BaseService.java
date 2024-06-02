@@ -1,8 +1,8 @@
-package main.java.com.library.server.entity.service.impl;
+package main.java.com.library.server.service.impl;
 
 import main.java.com.library.server.database.Dao;
 import main.java.com.library.server.entity.Entity;
-import main.java.com.library.server.entity.Service;
+import main.java.com.library.server.service.Service;
 
 import java.util.List;
 

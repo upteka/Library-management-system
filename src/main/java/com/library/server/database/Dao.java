@@ -51,7 +51,7 @@ public interface Dao<T extends Entity> {
     boolean update(T entity);
 
     /**
-     * 使用特定的字段和值从数据库中检索实体。
+     * 使用特定的字段和值从数据库中检索实体(精确匹配)。
      *
      * @param fieldName 要搜索的字段名称
      * @param value     要搜索的字段值
