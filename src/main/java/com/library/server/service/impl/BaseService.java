@@ -43,4 +43,5 @@ public class BaseService<T extends Entity> implements Service<T> {
         // 实现获取特定字段值的方法
         return dao.getByField(field, name);
     }
+
 }

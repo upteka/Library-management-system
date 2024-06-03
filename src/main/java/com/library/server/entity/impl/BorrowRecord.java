@@ -11,8 +11,9 @@ public class BorrowRecord implements Entity {
     private Date borrowDate;
     private Date returnDate;
 
-    public BorrowRecord(String recordID, String userID, String bookID, Date borrowDate, Date returnDate) {
-        this.borrowID = recordID;
+
+    public BorrowRecord(String borrowID, String userID, String bookID, Date borrowDate, Date returnDate) {
+        this.borrowID = borrowID;
         this.userID = userID;
         this.bookID = bookID;
         this.borrowDate = borrowDate;
@@ -62,7 +63,7 @@ public class BorrowRecord implements Entity {
     @Override
     public String toString() {
         return "BorrowRecord{" +
-                "recordID='" + borrowID + '\'' +
+                "borrowID='" + borrowID + '\'' +
                 ", userID='" + userID + '\'' +
                 ", bookID='" + bookID + '\'' +
                 ", borrowDate=" + borrowDate +

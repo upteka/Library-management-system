@@ -2,43 +2,45 @@ package main.java.com.library.server.network;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 
-public class ResponsePack {
+/**
+ * @author PC
+ */
+public class ResponsePack<T> {
     private String action;
-    private Object data;
+    private T data;
     private String message;
     private boolean isSuccess;
-    private String sessionID;
+    private String JwtToken;
 
     // 私有化构造函数
     private ResponsePack(Builder builder) {
         this.action = builder.action;
-        this.data = builder.data;
+        this.data = (T) builder.data;
         this.message = builder.message;
         this.isSuccess = builder.isSuccess;
-        this.sessionID = builder.sessionID;
+        this.JwtToken = builder.JwtToken;
     }
 
     // 公共构造函数
-    public ResponsePack(String action, String message, Object data, boolean isSuccess, String sessionID) {
+    public ResponsePack(String action, String message, T data, boolean isSuccess, String JwtToken) {
         this.action = action;
         this.data = data;
         this.message = message;
         this.isSuccess = isSuccess;
-        this.sessionID = sessionID;
+        this.JwtToken = JwtToken;
     }
 
-    //无sessionID构造函数
-    public ResponsePack(String action, String message, Object data, boolean isSuccess) {
+    //无JwtToken构造函数
+    public ResponsePack(String action, String message, T data, boolean isSuccess) {
         this.action = action;
         this.data = data;
         this.message = message;
         this.isSuccess = isSuccess;
-        this.sessionID = "null";
+        this.JwtToken = "null";
     }
 
-    public static ResponsePack success(String action, Object data) {
+    public ResponsePack success(String action, T data) {
         return new ResponsePack.Builder(action).data(data).message("success").isSuccess(true).build();
     }
 
@@ -67,11 +69,11 @@ public class ResponsePack {
         this.message = message;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 
@@ -83,54 +85,42 @@ public class ResponsePack {
         this.action = action;
     }
 
-    public String getSessionID() {
-        return sessionID;
+    public String getJwtToken() {
+        return JwtToken;
     }
 
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
+    public void setJwtToken(String JwtToken) {
+        this.JwtToken = JwtToken;
     }
 
     @Override
     public String toString() {
-        return "ResponsePack [action=" + action + ", data=" + data.toString() + ", message=" + message + ", isSuccess=" + isSuccess + ", sessionID=" + sessionID + "]";
+        return "ResponsePack [action=" + action + ", data=" + data.toString() + ", message=" + message + ", isSuccess=" + isSuccess + ", JwtToken=" + JwtToken + "]";
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ResponsePack that = (ResponsePack) o;
-        return isSuccess == that.isSuccess && Objects.equals(action, that.action) && Objects.equals(data, that.data) && Objects.equals(message, that.message) && Objects.equals(sessionID, that.sessionID);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(action, data, message, isSuccess, sessionID);
-    }
 
     // Builder Class
-    public static class Builder {
+    public static class Builder<T> {
         private final String action;
-        private Object data = null;
+        private T data = null;
         private String message = "";
         private boolean isSuccess = false;
-        private String sessionID = "null";
+        private String JwtToken = "null";
 
         public Builder(@NotNull String action) {
-            if (action == null || action.isEmpty()) {
+            if (action.isEmpty()) {
                 throw new IllegalArgumentException("Action cannot be null or empty");
             }
             this.action = action;
         }
 
-        public Builder data(Object data) {
+        public Builder data(T data) {
             this.data = data;
             return this;
         }
 
         public Builder message(@NotNull String message) {
-            if (message == null || message.isEmpty()) {
+            if (message.isEmpty()) {
                 throw new IllegalArgumentException("Message cannot be null or empty");
             }
             this.message = message;
@@ -142,11 +132,11 @@ public class ResponsePack {
             return this;
         }
 
-        public Builder setSessionID(@NotNull String sessionID) {
-            if (sessionID == null || sessionID.isEmpty()) {
-                throw new IllegalArgumentException("SessionID cannot be null or empty");
+        public Builder setJwtToken(@NotNull String JwtToken) {
+            if (JwtToken.isEmpty()) {
+                throw new IllegalArgumentException("JwtToken cannot be null or empty");
             }
-            this.sessionID = sessionID;
+            this.JwtToken = JwtToken;
             return this;
         }
 

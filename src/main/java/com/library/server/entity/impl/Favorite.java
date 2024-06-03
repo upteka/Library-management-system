@@ -3,9 +3,10 @@ package main.java.com.library.server.entity.impl;
 import main.java.com.library.server.entity.Entity;
 
 public class Favorite implements Entity {
-    private String favoriteID;
-    private String userID;
-    private String bookID;
+    private final String favoriteID;
+    private final String userID;
+    private final String bookID;
+
 
     public Favorite(String favoriteID, String userID, String bookID) {
         this.favoriteID = favoriteID;

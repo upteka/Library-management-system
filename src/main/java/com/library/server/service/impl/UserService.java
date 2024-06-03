@@ -3,6 +3,9 @@ package main.java.com.library.server.service.impl;
 import main.java.com.library.server.database.impl.BaseDao;
 import main.java.com.library.server.entity.impl.User;
 
+/**
+ * @author PC
+ */
 public class UserService extends BaseService<User> {
     public UserService() {
         super(new BaseDao<>(User.class));
@@ -16,7 +19,7 @@ public class UserService extends BaseService<User> {
         return super.getByField("email", email);
     }
 
-    public User getUserByEmaiOrUsername(String identifier) {
+    public User getUserByEmailOrUsername(String identifier) {
         User user = getUserByUsername(identifier);
         if (user == null) {
             user = getUserByEmail(identifier);
@@ -25,14 +28,14 @@ public class UserService extends BaseService<User> {
     }
 
     public boolean validateUser(String identifier, String password) {
-        User user = getUserByEmaiOrUsername(identifier);
+        User user = getUserByEmailOrUsername(identifier);
         return user != null && user.getPassword().equals(password);
     }
 
 
     public boolean isAdmin(String identifier) {
-        User user = getUserByEmaiOrUsername(identifier);
-        return user != null && user.getRole().equals("admin");
+        User user = getUserByEmailOrUsername(identifier);
+        return user != null && "admin".equals(user.getRole());
     }
 
 
