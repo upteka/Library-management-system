@@ -1,25 +1,26 @@
-package main.java.com.library.gui;
+package main.java.com.library.client.gui.effects;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FadeEffectUtils {
+public class FadeEffect {
+    // 更改一个组件的透明度以实现淡入淡出的效果
+    // 使用方法 applyFadeEffect(JComponent, boolean)
+    // true 表示出现, 透明度从 0 到 255
+    // false 表示消失, 透明度从 255 到 0
 
-    // 可调整的动画参数
     private static final int TIMER_DELAY = 1;  // 定时器延迟，单位为毫秒
     private static final float ALPHA_INCREMENT = 0.1f;  // 透明度变化增量
 
     private static Timer currentTimer = null;
 
     public static void applyFadeEffect(JComponent component, boolean fadeIn) {
-        // 如果当前有渐变效果正在执行，则取消之前的渐变
         if (currentTimer != null && currentTimer.isRunning()) {
             currentTimer.stop();
         }
 
-        // 创建新的渐变效果定时器
         Timer timer = fadeIn ? createFadeInTimer(component) : createFadeOutTimer(component);
         timer.start();
         currentTimer = timer;

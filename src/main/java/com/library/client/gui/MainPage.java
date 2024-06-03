@@ -1,20 +1,14 @@
-package main.java.com.library.gui;
+package main.java.com.library.client.gui;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.io.File;
-import java.io.IOException;
 
-import static main.java.com.library.gui.CreateComponent.setFormat;
-import static main.java.com.library.gui.FadeEffectUtils.applyFadeEffect;
+import static main.java.com.library.client.gui.effects.FadeEffect.applyFadeEffect;
+import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
 
 public class MainPage {
-    static Font customFont;
-
     public static void main(String[] args) {
         FlatLightLaf.setup();
         loadCustomFont();
@@ -40,13 +34,13 @@ public class MainPage {
                 0, 1, 40, 15, 20, Font.PLAIN);
 
         JButton loginButton = new JButton("继续");
-        setColor(loginButton, Color.WHITE, new Color(15, 163, 127));
+        setColor(loginButton, Color.WHITE, new Color(15, 163, 127), null);
         setFormat(loginButton, loginPanel, new Insets(0, 20, 20, 20),
                 0, 2, 1, 1, 40, 15,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 14, Font.BOLD);
 
         JLabel noAccountLabel = new JLabel("还没有账户?", SwingConstants.CENTER);
-        setColor(noAccountLabel, new Color(48, 48, 48), null);
+        setColor(noAccountLabel, new Color(48, 48, 48), null, null);
         setCustomFont(noAccountLabel, 12, Font.BOLD);
         noAccountLabel.setBounds(50, 368, 300, 20);
 
@@ -61,7 +55,7 @@ public class MainPage {
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0);
 
         JButton signupButton = new JButton("注册");
-        setColor(signupButton, Color.WHITE, new Color(15, 163, 127));
+        setColor(signupButton, Color.WHITE, new Color(15, 163, 127), null);
         setFormat(signupButton, loginPanel1, new Insets(0, 20, 20, 20),
                 0, 1, 0, 1, 40, 15,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 14, Font.BOLD);
@@ -93,52 +87,5 @@ public class MainPage {
         frame.add(welcomeLabel);
         frame.add(noAccountLabel);
         frame.setVisible(true);
-    }
-
-    private static void loadCustomFont() {
-        try {
-            File fontFile = new File(".\\lib\\pf.ttf");
-            customFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(customFont);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void setCustomFont(JComponent component, float size, int style) {
-        Font resizedFont = customFont.deriveFont(style, size);
-        component.setFont(resizedFont);
-    }
-
-    public static void addFocusListenerToField(JTextField field) {
-        field.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                field.setBorder(BorderFactory.createLineBorder(new Color(15, 163, 127), 1, true));
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                field.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true));
-            }
-        });
-    }
-
-    public static void setFrame(JFrame frame, int width, int height, LayoutManager layout, boolean resizable, int closeOperation) {
-        frame.setSize(width, height);
-        frame.setLayout(layout);
-        frame.setResizable(resizable);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(closeOperation);
-    }
-
-    public static void setColor(JComponent component, Color foreground, Color background) {
-        if (foreground != null) {
-            component.setForeground(foreground);
-        }
-        if (background != null) {
-            component.setBackground(background);
-        }
     }
 }
