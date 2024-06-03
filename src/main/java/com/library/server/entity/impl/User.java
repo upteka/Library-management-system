@@ -11,6 +11,7 @@ public class User implements Entity {
     private String phone;
     private String email; // optional
 
+
     public User(String userID, String username, String password, String role, String email) {
         this.userID = userID;
         this.username = username;
@@ -24,7 +25,7 @@ public class User implements Entity {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.phone = phone; // 设置 phone 字段
+        this.phone = phone;
         this.email = email;
     }
 

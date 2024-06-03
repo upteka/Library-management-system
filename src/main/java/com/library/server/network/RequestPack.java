@@ -2,32 +2,32 @@ package main.java.com.library.server.network;
 
 import java.util.Objects;
 
-public class RequestPack {
+/**
+ * @author PC
+ */
+public class RequestPack<T> {
 
     private String action;
-    private Object data;
+    private T data;
     private String message;
-    private String sessionID;
+    private String JwtToken = "";
 
-    public RequestPack(String action, Object data, String message, String sessionID) {
+    public RequestPack(String action, T data, String message, String JwtToken) {
         this.action = action;
         this.data = data;
-        this.sessionID = sessionID;
         this.message = message;
+        this.JwtToken = JwtToken;
     }
 
-    public RequestPack(String action, Object data, String message) {
-        this.action = action;
-        this.data = data;
-        this.sessionID = "";
-        this.message = message;
+    public RequestPack(String action, T data, String message) {
+        this(action, data, message, "");
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 
@@ -39,12 +39,12 @@ public class RequestPack {
         this.action = action;
     }
 
-    public String getSessionID() {
-        return sessionID;
+    public String getJwtToken() {
+        return JwtToken;
     }
 
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
+    public void setJwtToken(String JwtToken) {
+        this.JwtToken = JwtToken;
     }
 
     public String getMessage() {
@@ -55,55 +55,57 @@ public class RequestPack {
         this.message = message;
     }
 
+    @Override
     public String toString() {
-        return "RequestPack [action=" + action + ", data=" + data.toString() + ", token=" + sessionID + ", message=" + message + "]";
+        return "RequestPack [action=" + action + ", data=" + data + ", token=" + JwtToken + ", message=" + message + "]";
     }
+
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RequestPack that = (RequestPack) o;
-        return Objects.equals(action, that.action) && Objects.equals(data, that.data) && Objects.equals(sessionID, that.sessionID) && Objects.equals(message, that.message);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RequestPack<?> that = (RequestPack<?>) o;
+        return Objects.equals(action, that.action) && Objects.equals(data, that.data) && Objects.equals(JwtToken, that.JwtToken) && Objects.equals(message, that.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(action, data, sessionID, message);
+        return Objects.hash(action, data, JwtToken, message);
     }
 
-    class RequestPackBuilder {
+    static class RequestPackBuilder<T> {
         private String action;
-        private Object data;
-        private String sessionID;
+        private T data;
+        private String JwtToken;
         private String message;
 
-        public RequestPackBuilder setAction(String action) {
+        public RequestPackBuilder<T> setAction(String action) {
             this.action = action;
             return this;
         }
 
-        public RequestPackBuilder setData(Object data) {
+        public RequestPackBuilder<T> setData(T data) {
             this.data = data;
             return this;
         }
 
-        public RequestPackBuilder setSessionID(String sessionID) {
-            this.sessionID = sessionID;
+        public RequestPackBuilder<T> setJwtToken(String JwtToken) {
+            this.JwtToken = JwtToken;
             return this;
         }
 
-        public RequestPackBuilder setMessage(String message) {
+        public RequestPackBuilder<T> setMessage(String message) {
             this.message = message;
             return this;
         }
 
-        public RequestPack build() {
-            return new RequestPack(action, data, sessionID, message);
+        public RequestPack<T> build() {
+            return new RequestPack<>(action, data, message, JwtToken);
         }
-
-
     }
-
-
 }

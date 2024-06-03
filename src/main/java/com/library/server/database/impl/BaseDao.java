@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author PC
+ */
 public class BaseDao<T extends Entity> implements Dao<T> {
     private static final Logger LOGGER = Logger.getLogger(BaseDao.class.getName());
     private final Class<T> type;

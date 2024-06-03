@@ -8,5 +8,5 @@ public class BookService extends BaseService<Book> {
         super(new BaseDao<>(Book.class));
     }
 
-    // other methods
+
 }

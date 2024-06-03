@@ -39,6 +39,7 @@ public class ReturnRecord implements Entity {
         this.returnDate = returnDate;
     }
 
+    @Override
     public String toString() {
         return "ReturnRecord{" +
                 "returnID='" + returnID + '\'' +

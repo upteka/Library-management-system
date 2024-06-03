@@ -8,10 +8,20 @@ public class Book implements Entity {
     private String author;
     private String ISBN;
     private String status; // "available" or "borrowed"
-    private Integer count; // number of copies available
-    private String introduction; // brief description of the book optional
+    private Integer count;
+    private String introduction;
 
-
+    /**
+     * 构造函数用于初始化书籍对象。
+     *
+     * @param bookID       书籍ID
+     * @param title        标题
+     * @param author       作者
+     * @param ISBN         ISBN号
+     * @param status       状态
+     * @param count        数量
+     * @param introduction 简介
+     */
     public Book(String bookID, String title, String author, String ISBN, String status, Integer count, String introduction) {
         this.bookID = bookID;
         this.title = title;
@@ -61,6 +71,10 @@ public class Book implements Entity {
 
     public Integer getCount() {
         return count;
+    }
+
+    public boolean isAvailable() {
+        return status.equals("available");
     }
 
     public void setCount(Integer count) {

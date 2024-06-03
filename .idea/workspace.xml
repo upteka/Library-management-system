@@ -5,20 +5,49 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d571eaa3-629b-4962-b885-b07276467042" name="更改" comment="工作页面">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/book.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/io_jsonwebtoken_jjwt.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/jackson-annotations-2.12.7.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/jackson-core-2.12.7.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/jjwt-0.12.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/jjwt-impl-0.12.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/jjwt-jackson-0.12.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/network/ClientHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/network/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/network/handlers/RequestHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/network/handlers/ResponseHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/requests/Request.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/requests/impl/BaseRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/library/server/requests/impl/Borrow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/gui/FadeEffectUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/gui/FadeEffectUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/gui/createComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/gui/CreateComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/gui/mainPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/gui/MainPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/gui/showDeleteWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/gui/ShowDeleteWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/gui/showEditWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/gui/ShowEditWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/gui/showTable1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/gui/ShowTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/book.iml" beforeDir="false" afterPath="$PROJECT_DIR$/book.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/ClientHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BaseDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/database/impl/BaseDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/entity/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/BorrowRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/BorrowRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/Favorite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/Favorite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/ReturnRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/ReturnRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/entity/impl/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/network/RequestPack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/network/RequestPack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/network/ResponsePack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/network/ResponsePack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/network/Session.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/network/SessionManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/requests/RequestHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/requests/impl/Auth.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/requests/impl/Auth.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/requests/impl/Crud.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/requests/impl/Crud.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/requests/impl/Request.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/BaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/BaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/BookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/BorrowService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/BorrowService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/ReturnService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/ReturnService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/library/server/service/impl/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,8 +58,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -84,32 +113,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "true",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "模块",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
-    "vue.rearranger.settings.migration": "true",
-    "应用程序.FullScreenDemo.executor": "Run",
-    "应用程序.FullScreenListener.executor": "Run",
-    "应用程序.GUI.executor": "Run",
-    "应用程序.test.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;应用程序.FullScreenDemo.executor&quot;: &quot;Run&quot;,
+    &quot;应用程序.FullScreenListener.executor&quot;: &quot;Run&quot;,
+    &quot;应用程序.GUI.executor&quot;: &quot;Run&quot;,
+    &quot;应用程序.test.executor&quot;: &quot;Run&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="main.java.com.library.server.handler" />
@@ -142,14 +171,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
-        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
