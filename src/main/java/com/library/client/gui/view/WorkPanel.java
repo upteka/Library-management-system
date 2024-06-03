@@ -1,6 +1,7 @@
 package main.java.com.library.client.gui.view;
 
 import main.java.com.library.client.gui.ShowTable;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -47,35 +48,31 @@ public class WorkPanel extends JPanel {
         toggleButton.addActionListener(_ -> toggleButtonAction(toggleButton, p));
 
         JTextArea idArea = new JTextArea(data[i][0]);
-        idArea.setPreferredSize(new Dimension(60, 20));
         idArea.setEditable(false);
-        idArea.setBackground(new Color(255, 255, 255, 0));
-        setFormat(idArea, p, new Insets(0, 30, 0, 0), 1, 0, 14, Font.PLAIN);
+        idArea.setOpaque(false);
+        idArea.setPreferredSize(new Dimension(50, 30));
+        setFormat(idArea, p, new Insets(0, 40, 0, 0), 1, 0, 14, Font.PLAIN);
 
         JTextArea titleArea = new JTextArea(data[i][1]);
         titleArea.setEditable(false);
-        titleArea.setPreferredSize(new Dimension(70, 20));
-        titleArea.setBackground(new Color(255, 255, 255, 0));
-        setFormat(titleArea, p, new Insets(0, 20, 0, 0), 2, 0, 14, Font.PLAIN);
+        titleArea.setOpaque(false);
+        titleArea.setPreferredSize(new Dimension(70, 30));
+        setFormat(titleArea, p, new Insets(0, 40, 0, 0), 2, 0, 14, Font.PLAIN);
 
         JTextArea authorArea = new JTextArea(data[i][2]);
         authorArea.setEditable(false);
-        authorArea.setPreferredSize(new Dimension(40, 20));
-        authorArea.setBackground(new Color(255, 255, 255, 0));
-        setFormat(authorArea, p, new Insets(0, 20, 0, 0), 3, 0, 14, Font.PLAIN);
+        authorArea.setOpaque(false);
+        authorArea.setPreferredSize(new Dimension(70, 30));
+        setFormat(authorArea, p, new Insets(0, 40, 0, 0), 3, 0, 14, Font.PLAIN);
 
         JTextArea isbnArea = new JTextArea(data[i][3]);
         isbnArea.setEditable(false);
-        isbnArea.setPreferredSize(new Dimension(100, 20));
-        isbnArea.setBackground(new Color(255, 255, 255, 0));
-        setFormat(isbnArea, p, new Insets(0, 20, 0, 0), 4, 0, 14, Font.PLAIN);
+        isbnArea.setOpaque(false);
+        isbnArea.setPreferredSize(new Dimension(70, 30));
+        setFormat(isbnArea, p, new Insets(0, 40, 0, 0), 4, 0, 14, Font.PLAIN);
 
-        JPanel statusPanel = new JPanel(new GridBagLayout());
-        JLabel statusLabel = new JLabel(data[i][4]);
-        statusLabel.setForeground(new Color(45, 88, 42));
-        statusPanel.setBackground(new Color(222, 234, 221));
-        statusPanel.add(statusLabel);
-        setFormat(statusPanel, p, new Insets(0, 20, 0, 0), 5, 0, 10, 10, 0, 0);
+        JPanel statusPanel = getjPanel(i);
+        setFormat(statusPanel, p, new Insets(0, 40, 0, 0), 5, 0, 10, 10, 0, 0);
 
         JButton borrowButton = new JButton("借阅");
         setColor(borrowButton, new Color(41, 98, 241), new Color(230, 230, 230), BorderFactory.createEmptyBorder());
@@ -109,6 +106,22 @@ public class WorkPanel extends JPanel {
         AllComponents.put(p, components);
 
         setFormat(p, this, new Insets(0, 0, 0, 0), 0, i, 1, 0, 0, 40, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, 0, 0);
+    }
+
+    private @NotNull JPanel getjPanel(int i) {
+        JPanel statusPanel = new JPanel(LAYOUT);
+        JTextArea statusArea = new JTextArea(data[i][4]);
+        statusArea.setEditable(false);
+        statusArea.setOpaque(false);
+        if (data[i][4].equals("Available")) {
+            statusArea.setForeground(new Color(45, 88, 42));
+            statusPanel.setBackground(new Color(222, 234, 221));
+        } else {
+            statusArea.setForeground(new Color(130, 28, 18));
+            statusPanel.setBackground(new Color(251, 228, 224));
+        }
+        statusPanel.add(statusArea);
+        return statusPanel;
     }
 
     private void toggleButtonAction(JToggleButton toggleButton, JPanel panel) {
