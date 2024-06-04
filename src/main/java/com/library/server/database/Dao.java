@@ -1,6 +1,6 @@
 package main.java.com.library.server.database;
 
-import main.java.com.library.server.entity.Entity;
+import main.java.com.library.common.entity.Entity;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface Dao<T extends Entity> {
      * @param entity 要添加的实体
      * @return 如果实体添加成功，则返回 true；否则返回 false
      */
-    boolean add(T entity);
+    String add(T entity);
 
     /**
      * 使用实体的 ID 从数据库中删除实体。
@@ -46,9 +46,9 @@ public interface Dao<T extends Entity> {
      * 更新数据库中的现有实体。
      *
      * @param entity 包含更新值的实体
-     * @return 如果实体更新成功，则返回 true；否则返回 false
+     * @return 如果实体更新成功，则返回 "success"；否则返回 "failed"
      */
-    boolean update(T entity);
+    String update(T entity);
 
     /**
      * 使用特定的字段和值从数据库中检索实体(精确匹配)。

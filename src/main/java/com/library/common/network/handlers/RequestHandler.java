@@ -1,8 +1,8 @@
-package main.java.com.library.server.network.handlers;
+package main.java.com.library.common.network.handlers;
 
-import main.java.com.library.server.network.JwtUtil;
-import main.java.com.library.server.network.RequestPack;
-import main.java.com.library.server.network.ResponsePack;
+import main.java.com.library.common.network.JwtUtil;
+import main.java.com.library.common.network.RequestPack;
+import main.java.com.library.common.network.ResponsePack;
 
 /**
  * @author PC
@@ -22,16 +22,11 @@ public class RequestHandler {
         String jwtToken = requestPack.getJwtToken();
         if (jwtToken == null) {
             return false;
-        } else if (JwtUtil.isTokenExpired(jwtToken)) {
-            return false;
-        } else {
-            return true;
-        }
+        } else return !JwtUtil.isTokenExpired(jwtToken);
     }
 
     public static <T> ResponsePack<T> makeResponse(RequestPack<T> requestPack, T data, String message, boolean isSuccess) {
-        ResponsePack<T> responsePack = new ResponsePack<>(requestPack.getAction(), message, data, isSuccess, requestPack.getJwtToken());
-        return responsePack;
+        return new ResponsePack<>(requestPack.getAction(), message, data, isSuccess, requestPack.getJwtToken());
     }
 
 

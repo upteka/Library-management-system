@@ -1,7 +1,7 @@
 package main.java.com.library.server.service.impl;
 
+import main.java.com.library.common.entity.Entity;
 import main.java.com.library.server.database.Dao;
-import main.java.com.library.server.entity.Entity;
 import main.java.com.library.server.service.Service;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class BaseService<T extends Entity> implements Service<T> {
     }
 
     @Override
-    public boolean add(T entity) {
+    public String add(T entity) {
         return dao.add(entity);
     }
 
@@ -34,7 +34,7 @@ public class BaseService<T extends Entity> implements Service<T> {
     }
 
     @Override
-    public boolean update(T entity) {
+    public String update(T entity) {
         return dao.update(entity);
     }
 

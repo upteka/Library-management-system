@@ -1,10 +1,10 @@
 package main.java.com.library.server.requests.impl;
 
-import main.java.com.library.server.network.RequestPack;
-import main.java.com.library.server.network.ResponsePack;
+import main.java.com.library.common.network.RequestPack;
+import main.java.com.library.common.network.ResponsePack;
 
 /**
- * @author PC
+ * @author upteka
  */
 public class BaseRequest<T> {
 

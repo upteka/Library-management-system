@@ -1,4 +1,4 @@
-package main.java.com.library.server.entity;
+package main.java.com.library.common.entity;
 
 import java.io.Serializable;
 

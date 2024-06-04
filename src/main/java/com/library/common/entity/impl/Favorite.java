@@ -1,6 +1,7 @@
-package main.java.com.library.server.entity.impl;
+package main.java.com.library.common.entity.impl;
 
-import main.java.com.library.server.entity.Entity;
+import com.github.f4b6a3.ulid.UlidCreator;
+import main.java.com.library.common.entity.Entity;
 
 public class Favorite implements Entity {
     private final String favoriteID;
@@ -8,8 +9,8 @@ public class Favorite implements Entity {
     private final String bookID;
 
 
-    public Favorite(String favoriteID, String userID, String bookID) {
-        this.favoriteID = favoriteID;
+    public Favorite(String userID, String bookID) {
+        this.favoriteID = UlidCreator.getUlid().toString();
         this.userID = userID;
         this.bookID = bookID;
     }

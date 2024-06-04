@@ -1,16 +1,16 @@
 package main.java.com.library.server.requests.impl;
 
-import main.java.com.library.server.entity.Entity;
-import main.java.com.library.server.entity.impl.BorrowRecord;
-import main.java.com.library.server.network.RequestPack;
-import main.java.com.library.server.network.ResponsePack;
-import main.java.com.library.server.network.handlers.RequestHandler;
-import main.java.com.library.server.network.handlers.ResponseHandler;
+import main.java.com.library.common.entity.Entity;
+import main.java.com.library.common.entity.impl.BorrowRecord;
+import main.java.com.library.common.network.RequestPack;
+import main.java.com.library.common.network.ResponsePack;
+import main.java.com.library.common.network.handlers.RequestHandler;
+import main.java.com.library.common.network.handlers.ResponseHandler;
 import main.java.com.library.server.requests.Request;
 import main.java.com.library.server.service.impl.BorrowService;
 
 /**
- * @author PC
+ * @author upteka
  */
 public class Borrow implements Request<BorrowRecord> {
 
@@ -26,15 +26,16 @@ public class Borrow implements Request<BorrowRecord> {
     @Override
     public ResponsePack<BorrowRecord> handle(RequestPack<? extends Entity> requestPack) {
         Entity entity = RequestHandler.unPackRequest(requestPack);
-        if (!(entity instanceof BorrowRecord)) {
-            return ResponseHandler.packResponse(action, false, "Invalid request type, expected BorrowRecord", null, requestPack.getJwtToken());
-        }
+        String jwtToken = requestPack.getJwtToken();
 
+        if (!(entity instanceof BorrowRecord)) {
+            return ResponseHandler.packResponse(action, false, "Invalid request type, expected BorrowRecord", null, jwtToken);
+        }
 
         if (borrowService.borrowBook((BorrowRecord) requestPack.getData())) {
-            return ResponseHandler.packResponse(action, true, "Borrowed successfully", null, requestPack.getJwtToken());
+            return ResponseHandler.packResponse(action, true, "Borrowed successfully", null, jwtToken);
         }
 
-        return ResponseHandler.packResponse(action, false, "Borrowed failed the book is not available", null, requestPack.getJwtToken());
+        return ResponseHandler.packResponse(action, false, "Borrowed failed the book is not available", null, jwtToken);
     }
 }

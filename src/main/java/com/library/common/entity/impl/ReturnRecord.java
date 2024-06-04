@@ -1,17 +1,18 @@
-package main.java.com.library.server.entity.impl;
+package main.java.com.library.common.entity.impl;
 
-import main.java.com.library.server.entity.Entity;
+import com.github.f4b6a3.ulid.UlidCreator;
+import main.java.com.library.common.entity.Entity;
 
 import java.util.Date;
 
 public class ReturnRecord implements Entity {
     private String returnID;
-    private String recordID;
+    private String borrowID;
     private Date returnDate;
 
-    public ReturnRecord(String returnID, String recordID, Date returnDate) {
-        this.returnID = returnID;
-        this.recordID = recordID;
+    public ReturnRecord(String returnID, String borrowID, Date returnDate) {
+        this.returnID = UlidCreator.getUlid().toString();
+        this.borrowID = borrowID;
         this.returnDate = returnDate;
     }
 
@@ -23,12 +24,12 @@ public class ReturnRecord implements Entity {
         this.returnID = returnID;
     }
 
-    public String getRecordID() {
-        return recordID;
+    public String getborrowID() {
+        return borrowID;
     }
 
-    public void setRecordID(String recordID) {
-        this.recordID = recordID;
+    public void setborrowID(String borrowID) {
+        this.borrowID = borrowID;
     }
 
     public Date getReturnDate() {
@@ -43,7 +44,7 @@ public class ReturnRecord implements Entity {
     public String toString() {
         return "ReturnRecord{" +
                 "returnID='" + returnID + '\'' +
-                ", recordID='" + recordID + '\'' +
+                ", borrowID='" + borrowID + '\'' +
                 ", returnDate=" + returnDate +
                 '}';
     }

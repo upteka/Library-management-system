@@ -1,9 +1,11 @@
-package main.java.com.library.server.network;
+package main.java.com.library.common.network;
+
+import main.java.com.library.common.entity.Entity;
 
 import java.util.Objects;
 
 /**
- * @author PC
+ * @author upteka
  */
 public class RequestPack<T> {
 
@@ -11,6 +13,7 @@ public class RequestPack<T> {
     private T data;
     private String message;
     private String JwtToken = "";
+
 
     public RequestPack(String action, T data, String message, String JwtToken) {
         this.action = action;
@@ -53,6 +56,14 @@ public class RequestPack<T> {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getType() {
+        return data.getClass().getSimpleName();
+    }
+
+    public boolean isEntity() {
+        return data != null && Entity.class.isAssignableFrom(data.getClass());
     }
 
     @Override

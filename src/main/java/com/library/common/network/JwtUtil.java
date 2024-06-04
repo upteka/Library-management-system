@@ -1,4 +1,4 @@
-package main.java.com.library.server.network;
+package main.java.com.library.common.network;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author PC
+ * @author upteka
  */
 public class JwtUtil {
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // Generates a secure random key
@@ -36,9 +36,9 @@ public class JwtUtil {
         PERMISSIONS.put("user", userPermissions);
     }
 
-    public static String generateToken(String userName, String role) {
+    public static String generateToken(String userID, String role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userName);
+        claims.put("userId", userID);
         claims.put("role", role);
 
         return Jwts.builder()

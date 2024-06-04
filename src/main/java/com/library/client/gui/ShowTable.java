@@ -49,11 +49,7 @@ public class ShowTable {
             public void componentResized(ComponentEvent e) {
                 int magicNumber = startValue + mainFrame.getWidth() - width;
                 System.out.println("" + magicNumber);
-                if (magicNumber > 30) {
-                    workPanel.updateLayout(magicNumber);
-                } else {
-                    workPanel.updateLayout(30);
-                }
+                workPanel.updateLayout(Math.max(magicNumber, 30));
                 mainFrame.revalidate();
                 mainFrame.repaint();
             }
@@ -62,11 +58,7 @@ public class ShowTable {
         mainFrame.addWindowStateListener(e -> {
             if ((e.getNewState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
                 int magicNumber = startValue + mainFrame.getWidth() - width;
-                if (magicNumber > 30) {
-                    workPanel.updateLayout(magicNumber);
-                } else {
-                    workPanel.updateLayout(30);
-                }
+                workPanel.updateLayout(Math.max(magicNumber, 30));
                 mainFrame.revalidate();
                 mainFrame.repaint();
             }

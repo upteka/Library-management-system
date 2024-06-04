@@ -1,6 +1,6 @@
-package main.java.com.library.server.network.handlers;
+package main.java.com.library.common.network.handlers;
 
-import main.java.com.library.server.network.ResponsePack;
+import main.java.com.library.common.network.ResponsePack;
 
 /**
  * @author PC
@@ -8,11 +8,11 @@ import main.java.com.library.server.network.ResponsePack;
 public class ResponseHandler {
 
     public static <T> ResponsePack<T> packResponse(String action, boolean isSuccess, String message, T data, String JwtToken) {
-        return new ResponsePack(action, message, data, isSuccess, JwtToken);
+        return new ResponsePack<>(action, message, data, isSuccess, JwtToken);
     }
 
     public static <T> ResponsePack<T> packResponse(String action, boolean isSuccess, String message, T data) {
-        return new ResponsePack(action, message, data, isSuccess);
+        return new ResponsePack<>(action, message, data, isSuccess);
     }
 }
 

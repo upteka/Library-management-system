@@ -1,22 +1,24 @@
-package main.java.com.library.server.entity.impl;
+package main.java.com.library.common.entity.impl;
 
-import main.java.com.library.server.entity.Entity;
+import com.github.f4b6a3.ulid.Ulid;
+import com.github.f4b6a3.ulid.UlidCreator;
+import main.java.com.library.common.entity.Entity;
 
-import java.util.Date;
+import java.time.Instant;
 
 public class BorrowRecord implements Entity {
     private String borrowID;
     private String userID;
     private String bookID;
-    private Date borrowDate;
-    private Date returnDate;
+    private Instant borrowDate;
+    private Instant returnDate;
 
 
-    public BorrowRecord(String borrowID, String userID, String bookID, Date borrowDate, Date returnDate) {
-        this.borrowID = borrowID;
+    public BorrowRecord(String userID, String bookID, Instant returnDate) {
+        this.borrowID = UlidCreator.getUlid().toString();
         this.userID = userID;
         this.bookID = bookID;
-        this.borrowDate = borrowDate;
+        this.borrowDate = Ulid.getInstant(borrowID);
         this.returnDate = returnDate;
     }
 
@@ -24,7 +26,7 @@ public class BorrowRecord implements Entity {
         return borrowID;
     }
 
-    public void setBorrowID(String borrowID) {
+    private void setBorrowID(String borrowID) {
         this.borrowID = borrowID;
     }
 
@@ -44,19 +46,19 @@ public class BorrowRecord implements Entity {
         this.bookID = bookID;
     }
 
-    public Date getBorrowDate() {
+    public Instant getBorrowDate() {
         return borrowDate;
     }
 
-    public void setBorrowDate(Date borrowDate) {
+    public void setBorrowDate(Instant borrowDate) {
         this.borrowDate = borrowDate;
     }
 
-    public Date getReturnDate() {
+    public Instant getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(Date returnDate) {
+    public void setReturnDate(Instant returnDate) {
         this.returnDate = returnDate;
     }
 

@@ -1,21 +1,19 @@
 package main.java.com.library.server.database.impl;
 
+import main.java.com.library.common.entity.Entity;
 import main.java.com.library.server.database.Dao;
 import main.java.com.library.server.database.DatabaseManager;
-import main.java.com.library.server.entity.Entity;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author PC
+ * @author upteka
  */
 public class BaseDao<T extends Entity> implements Dao<T> {
     private static final Logger LOGGER = Logger.getLogger(BaseDao.class.getName());
@@ -27,7 +25,11 @@ public class BaseDao<T extends Entity> implements Dao<T> {
 
     private void setParameters(PreparedStatement stmt, Object... params) throws SQLException {
         for (int i = 0; i < params.length; i++) {
-            stmt.setObject(i + 1, params[i]);
+            if (params[i] instanceof Instant) {
+                stmt.setTimestamp(i + 1, Timestamp.from((Instant) params[i]));
+            } else {
+                stmt.setObject(i + 1, params[i]);
+            }
         }
     }
 
@@ -36,10 +38,19 @@ public class BaseDao<T extends Entity> implements Dao<T> {
             T entity = type.getDeclaredConstructor().newInstance();
             for (Field field : type.getDeclaredFields()) {
                 field.setAccessible(true);
-                if (field.getType() == long.class) {
-                    field.set(entity, rs.getLong(field.getName()));
+                String columnName = field.getName();
+                Class<?> fieldType = field.getType();
+                if (fieldType == long.class || fieldType == Long.class) {
+                    field.set(entity, rs.getLong(columnName));
+                } else if (fieldType == int.class || fieldType == Integer.class) {
+                    field.set(entity, rs.getInt(columnName));
+                } else if (fieldType == Instant.class) {
+                    Timestamp timestamp = rs.getTimestamp(columnName);
+                    if (timestamp != null) {
+                        field.set(entity, timestamp.toInstant());
+                    }
                 } else {
-                    field.set(entity, rs.getObject(field.getName()));
+                    field.set(entity, rs.getObject(columnName));
                 }
             }
             return entity;
@@ -89,9 +100,9 @@ public class BaseDao<T extends Entity> implements Dao<T> {
     }
 
     @Override
-    public boolean add(T entity) {
+    public String add(T entity) {
         String query = "INSERT INTO " + type.getSimpleName().toLowerCase() + "s" + " (" + getFields() + ") VALUES (" + getPlaceholders() + ")";
-        return executeUpdate(query, getFieldValues(entity));
+        return executeUpdate(query, getFieldValues(entity)) ? "success" : "failed";
     }
 
     @Override
@@ -113,9 +124,9 @@ public class BaseDao<T extends Entity> implements Dao<T> {
     }
 
     @Override
-    public boolean update(T entity) {
+    public String update(T entity) {
         String query = "UPDATE " + type.getSimpleName().toLowerCase() + "s SET " + getUpdateFields() + " WHERE id = ?";
-        return executeUpdate(query, getFieldValuesWithId(entity));
+        return executeUpdate(query, getFieldValuesWithId(entity)) ? "success" : "failed";
     }
 
     @Override
@@ -155,7 +166,12 @@ public class BaseDao<T extends Entity> implements Dao<T> {
             List<Object> values = new ArrayList<>();
             for (Field field : type.getDeclaredFields()) {
                 field.setAccessible(true);
-                values.add(field.get(entity));
+                Object value = field.get(entity);
+                if (value instanceof Instant) {
+                    values.add(Timestamp.from((Instant) value));
+                } else {
+                    values.add(value);
+                }
             }
             return values.toArray();
         } catch (IllegalAccessException e) {
@@ -169,7 +185,12 @@ public class BaseDao<T extends Entity> implements Dao<T> {
             for (Field field : type.getDeclaredFields()) {
                 field.setAccessible(true);
                 if (!field.getName().equals("id")) {
-                    values.add(field.get(entity));
+                    Object value = field.get(entity);
+                    if (value instanceof Instant) {
+                        values.add(Timestamp.from((Instant) value));
+                    } else {
+                        values.add(value);
+                    }
                 }
             }
             Field idField = type.getDeclaredField("id");

@@ -1,6 +1,7 @@
-package main.java.com.library.server.entity.impl;
+package main.java.com.library.common.entity.impl;
 
-import main.java.com.library.server.entity.Entity;
+import com.github.f4b6a3.ulid.UlidCreator;
+import main.java.com.library.common.entity.Entity;
 
 
 public class User implements Entity {
@@ -12,16 +13,16 @@ public class User implements Entity {
     private String email; // optional
 
 
-    public User(String userID, String username, String password, String role, String email) {
-        this.userID = userID;
+    public User(String username, String password, String role, String email) {
+        this.userID = UlidCreator.getUlid().toString();
         this.username = username;
         this.password = password;
-        this.email = email; // 设置 email 字段
+        this.email = email;
         this.role = role;
     }
 
-    public User(String userID, String username, String password, String role, String email, String phone) {
-        this.userID = userID;
+    public User(String username, String password, String role, String email, String phone) {
+        this.userID = UlidCreator.getUlid().toString();
         this.username = username;
         this.password = password;
         this.role = role;
@@ -34,7 +35,7 @@ public class User implements Entity {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    private void setUserID(String userID) {
         this.userID = userID;
     }
 

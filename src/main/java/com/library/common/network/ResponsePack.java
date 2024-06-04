@@ -1,10 +1,10 @@
-package main.java.com.library.server.network;
+package main.java.com.library.common.network;
 
 import org.jetbrains.annotations.NotNull;
 
 
 /**
- * @author PC
+ * @author upteka
  */
 public class ResponsePack<T> {
     private String action;
@@ -14,7 +14,7 @@ public class ResponsePack<T> {
     private String JwtToken;
 
     // 私有化构造函数
-    private ResponsePack(Builder builder) {
+    private ResponsePack(Builder<T> builder) {
         this.action = builder.action;
         this.data = (T) builder.data;
         this.message = builder.message;
@@ -114,7 +114,7 @@ public class ResponsePack<T> {
             this.action = action;
         }
 
-        public Builder data(T data) {
+        public Builder<T> data(T data) {
             this.data = data;
             return this;
         }

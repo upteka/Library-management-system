@@ -1,8 +1,8 @@
 package main.java.com.library.server.requests;
 
-import main.java.com.library.server.entity.Entity;
-import main.java.com.library.server.network.RequestPack;
-import main.java.com.library.server.network.ResponsePack;
+import main.java.com.library.common.entity.Entity;
+import main.java.com.library.common.network.RequestPack;
+import main.java.com.library.common.network.ResponsePack;
 
 import java.io.Serializable;
 

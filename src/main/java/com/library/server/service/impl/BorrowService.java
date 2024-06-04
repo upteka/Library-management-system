@@ -1,11 +1,11 @@
 package main.java.com.library.server.service.impl;
 
+import main.java.com.library.common.entity.impl.Book;
+import main.java.com.library.common.entity.impl.BorrowRecord;
 import main.java.com.library.server.database.impl.BaseDao;
-import main.java.com.library.server.entity.impl.Book;
-import main.java.com.library.server.entity.impl.BorrowRecord;
 
 /**
- * @author PC
+ * @author upteka
  */
 public class BorrowService extends BaseService<BorrowRecord> {
     public BorrowService() {
@@ -16,10 +16,10 @@ public class BorrowService extends BaseService<BorrowRecord> {
         BookService bookService = new BookService();
         Book book = bookService.get(borrowRecord.getBookID());
 
-        if (book.isAvailable()) {
-            return super.update(borrowRecord);
+        if (book.isAvailable() || book.getCount() != 0) {
+            return super.update(borrowRecord).equals("success");
         }
         return false;
     }
-
 }
+
