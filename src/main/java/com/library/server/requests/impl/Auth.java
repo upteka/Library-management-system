@@ -36,8 +36,8 @@ public class Auth implements Request<User> {
 
     /**
      * 处理认证请求并返回响应对象。
-     * 如果用户名和密码验证成功，则创建一个新的会话并返回成功的响应包；
-     * 否则，返回失败的响应包。
+     * 如果用户名和密码验证成功，则创建一个新的会话并返回成功的响应包, 其中包含 JWT 令牌；
+     * 否则，返回失败的响应包, 其中包含错误信息。
      *
      * @param requestPack 包含请求数据的对象
      * @return 包含操作结果的 {@link ResponsePack} 对象
@@ -55,8 +55,10 @@ public class Auth implements Request<User> {
             if (userService.validateUser(username, password)) {
                 user = userService.getUser(username);
                 String jwtToken = JwtUtil.generateToken(user.getUsername(), user.getRole());
+                logger.info("Authentication success for user: {}", username);
                 return ResponseHandler.packResponse(action, true, "success", null, jwtToken);
             } else {
+                logger.info("Authentication failed for user: {}", username);
                 return ResponseHandler.packResponse(action, false, "Invalid username or password", null);
             }
         } catch (Exception e) {

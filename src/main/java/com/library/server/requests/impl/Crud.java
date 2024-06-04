@@ -8,6 +8,7 @@ import main.java.com.library.server.requests.Request;
 import main.java.com.library.server.service.impl.BaseService;
 
 import java.io.Serial;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,6 +60,7 @@ public class Crud<T extends Entity> implements Request<T> {
     public ResponsePack<T> handle(RequestPack<? extends Entity> requestPack) {
         try {
             String entityName = requestPack.getType();
+//            @SuppressWarnings("unchecked")
             T data = (T) requestPack.getData();
             String id = data != null ? data.getId() : null;
             String jwtToken = requestPack.getJwtToken();
@@ -78,7 +80,7 @@ public class Crud<T extends Entity> implements Request<T> {
         return JwtUtil.canPerform(jwtToken, action, entityName);
     }
 
-    private ResponsePack<T> processAction(String action, String entityName, T data, String id) {
+    private ResponsePack<T> processAction(String action, String entityName, T data, String id) throws SQLException {
         boolean success = false;
         String message = "";
         T result = null;

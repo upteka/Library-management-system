@@ -1,6 +1,5 @@
 package main.java.com.library.common.entity.impl;
 
-import com.github.f4b6a3.ulid.Ulid;
 import com.github.f4b6a3.ulid.UlidCreator;
 import main.java.com.library.common.entity.Entity;
 
@@ -18,7 +17,7 @@ public class BorrowRecord implements Entity {
         this.borrowID = UlidCreator.getUlid().toString();
         this.userID = userID;
         this.bookID = bookID;
-        this.borrowDate = Ulid.getInstant(borrowID);
+        this.borrowDate = Instant.now();
         this.returnDate = returnDate;
     }
 

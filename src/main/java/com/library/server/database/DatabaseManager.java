@@ -54,6 +54,7 @@ public class DatabaseManager {
             + "favoriteID VARCHAR(255) PRIMARY KEY,"
             + "userID VARCHAR(255) NOT NULL,"
             + "bookID VARCHAR(255) NOT NULL,"
+            + "UNIQUE KEY unique_favorite (userID, bookID),"
             + "FOREIGN KEY (userID) REFERENCES users(userID),"
             + "FOREIGN KEY (bookID) REFERENCES books(bookID)"
             + ")";

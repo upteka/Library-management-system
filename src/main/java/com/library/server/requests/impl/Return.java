@@ -48,7 +48,7 @@ public class Return implements Request<ReturnRecord> {
                 return ResponseHandler.packResponse(action, false, result, null);
             }
         } catch (Exception e) {
-            logger.error("Return book failed for request: " + requestPack, e);
+            logger.error("Return book failed for request: {}", requestPack, e);
             return ResponseHandler.packResponse(action, false, "Internal server error", null);
         }
     }

@@ -1,5 +1,6 @@
 package main.java.com.library.server.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public interface Service<T> {
      * @param entity 要添加的实体
      * @return 如果添加成功则返回 true，否则返回 false
      */
-    String add(T entity);
+    String add(T entity) throws SQLException;
 
     /**
      * 根据 ID 删除一个实体。

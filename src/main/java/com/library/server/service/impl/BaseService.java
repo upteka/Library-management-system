@@ -4,6 +4,7 @@ import main.java.com.library.common.entity.Entity;
 import main.java.com.library.server.database.Dao;
 import main.java.com.library.server.service.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class BaseService<T extends Entity> implements Service<T> {
@@ -14,7 +15,7 @@ public class BaseService<T extends Entity> implements Service<T> {
     }
 
     @Override
-    public String add(T entity) {
+    public String add(T entity) throws SQLException {
         return dao.add(entity);
     }
 

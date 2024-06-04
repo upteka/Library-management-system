@@ -100,7 +100,7 @@ public class BaseDao<T extends Entity> implements Dao<T> {
     }
 
     @Override
-    public String add(T entity) {
+    public String add(T entity) throws SQLException {
         String query = "INSERT INTO " + type.getSimpleName().toLowerCase() + "s" + " (" + getFields() + ") VALUES (" + getPlaceholders() + ")";
         return executeUpdate(query, getFieldValues(entity)) ? "success" : "failed";
     }

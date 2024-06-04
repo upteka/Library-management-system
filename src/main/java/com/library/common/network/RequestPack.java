@@ -12,7 +12,7 @@ public class RequestPack<T> {
     private String action;
     private T data;
     private String message;
-    private String JwtToken = "";
+    private String JwtToken;
 
 
     public RequestPack(String action, T data, String message, String JwtToken) {

@@ -5,36 +5,43 @@ import main.java.com.library.common.entity.impl.BorrowRecord;
 import main.java.com.library.common.entity.impl.ReturnRecord;
 import main.java.com.library.server.database.impl.BaseDao;
 
+import java.sql.SQLException;
 import java.time.Instant;
-import java.util.Date;
 
 public class ReturnService extends BaseService<ReturnRecord> {
+
 
     public ReturnService() {
         super(new BaseDao<>(ReturnRecord.class));
     }
 
-    public String returnBook(ReturnRecord returnRecord) {
+    public String returnBook(ReturnRecord returnRecord) throws SQLException {
         BorrowService borrowService = new BorrowService();
-        BorrowRecord borrowRecord = borrowService.get(returnRecord.getborrowID());
+        BorrowRecord borrowRecord = borrowService.get(returnRecord.getBorrowID());
 
         if (borrowRecord == null) {
-            return "Failed to find borrow record"; // 未能找到匹配的借阅记录
+            return "Failed to find borrow record";
         }
 
         BookService bookService = new BookService();
         Book book = bookService.get(borrowRecord.getBookID());
 
         if (book == null) {
-            return "Failed to find book"; // 未能找到匹配的书籍
+            return "Failed to find book";
         }
+
         // 更新借阅记录的归还时间
         borrowRecord.setReturnDate(Instant.now());
         borrowService.update(borrowRecord);
 
-        // 添加新的还书记录
-        returnRecord.setReturnDate(new Date());
-        return super.add(returnRecord); // 触发器将自动更新 availableCount 和 status
-    }
+        // 服务端设置还书记录的归还时间
+        returnRecord.setReturnDate(Instant.now());
+        String addResult = super.add(returnRecord);
 
+        if ("Success".equals(addResult)) {
+            return "Book returned successfully";
+        } else {
+            return "Failed to add return record";
+        }
+    }
 }

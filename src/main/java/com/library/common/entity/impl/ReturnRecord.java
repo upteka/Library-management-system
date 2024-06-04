@@ -1,19 +1,20 @@
 package main.java.com.library.common.entity.impl;
 
+import com.github.f4b6a3.ulid.Ulid;
 import com.github.f4b6a3.ulid.UlidCreator;
 import main.java.com.library.common.entity.Entity;
 
-import java.util.Date;
+import java.time.Instant;
 
 public class ReturnRecord implements Entity {
     private String returnID;
     private String borrowID;
-    private Date returnDate;
+    private Instant returnDate;
 
-    public ReturnRecord(String returnID, String borrowID, Date returnDate) {
+    public ReturnRecord(String borrowID) {
         this.returnID = UlidCreator.getUlid().toString();
         this.borrowID = borrowID;
-        this.returnDate = returnDate;
+        this.returnDate = Ulid.getInstant(returnID);
     }
 
     public String getReturnID() {
@@ -24,19 +25,19 @@ public class ReturnRecord implements Entity {
         this.returnID = returnID;
     }
 
-    public String getborrowID() {
+    public String getBorrowID() {
         return borrowID;
     }
 
-    public void setborrowID(String borrowID) {
+    public void setBorrowID(String borrowID) {
         this.borrowID = borrowID;
     }
 
-    public Date getReturnDate() {
+    public Instant getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(Date returnDate) {
+    public void setReturnDate(Instant returnDate) {
         this.returnDate = returnDate;
     }
 

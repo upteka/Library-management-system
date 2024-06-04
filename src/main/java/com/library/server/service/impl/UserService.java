@@ -3,6 +3,8 @@ package main.java.com.library.server.service.impl;
 import main.java.com.library.common.entity.impl.User;
 import main.java.com.library.server.database.impl.BaseDao;
 
+import java.sql.SQLException;
+
 /**
  * @author PC
  */
@@ -36,6 +38,7 @@ public class UserService extends BaseService<User> {
         return user;
     }
 
+
     public boolean validateUser(String identifier, String password) {
         User user = getUser(identifier);
         return user != null && user.getPassword().equals(password);
@@ -51,7 +54,7 @@ public class UserService extends BaseService<User> {
         return user != null && "admin".equals(user.getRole());
     }
 
-    public String registerUser(User user) {
+    public String registerUser(User user) throws SQLException {
         if (isUserExists(user.getUsername())) {
             return "Failed to register user: Username already exists";
         } else if (isUserExists(user.getEmail())) {
@@ -61,8 +64,8 @@ public class UserService extends BaseService<User> {
         } else if (user.getPassword().length() < 8) {
             return "Failed to register user: Password must be at least 8 characters";
         } else {
-            user.setRole("user");
-            if (super.add(user).equals("success")) {
+            User savedUser = new User(user.getUsername(), user.getPassword(), "user", user.getEmail(), user.getPhone());
+            if (super.add(savedUser).equals("success")) {
                 return "Success: User registered successfully";
             } else {
                 return "Failed to register user: Internal server error";

@@ -2,6 +2,7 @@ package main.java.com.library.server.database;
 
 import main.java.com.library.common.entity.Entity;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface Dao<T extends Entity> {
      * @param entity 要添加的实体
      * @return 如果实体添加成功，则返回 true；否则返回 false
      */
-    String add(T entity);
+    String add(T entity) throws SQLException;
 
     /**
      * 使用实体的 ID 从数据库中删除实体。

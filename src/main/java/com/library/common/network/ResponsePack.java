@@ -16,7 +16,7 @@ public class ResponsePack<T> {
     // 私有化构造函数
     private ResponsePack(Builder<T> builder) {
         this.action = builder.action;
-        this.data = (T) builder.data;
+        this.data = builder.data;
         this.message = builder.message;
         this.isSuccess = builder.isSuccess;
         this.JwtToken = builder.JwtToken;
