@@ -224,4 +224,26 @@ public class ToolsIMPL implements Tools {
             target.add(component, gbc);
         return gbc;
     }
+
+    /**
+     * 设置组件的 GridBagConstraints 布局参数，并添加到目标组件中。
+     * 返回值是 GridBagConstraints 对象，包含了设置的参数。
+     * 源组件和目标组件填 null 表示不添加到任何组件。
+     * 字体大小和字体样式填 0 表示不调整字体。
+     * 布局参数填 null 表示不设置直接添加。
+     *
+     * @param component  需要设置的组件
+     * @param target     目标组件
+     * @param gbc        布局参数对象
+     * @param font_size  字体大小
+     * @param font_style 字体样式 (如 Font.PLAIN, Font.BOLD)
+     * @return GridBagConstraints 对象
+     */
+    public static GridBagConstraints setFormat(JComponent component, JComponent target, GridBagConstraints gbc, int font_size, int font_style) {
+        if (font_size > 0 && font_style > 0)
+            setCustomFont(component, font_size, font_style);
+        if (component != null && target != null && gbc != null)
+            target.add(component, gbc);
+        return gbc;
+    }
 }
