@@ -1,6 +1,7 @@
 package main.java.com.library.client.gui;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.java.com.library.client.gui.effects.FadeEffect;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,8 @@ public class MainPage {
     public static void main(String[] args) {
         FlatLightLaf.setup();
         loadCustomFont();
+        UIManager.put("ScrollBar.showButtons", true);
+        UIManager.put("TabbedPane.selectedBackground", Color.white);
 
         JFrame frame = new JFrame("图书管理系统");
         setFrame(frame, 400, 600, null, false, JFrame.EXIT_ON_CLOSE);
@@ -70,15 +73,21 @@ public class MainPage {
 
         signupButton.addActionListener(_ -> {
             if (signupButton.getText().equals("注册")) {
-                applyFadeEffect(welcomeLabel, false);
-                welcomeLabel.setText("注册");
                 signupButton.setText("登录");
-                applyFadeEffect(welcomeLabel, true);
+                Runnable fadeOutCallback = () -> {
+                    welcomeLabel.setText("注册");
+                    Runnable fadeInCallback = FadeEffect::checkAllAnimationsComplete;
+                    applyFadeEffect(welcomeLabel, true, 1, 0.1f, fadeInCallback);
+                };
+                applyFadeEffect(welcomeLabel, false, 1, 0.1f, fadeOutCallback);
             } else {
-                applyFadeEffect(welcomeLabel, false);
-                welcomeLabel.setText("欢迎回来");
+                Runnable fadeOutCallback = () -> {
+                    welcomeLabel.setText("欢迎回来");
+                    Runnable fadeInCallback = FadeEffect::checkAllAnimationsComplete;
+                    applyFadeEffect(welcomeLabel, true, 1, 0.1f, fadeInCallback);
+                };
                 signupButton.setText("注册");
-                applyFadeEffect(welcomeLabel, true);
+                applyFadeEffect(welcomeLabel, false, 1, 0.1f, fadeOutCallback);
             }
         });
 
