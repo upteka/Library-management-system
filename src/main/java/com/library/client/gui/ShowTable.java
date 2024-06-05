@@ -1,6 +1,7 @@
 package main.java.com.library.client.gui;
 
 import main.java.com.library.client.gui.view.ClientPanel;
+import main.java.com.library.client.gui.view.SideBar;
 import main.java.com.library.client.gui.view.WorkPanel;
 
 import javax.swing.*;
@@ -11,13 +12,15 @@ import java.awt.event.ComponentEvent;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
 
 public class ShowTable {
-    public static final int START_VALUE = 200;
+    public static int START_VALUE = 100;
     public static final int WIDTH = 1100;
     public static final int HEIGHT = 800;
     public static int PANEL_COUNT = 20;
     public static int SCROLL_VALUE = 0;
     public static int CURRENT_WIDTH = 0;
     public static JFrame mainFrame = new JFrame("图书管理系统");
+    public static SideBar sideBar = new SideBar();
+    public static JPanel mainPanel = new JPanel(new GridBagLayout());
 
     public ShowTable() {
         setFrame(mainFrame, WIDTH, HEIGHT, new BorderLayout(), true, JFrame.EXIT_ON_CLOSE);
@@ -25,18 +28,10 @@ public class ShowTable {
         JTabbedPane tabbedPane = new JTabbedPane();
         setCustomFont(tabbedPane, 12, Font.PLAIN);
 
-        JPanel tablePanel = new JPanel(new GridBagLayout());
-        tabbedPane.addTab("工作区", tablePanel);
+        tabbedPane.addTab("工作区", mainPanel);
 
         JPanel clientPanel = new ClientPanel(new GridBagLayout());
         tabbedPane.addTab("用户管理", clientPanel);
-
-        JPanel topPanel = new JPanel(null);
-        topPanel.setBounds(0, 0, WIDTH, 100);
-        JTextField searchField = new JTextField();
-        searchField.setColumns(10);
-        searchField.setBounds(20, 20, 200, 25);
-        topPanel.add(searchField, BorderLayout.WEST);
 
         WorkPanel workPanel = new WorkPanel(PANEL_COUNT, data);
         JScrollPane scrollPane = new JScrollPane(workPanel);
@@ -48,33 +43,35 @@ public class ShowTable {
         mainFrame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
+                SCROLL_VALUE = scrollPane.getVerticalScrollBar().getValue();
                 if (CURRENT_WIDTH != mainFrame.getWidth()) {
                     CURRENT_WIDTH = mainFrame.getWidth();
-                    SCROLL_VALUE = scrollPane.getVerticalScrollBar().getValue();
                     workPanel.updateLayout(Math.max(START_VALUE + mainFrame.getWidth() - WIDTH, 50));
-                    SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(SCROLL_VALUE));
                 }
+                SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(SCROLL_VALUE));
             }
         });
 
         mainFrame.addWindowStateListener(e -> {
+            SCROLL_VALUE = scrollPane.getVerticalScrollBar().getValue();
             if ((e.getNewState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
                 if (CURRENT_WIDTH != mainFrame.getWidth()) {
                     CURRENT_WIDTH = mainFrame.getWidth();
-                    SCROLL_VALUE = scrollPane.getVerticalScrollBar().getValue();
                     workPanel.updateLayout(Math.max(START_VALUE + mainFrame.getWidth() - WIDTH, 50));
-                    SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(SCROLL_VALUE));
                 }
             }
+            SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(SCROLL_VALUE));
         });
 
-        setFormat(topPanel, tablePanel, new Insets(0, 0, 0, 0), 0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, 0, 0);
-        setFormat(scrollPane, tablePanel, new Insets(0, 0, 0, 0), 0, 1, 1, 10, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
+        setFormat(sideBar, mainPanel, new Insets(0, 0, 0, 0), 0, 0, 0, 0, 20, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0);
+        SwingUtilities.invokeLater(() -> setFormat(scrollPane, mainPanel, new Insets(0, 0, 0, 0), 1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0));
+
+        mainFrame.revalidate();
+        mainFrame.repaint();
 
         mainFrame.add(tabbedPane);
         mainFrame.setVisible(true);
     }
-
 
     public String[][] data = {
             {"1", "Book1", "Author1", "ISBN1", "Available"},

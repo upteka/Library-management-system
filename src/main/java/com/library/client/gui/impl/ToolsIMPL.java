@@ -7,6 +7,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 
@@ -118,6 +119,53 @@ public class ToolsIMPL implements Tools {
         if (border != null) {
             component.setBorder(border);
         }
+    }
+
+    /**
+     * 为指定的JComponent设置渐变背景色。
+     *
+     * @param component   需要设置渐变背景色的JComponent，颜色填 null 则忽略
+     * @param topLeft     左上角的颜色
+     * @param topRight    右上角的颜色
+     * @param bottomLeft  左下角的颜色
+     * @param bottomRight 右下角的颜色
+     */
+    public static void setGradientBackground(JComponent component, Color topLeft, Color topRight, Color bottomLeft, Color bottomRight) {
+        component = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (topLeft != null || topRight != null || bottomLeft != null || bottomRight != null) {
+                    Graphics2D g2d = (Graphics2D) g.create();
+                    int width = getWidth();
+                    int height = getHeight();
+
+                    Color[] colors = {topLeft, topRight, bottomLeft, bottomRight};
+                    Point2D[] points = {
+                            new Point2D.Float(0, 0),
+                            new Point2D.Float(width, 0),
+                            new Point2D.Float(0, height),
+                            new Point2D.Float(width, height)
+                    };
+
+                    for (int i = 0; i < colors.length; i++) {
+                        if (colors[i] != null) {
+                            int nextIndex = (i + 1) % colors.length;
+                            while (colors[nextIndex] == null) {
+                                nextIndex = (nextIndex + 1) % colors.length;
+                                if (nextIndex == i) break;
+                            }
+                            if (nextIndex != i) {
+                                GradientPaint paint = new GradientPaint(points[i], colors[i], points[nextIndex], colors[nextIndex], true);
+                                g2d.setPaint(paint);
+                                g2d.fillRect(0, 0, width, height);
+                            }
+                        }
+                    }
+                    g2d.dispose();
+                }
+            }
+        };
     }
 
     /**
