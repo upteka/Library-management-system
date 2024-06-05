@@ -34,4 +34,14 @@ public interface Entity extends Serializable {
      */
     @Override
     String toString();
+
+    /**
+     * 获取实体对象的主键名称。
+     *
+     * @return 实体对象的主键名称
+     */
+    default String getPrimaryKeyName() {
+        return this.getClass().getSimpleName().toLowerCase() + "ID";
+    }
+
 }

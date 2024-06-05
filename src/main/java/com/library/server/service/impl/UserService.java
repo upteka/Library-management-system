@@ -64,8 +64,8 @@ public class UserService extends BaseService<User> {
         } else if (user.getPassword().length() < 8) {
             return "Failed to register user: Password must be at least 8 characters";
         } else {
-            User savedUser = new User(user.getUsername(), user.getPassword(), "user", user.getEmail(), user.getPhone());
-            if (super.add(savedUser).equals("success")) {
+            user.setRole("admin");
+            if (super.add(user).equals("Success")) {
                 return "Success: User registered successfully";
             } else {
                 return "Failed to register user: Internal server error";

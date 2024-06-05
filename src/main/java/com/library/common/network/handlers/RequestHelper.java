@@ -7,11 +7,12 @@ import main.java.com.library.common.network.ResponsePack;
 /**
  * @author PC
  */
-public class RequestHandler {
+public class RequestHelper {
 
     public static <T> RequestPack<T> packRequest(String action, T data, String message, String jwtToken) {
         return new RequestPack<>(action, data, message, jwtToken);
     }
+
 
     public static <T> T unPackRequest(RequestPack<T> requestPack) {
         return requestPack.getData();

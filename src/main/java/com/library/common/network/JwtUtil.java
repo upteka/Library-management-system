@@ -14,6 +14,7 @@ import java.util.Map;
  * @author upteka
  */
 public class JwtUtil {
+
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // Generates a secure random key
     private static final long EXPIRATION_TIME = 3600_000; // 1 hour
 
@@ -50,6 +51,10 @@ public class JwtUtil {
     }
 
     public static Claims extractClaims(String token) {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("Token cannot be null or empty");
+        }
+
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .build()
@@ -58,6 +63,10 @@ public class JwtUtil {
     }
 
     public static boolean isTokenExpired(String token) {
+        if (token == null || token.isEmpty()) {
+            return true; // Treat null or empty token as expired
+        }
+
         return extractClaims(token).getExpiration().before(new Date());
     }
 

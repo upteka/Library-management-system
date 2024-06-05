@@ -2,18 +2,18 @@ package main.java.com.library.common.network;
 
 import main.java.com.library.common.entity.Entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * @author upteka
  */
-public class RequestPack<T> {
+public class RequestPack<T> implements Serializable {
 
     private String action;
     private T data;
     private String message;
     private String JwtToken;
-
 
     public RequestPack(String action, T data, String message, String JwtToken) {
         this.action = action;
@@ -59,7 +59,7 @@ public class RequestPack<T> {
     }
 
     public String getType() {
-        return data.getClass().getSimpleName();
+        return data != null ? data.getClass().getSimpleName() : "null";
     }
 
     public boolean isEntity() {
@@ -68,9 +68,8 @@ public class RequestPack<T> {
 
     @Override
     public String toString() {
-        return "RequestPack [action=" + action + ", data=" + data + ", token=" + JwtToken + ", message=" + message + "]";
+        return "RequestPack [action=" + action + ", data=" + (data != null ? data.toString() : "null") + ", token=" + JwtToken + ", message=" + message + "]";
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -81,7 +80,10 @@ public class RequestPack<T> {
             return false;
         }
         RequestPack<?> that = (RequestPack<?>) o;
-        return Objects.equals(action, that.action) && Objects.equals(data, that.data) && Objects.equals(JwtToken, that.JwtToken) && Objects.equals(message, that.message);
+        return Objects.equals(action, that.action) &&
+                Objects.equals(data, that.data) &&
+                Objects.equals(JwtToken, that.JwtToken) &&
+                Objects.equals(message, that.message);
     }
 
     @Override

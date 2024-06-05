@@ -10,10 +10,10 @@ import java.time.Instant;
 /**
  * @author upteka
  */
-public class BorrowService extends BaseService<BorrowRecord> {
+public class BorrowRecordService extends BaseService<BorrowRecord> {
     private static final int MAX_BORROW_DAYS = 30;
 
-    public BorrowService() {
+    public BorrowRecordService() {
         super(new BaseDao<>(BorrowRecord.class));
     }
 

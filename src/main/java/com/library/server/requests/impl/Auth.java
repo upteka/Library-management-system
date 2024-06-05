@@ -5,8 +5,8 @@ import main.java.com.library.common.entity.impl.User;
 import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
-import main.java.com.library.common.network.handlers.RequestHandler;
-import main.java.com.library.common.network.handlers.ResponseHandler;
+import main.java.com.library.common.network.handlers.RequestHelper;
+import main.java.com.library.common.network.handlers.ResponseHelper;
 import main.java.com.library.server.requests.Request;
 import main.java.com.library.server.service.impl.UserService;
 import org.slf4j.Logger;
@@ -25,9 +25,10 @@ public class Auth implements Request<User> {
     private final UserService userService;
 
     // 通过构造函数注入依赖
-    public Auth(UserService userService) {
-        this.userService = userService;
+    public Auth() {
+        userService = new UserService();
     }
+
 
     @Override
     public String getAction() {
@@ -45,25 +46,25 @@ public class Auth implements Request<User> {
     @Override
     public ResponsePack<User> handle(RequestPack<? extends Entity> requestPack) {
         try {
-            Entity entity = RequestHandler.unPackRequest(requestPack);
+            Entity entity = RequestHelper.unPackRequest(requestPack);
             if (!(entity instanceof User user)) {
-                return ResponseHandler.packResponse(action, false, "Invalid request type, expected User", null);
+                return ResponseHelper.packResponse(action, false, "Invalid request type, expected User", null);
             }
             String username = user.getUsername();
             String password = user.getPassword();
 
             if (userService.validateUser(username, password)) {
                 user = userService.getUser(username);
-                String jwtToken = JwtUtil.generateToken(user.getUsername(), user.getRole());
+                String jwtToken = JwtUtil.generateToken(user.getUserID(), user.getRole());
                 logger.info("Authentication success for user: {}", username);
-                return ResponseHandler.packResponse(action, true, "success", null, jwtToken);
+                return ResponseHelper.packResponse(action, true, "success", null, jwtToken);
             } else {
                 logger.info("Authentication failed for user: {}", username);
-                return ResponseHandler.packResponse(action, false, "Invalid username or password", null);
+                return ResponseHelper.packResponse(action, false, "Invalid username or password", null);
             }
         } catch (Exception e) {
             logger.error("Authentication failed for user: {}", requestPack, e);
-            return ResponseHandler.packResponse(action, false, "Internal server error", null);
+            return ResponseHelper.packResponse(action, false, "Internal server error", null);
         }
     }
 }

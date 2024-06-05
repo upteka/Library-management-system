@@ -2,10 +2,11 @@ package main.java.com.library.server.requests.impl;
 
 import main.java.com.library.common.entity.Entity;
 import main.java.com.library.common.entity.impl.User;
+import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
-import main.java.com.library.common.network.handlers.RequestHandler;
-import main.java.com.library.common.network.handlers.ResponseHandler;
+import main.java.com.library.common.network.handlers.RequestHelper;
+import main.java.com.library.common.network.handlers.ResponseHelper;
 import main.java.com.library.server.requests.Request;
 import main.java.com.library.server.service.impl.UserService;
 import org.slf4j.Logger;
@@ -36,23 +37,24 @@ public class Register implements Request<User> {
     @Override
     public ResponsePack<User> handle(RequestPack<? extends Entity> requestPack) {
         try {
-            Entity entity = RequestHandler.unPackRequest(requestPack);
+            Entity entity = RequestHelper.unPackRequest(requestPack);
+
             if (!(entity instanceof User user)) {
-                return ResponseHandler.packResponse(action, false, "Invalid request type, expected User", null);
+                return ResponseHelper.packResponse(action, false, "Invalid request type, expected User", null);
             }
             // 调用 UserService 的 registerUser 方法进行注册
             String result = userService.registerUser(user);
             user = userService.get(user.getId());
             logger.info("Registration result: {}", result);
             if (result.startsWith("Success")) {
-                return ResponseHandler.packResponse(action, true, result, user);
+                return ResponseHelper.packResponse(action, true, result, user, JwtUtil.generateToken(user.getId(), user.getPassword()));
             } else {
-                return ResponseHandler.packResponse(action, false, result, null);
+                return ResponseHelper.packResponse(action, false, result, null);
             }
 
         } catch (Exception e) {
             logger.error("Registration failed for user: {}", requestPack, e);
-            return ResponseHandler.packResponse(action, false, "Internal server error", null);
+            return ResponseHelper.packResponse(action, false, "Internal server error" + e.getMessage(), null);
         }
     }
 }

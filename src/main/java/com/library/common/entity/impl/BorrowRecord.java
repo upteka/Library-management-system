@@ -1,5 +1,6 @@
 package main.java.com.library.common.entity.impl;
 
+import com.github.f4b6a3.ulid.Ulid;
 import com.github.f4b6a3.ulid.UlidCreator;
 import main.java.com.library.common.entity.Entity;
 
@@ -11,14 +12,34 @@ public class BorrowRecord implements Entity {
     private String bookID;
     private Instant borrowDate;
     private Instant returnDate;
+    private boolean Returned;
 
-
-    public BorrowRecord(String userID, String bookID, Instant returnDate) {
+    // 无参数构造器
+    public BorrowRecord() {
         this.borrowID = UlidCreator.getUlid().toString();
+        this.borrowDate = Ulid.getInstant(borrowID);
+        this.userID = null;
+        this.bookID = null;
+        this.returnDate = null;
+        this.Returned = false;
+    }
+
+    // 公共构造器
+    public BorrowRecord(String userID, String bookID, Instant returnDate, boolean Returned) {
+        this.borrowID = UlidCreator.getUlid().toString();
+        this.borrowDate = Ulid.getInstant(borrowID);
         this.userID = userID;
         this.bookID = bookID;
-        this.borrowDate = Instant.now();
         this.returnDate = returnDate;
+        this.Returned = Returned;
+    }
+
+    public boolean isReturned() {
+        return Returned;
+    }
+
+    public void setReturned(boolean returned) {
+        Returned = returned;
     }
 
     public String getBorrowID() {

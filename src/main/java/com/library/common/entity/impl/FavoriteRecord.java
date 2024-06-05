@@ -8,6 +8,13 @@ public class FavoriteRecord implements Entity {
     private final String userID;
     private final String bookID;
 
+    // 无参数构造器
+    public FavoriteRecord() {
+        this.favoriteID = UlidCreator.getUlid().toString();
+        this.userID = null;
+        this.bookID = null;
+    }
+
     public FavoriteRecord(String userID, String bookID) {
         this.favoriteID = UlidCreator.getUlid().toString();
         this.userID = userID;

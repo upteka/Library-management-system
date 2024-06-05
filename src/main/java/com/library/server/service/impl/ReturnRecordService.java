@@ -8,16 +8,16 @@ import main.java.com.library.server.database.impl.BaseDao;
 import java.sql.SQLException;
 import java.time.Instant;
 
-public class ReturnService extends BaseService<ReturnRecord> {
+public class ReturnRecordService extends BaseService<ReturnRecord> {
 
 
-    public ReturnService() {
+    public ReturnRecordService() {
         super(new BaseDao<>(ReturnRecord.class));
     }
 
     public String returnBook(ReturnRecord returnRecord) throws SQLException {
-        BorrowService borrowService = new BorrowService();
-        BorrowRecord borrowRecord = borrowService.get(returnRecord.getBorrowID());
+        BorrowRecordService borrowRecordService = new BorrowRecordService();
+        BorrowRecord borrowRecord = borrowRecordService.get(returnRecord.getBorrowID());
 
         if (borrowRecord == null) {
             return "Failed to find borrow record";
@@ -32,9 +32,8 @@ public class ReturnService extends BaseService<ReturnRecord> {
 
         // 更新借阅记录的归还时间
         borrowRecord.setReturnDate(Instant.now());
-        borrowService.update(borrowRecord);
+        borrowRecordService.update(borrowRecord);
 
-        // 服务端设置还书记录的归还时间
         returnRecord.setReturnDate(Instant.now());
         String addResult = super.add(returnRecord);
 

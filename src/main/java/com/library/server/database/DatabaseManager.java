@@ -9,13 +9,22 @@ import java.util.logging.Logger;
 
 public class DatabaseManager {
     private static final Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
-    private static final String URL = "jdbc:mysql://localhost:3306/library";
+    private static final String URL = "jdbc:mysql://localhost:3306/testlibrary";
     private static final String USER = "root";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "81780937ma";
+
+    private static final String DROP_USERS_TABLE = "DROP TABLE IF EXISTS users";
+    private static final String DROP_BOOKS_TABLE = "DROP TABLE IF EXISTS books";
+    private static final String DROP_BORROW_RECORDS_TABLE = "DROP TABLE IF EXISTS borrow_records";
+    private static final String DROP_RETURN_RECORDS_TABLE = "DROP TABLE IF EXISTS return_records";
+    private static final String DROP_FAVORITES_TABLE = "DROP TABLE IF EXISTS favorites";
+    private static final String DROP_BORROW_TRIGGER = "DROP TRIGGER IF EXISTS after_borrow_insert";
+    private static final String DROP_RETURN_TRIGGER = "DROP TRIGGER IF EXISTS after_return_insert";
 
     private static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users ("
             + "userID VARCHAR(255) PRIMARY KEY,"
             + "email VARCHAR(255) NOT NULL,"
+            + "phone VARCHAR(255) NOT NULL,"
             + "username VARCHAR(255) UNIQUE NOT NULL,"
             + "password VARCHAR(255) NOT NULL,"
             + "role VARCHAR(50) NOT NULL"
@@ -39,6 +48,7 @@ public class DatabaseManager {
             + "bookID VARCHAR(255) NOT NULL,"
             + "borrowDate TIMESTAMP NOT NULL,"
             + "returnDate TIMESTAMP,"
+            + "returned BOOLEAN NOT NULL,"
             + "FOREIGN KEY (userID) REFERENCES users(userID),"
             + "FOREIGN KEY (bookID) REFERENCES books(bookID)"
             + ")";
@@ -59,7 +69,6 @@ public class DatabaseManager {
             + "FOREIGN KEY (bookID) REFERENCES books(bookID)"
             + ")";
 
-
     private static final String CREATE_BORROW_TRIGGER = "CREATE TRIGGER after_borrow_insert "
             + "AFTER INSERT ON borrow_records "
             + "FOR EACH ROW "
@@ -71,7 +80,6 @@ public class DatabaseManager {
             + "        WHERE bookID = NEW.bookID; "
             + "    END IF; "
             + "END;";
-
 
     private static final String CREATE_RETURN_TRIGGER = "CREATE TRIGGER after_return_insert "
             + "AFTER INSERT ON return_records "
@@ -109,5 +117,33 @@ public class DatabaseManager {
             LOGGER.log(Level.SEVERE, "Database error", e);
             System.err.println("Error creating tables/triggers: " + e.getMessage());
         }
+    }
+
+    public static void dropTables() {
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute(DROP_BORROW_TRIGGER);
+            stmt.execute(DROP_RETURN_TRIGGER);
+            stmt.execute(DROP_FAVORITES_TABLE);
+            stmt.execute(DROP_RETURN_RECORDS_TABLE);
+            stmt.execute(DROP_BORROW_RECORDS_TABLE);
+            stmt.execute(DROP_BOOKS_TABLE);
+            stmt.execute(DROP_USERS_TABLE);
+            System.out.println("Tables and triggers dropped successfully");
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Database error", e);
+            System.err.println("Error dropping tables/triggers: " + e.getMessage());
+        }
+    }
+
+    public static void resetDatabase() {
+        dropTables();
+        createTables();
+    }
+
+    public static void main(String[] args) {
+        resetDatabase();
     }
 }

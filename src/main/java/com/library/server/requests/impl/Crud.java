@@ -6,11 +6,11 @@ import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
 import main.java.com.library.server.requests.Request;
 import main.java.com.library.server.service.impl.BaseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serial;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * 该类实现了 {@link Request} 接口，以处理 CRUD 操作。
@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class Crud<T extends Entity> implements Request<T> {
     @Serial
     private static final long serialVersionUID = 1L;
-    private static final Logger LOGGER = Logger.getLogger(Crud.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(Crud.class);
 
     private final String action;
     private final BaseService<T> service;
@@ -30,10 +30,11 @@ public class Crud<T extends Entity> implements Request<T> {
      * 构造一个新的 Crud 请求处理器。
      *
      * @param action 要执行的操作
+     * @param entityType 实体类型
      */
-    public Crud(String action) {
+    public Crud(String action, String entityType) {
         this.action = action;
-        this.service = getServiceForEntity();
+        this.service = getServiceForEntity(entityType);
     }
 
     /**
@@ -53,14 +54,14 @@ public class Crud<T extends Entity> implements Request<T> {
      * @return 包含操作结果的 {@link ResponsePack} 对象,
      * ResponsePack.getData() 返回操作的对象,ResponsePack.isSuccess() 返回操作是否成功,
      * ResponsePack.getMessage() 返回操作的结果信息,ResponsePack.getType() 返回操作的实体类型
-     * ResponsePack.getJwtToken() 返回JWT 令牌,必须在请求中带上
+     * ResponsePack.getJwtToken() 返回 JWT 令牌,必须在请求中带上
      * @throws IllegalArgumentException 如果请求的实体类型无法找到对应的服务类
      */
     @Override
     public ResponsePack<T> handle(RequestPack<? extends Entity> requestPack) {
         try {
             String entityName = requestPack.getType();
-//            @SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked")
             T data = (T) requestPack.getData();
             String id = data != null ? data.getId() : null;
             String jwtToken = requestPack.getJwtToken();
@@ -68,10 +69,11 @@ public class Crud<T extends Entity> implements Request<T> {
             if (!checkPermissions(jwtToken, action, entityName)) {
                 return new ResponsePack<>(action, "权限不足，无法执行操作", null, false);
             }
+            LOGGER.info("处理 {} 操作对象: {}", action, entityName);
 
             return processAction(action, entityName, data, id);
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "处理操作时出错: " + action, e);
+            LOGGER.error("处理操作时出错: {}", action, e);
             return new ResponsePack<>(action, "处理操作时出错: " + e.getMessage(), null, false);
         }
     }
@@ -86,8 +88,9 @@ public class Crud<T extends Entity> implements Request<T> {
         T result = null;
         switch (action.toLowerCase()) {
             case "add":
-                success = service.add(data).contains("success");
-                message = success ? entityName + " 创建成功" : entityName + " 创建失败";
+                LOGGER.info("添加 {} 服务: {}", entityName, service);
+                message = service.add(data);
+                success = message.contains("Success");
                 break;
             case "get":
                 result = service.get(id);
@@ -95,7 +98,7 @@ public class Crud<T extends Entity> implements Request<T> {
                 message = success ? entityName + " 获取成功" : entityName + " 获取失败";
                 break;
             case "update":
-                success = "success".equals(service.update(data));
+                success = service.update(data).startsWith("Success");
                 message = success ? entityName + " 更新成功" : entityName + " 更新失败";
                 break;
             case "delete":
@@ -110,15 +113,14 @@ public class Crud<T extends Entity> implements Request<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private BaseService<T> getServiceForEntity() {
+    private BaseService<T> getServiceForEntity(String entityType) {
         try {
-            String entityName = getClass().getGenericSuperclass().getTypeName();
-            String serviceClassName = "main.java.com.library.server.service.impl." + entityName + "Service";
+            String serviceClassName = "main.java.com.library.server.service.impl." + entityType + "Service";
             Class<?> serviceClass = Class.forName(serviceClassName);
             return (BaseService<T>) serviceClass.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "无法获取服务类实例", e);
-            throw new IllegalArgumentException("无法获取服务类实例: " + e.getMessage(), e);
+            LOGGER.error("无法实例化服务类 {}", entityType, e);
+            throw new IllegalArgumentException("无法实例化服务类: " + e.getMessage(), e);
         }
     }
 }

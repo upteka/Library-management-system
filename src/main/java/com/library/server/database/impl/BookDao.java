@@ -6,4 +6,6 @@ public class BookDao extends BaseDao<Book> {
     public BookDao() {
         super(Book.class);
     }
+
+
 }

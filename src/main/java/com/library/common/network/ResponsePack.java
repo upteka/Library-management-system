@@ -2,11 +2,12 @@ package main.java.com.library.common.network;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 
 /**
  * @author upteka
  */
-public class ResponsePack<T> {
+public class ResponsePack<T> implements Serializable {
     private String action;
     private T data;
     private String message;
@@ -31,25 +32,21 @@ public class ResponsePack<T> {
         this.JwtToken = JwtToken;
     }
 
-    //无JwtToken构造函数
+    // 无 JwtToken 构造函数
     public ResponsePack(String action, String message, T data, boolean isSuccess) {
-        this.action = action;
-        this.data = data;
-        this.message = message;
-        this.isSuccess = isSuccess;
-        this.JwtToken = "null";
-    }
-
-    public ResponsePack success(String action, T data) {
-        return new ResponsePack.Builder(action).data(data).message("success").isSuccess(true).build();
+        this(action, message, data, isSuccess, "");
     }
 
     public static ResponsePack success(String action) {
-        return new ResponsePack.Builder(action).data(null).message("success").isSuccess(true).build();
+        return new ResponsePack.Builder<>(action).data(null).message("success").isSuccess(true).build();
     }
 
     public static ResponsePack failure(String action, String message) {
-        return new ResponsePack.Builder(action).message(message).isSuccess(false).build();
+        return new ResponsePack.Builder<>(action).message(message).isSuccess(false).build();
+    }
+
+    public ResponsePack success(String action, T data) {
+        return new ResponsePack.Builder<>(action).data(data).message("success").isSuccess(true).build();
     }
 
     // Getter and Setter methods
@@ -95,9 +92,8 @@ public class ResponsePack<T> {
 
     @Override
     public String toString() {
-        return "ResponsePack [action=" + action + ", data=" + data.toString() + ", message=" + message + ", isSuccess=" + isSuccess + ", JwtToken=" + JwtToken + "]";
+        return "ResponsePack [action=" + action + ", data=" + (data != null ? data.toString() : "null") + ", message=" + message + ", isSuccess=" + isSuccess + ", JwtToken=" + JwtToken + "]";
     }
-
 
     // Builder Class
     public static class Builder<T> {
@@ -105,7 +101,7 @@ public class ResponsePack<T> {
         private T data = null;
         private String message = "";
         private boolean isSuccess = false;
-        private String JwtToken = "null";
+        private String JwtToken = "";
 
         public Builder(@NotNull String action) {
             if (action.isEmpty()) {
@@ -119,7 +115,7 @@ public class ResponsePack<T> {
             return this;
         }
 
-        public Builder message(@NotNull String message) {
+        public Builder<T> message(@NotNull String message) {
             if (message.isEmpty()) {
                 throw new IllegalArgumentException("Message cannot be null or empty");
             }
@@ -127,12 +123,12 @@ public class ResponsePack<T> {
             return this;
         }
 
-        public Builder isSuccess(boolean isSuccess) {
+        public Builder<T> isSuccess(boolean isSuccess) {
             this.isSuccess = isSuccess;
             return this;
         }
 
-        public Builder setJwtToken(@NotNull String JwtToken) {
+        public Builder<T> setJwtToken(@NotNull String JwtToken) {
             if (JwtToken.isEmpty()) {
                 throw new IllegalArgumentException("JwtToken cannot be null or empty");
             }
@@ -140,8 +136,8 @@ public class ResponsePack<T> {
             return this;
         }
 
-        public ResponsePack build() {
-            return new ResponsePack(this);
+        public ResponsePack<T> build() {
+            return new ResponsePack<>(this);
         }
     }
 }

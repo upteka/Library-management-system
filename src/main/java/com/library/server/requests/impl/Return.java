@@ -4,10 +4,10 @@ import main.java.com.library.common.entity.Entity;
 import main.java.com.library.common.entity.impl.ReturnRecord;
 import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
-import main.java.com.library.common.network.handlers.RequestHandler;
-import main.java.com.library.common.network.handlers.ResponseHandler;
+import main.java.com.library.common.network.handlers.RequestHelper;
+import main.java.com.library.common.network.handlers.ResponseHelper;
 import main.java.com.library.server.requests.Request;
-import main.java.com.library.server.service.impl.ReturnService;
+import main.java.com.library.server.service.impl.ReturnRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class Return implements Request<ReturnRecord> {
     private static final Logger logger = LoggerFactory.getLogger(Return.class);
     private final String action = "return";
-    private final ReturnService returnService = new ReturnService(); // 直接创建 ReturnService 实例
+    private final ReturnRecordService returnRecordService = new ReturnRecordService(); // 直接创建 ReturnService 实例
 
     /**
      * 返回与此请求相关的操作。
@@ -36,20 +36,20 @@ public class Return implements Request<ReturnRecord> {
     @Override
     public ResponsePack<ReturnRecord> handle(RequestPack<? extends Entity> requestPack) {
         try {
-            Entity entity = RequestHandler.unPackRequest(requestPack);
+            Entity entity = RequestHelper.unPackRequest(requestPack);
             if (!(entity instanceof ReturnRecord returnRecord)) {
-                return ResponseHandler.packResponse(action, false, "Invalid request type, expected ReturnRecord", null);
+                return ResponseHelper.packResponse(action, false, "Invalid request type, expected ReturnRecord", null);
             }
             // 调用 ReturnService 的 returnBook 方法处理还书请求
-            String result = returnService.returnBook(returnRecord);
+            String result = returnRecordService.returnBook(returnRecord);
             if (result.startsWith("Success")) {
-                return ResponseHandler.packResponse(action, true, result, returnRecord); // 成功时返回还书记录
+                return ResponseHelper.packResponse(action, true, result, returnRecord); // 成功时返回还书记录
             } else {
-                return ResponseHandler.packResponse(action, false, result, null);
+                return ResponseHelper.packResponse(action, false, result, null);
             }
         } catch (Exception e) {
             logger.error("Return book failed for request: {}", requestPack, e);
-            return ResponseHandler.packResponse(action, false, "Internal server error", null);
+            return ResponseHelper.packResponse(action, false, "Internal server error", null);
         }
     }
 }

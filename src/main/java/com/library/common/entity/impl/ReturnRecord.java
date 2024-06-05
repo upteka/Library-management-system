@@ -11,6 +11,12 @@ public class ReturnRecord implements Entity {
     private String borrowID;
     private Instant returnDate;
 
+    public ReturnRecord() {
+        this.returnID = UlidCreator.getUlid().toString();
+        this.borrowID = null;
+        this.returnDate = Ulid.getInstant(returnID);
+    }
+
     public ReturnRecord(String borrowID) {
         this.returnID = UlidCreator.getUlid().toString();
         this.borrowID = borrowID;

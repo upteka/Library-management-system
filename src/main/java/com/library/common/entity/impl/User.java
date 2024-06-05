@@ -3,7 +3,6 @@ package main.java.com.library.common.entity.impl;
 import com.github.f4b6a3.ulid.UlidCreator;
 import main.java.com.library.common.entity.Entity;
 
-
 public class User implements Entity {
     private String userID;
     private String username;
@@ -12,22 +11,41 @@ public class User implements Entity {
     private String phone;
     private String email; // optional
 
-
-    public User(String username, String password, String role, String email) {
+    public User() {
         this.userID = UlidCreator.getUlid().toString();
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
+        this.username = null;
+        this.password = null;
+        this.email = null;
+        this.role = null;
     }
 
     public User(String username, String password, String role, String email, String phone) {
+        if ((email == null || email.isEmpty()) && (phone == null || phone.isEmpty())) {
+            throw new IllegalArgumentException("Either email or phone must be provided.");
+        }
         this.userID = UlidCreator.getUlid().toString();
         this.username = username;
         this.password = password;
         this.role = role;
         this.phone = phone;
         this.email = email;
+    }
+
+    public User(String username, String password, String role, String contact) {
+        if (contact.isEmpty()) {
+            throw new IllegalArgumentException("Either email or phone must be provided.");
+        }
+        this.userID = UlidCreator.getUlid().toString();
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        if (contact.contains("@")) {
+            this.email = contact;
+            this.phone = "";
+        } else {
+            this.phone = contact;
+            this.email = "";
+        }
     }
 
 
@@ -79,8 +97,6 @@ public class User implements Entity {
         this.phone = phone;
     }
 
-
-
     @Override
     public String toString() {
         return "User{" +
@@ -88,6 +104,8 @@ public class User implements Entity {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 
