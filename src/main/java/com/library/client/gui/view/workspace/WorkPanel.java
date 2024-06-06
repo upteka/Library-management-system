@@ -1,6 +1,5 @@
-package main.java.com.library.client.gui.view;
+package main.java.com.library.client.gui.view.workspace;
 
-import main.java.com.library.client.gui.ShowTable;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -10,31 +9,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static main.java.com.library.client.gui.ShowTable.START_VALUE;
+import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setColor;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
+import static main.java.com.library.client.gui.view.workspace.WorkSpace.START_VALUE;
 
-public class WorkPanel extends JPanel {
+public class WorkPanel extends JScrollPane {
     private final GridBagLayout LAYOUT = new GridBagLayout();
     private final List<JPanel> subPanels = new ArrayList<>();
     private final Map<JPanel, List<JComponent>> AllComponents = new HashMap<>();
-    private final int panelCount;
-    private final String[][] data;
+    public final JPanel content = new JPanel(LAYOUT);
+    private int panelCount;
+    private String[][] data;
 
-    public WorkPanel(int panelCount, String[][] data) {
-        this.panelCount = panelCount;
-        this.data = data;
-        setLayout(LAYOUT);
-        initialize();
+
+    public WorkPanel() {
+
     }
 
-    private void initialize() {
+    public void initialize(int panelCount, String[][] data) {
+        this.panelCount = panelCount;
+        this.data = data;
         for (int i = 0; i < panelCount; i++) {
             JPanel panel = new JPanel(LAYOUT);
             createSubPanels(panel, i, null);
             subPanels.add(panel);
-            add(panel);
+            content.add(panel);
         }
+        setViewportView(content);
+        getVerticalScrollBar().setUnitIncrement(16);
+        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
     private void createSubPanels(JPanel p, int i, GridBagConstraints gbc) {
@@ -91,8 +96,8 @@ public class WorkPanel extends JPanel {
         setFormat(deleteButton, p, new Insets(0, 20, 0, 20), 9, 0, 20, 10, 14, Font.BOLD);
 
         toggleButton.addActionListener(_ -> toggleButtonAction(toggleButton, p));
-        editButton.addActionListener(_ -> new EditDialog(ShowTable.mainFrame, data[i][0], data[i][1], data[i][2], data[i][3]));
-        deleteButton.addActionListener(_ -> new DeleteDialog(ShowTable.mainFrame, data[i][0], data[i][1], data[i][2], data[i][3]));
+        editButton.addActionListener(_ -> new EditDialog(mainFrame, data[i][0], data[i][1], data[i][2], data[i][3]));
+        deleteButton.addActionListener(_ -> new DeleteDialog(mainFrame, data[i][0], data[i][1], data[i][2], data[i][3]));
 
         components.add(toggleButton);
         components.add(idArea);
@@ -105,7 +110,7 @@ public class WorkPanel extends JPanel {
         components.add(deleteButton);
         AllComponents.put(p, components);
 
-        setFormat(p, this, new Insets(0, 0, 0, 0), 0, i, 1, 0, 0, 40, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, 0, 0);
+        setFormat(p, content, new Insets(0, 0, 0, 0), 0, i, 1, 0, 0, 40, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, 0, 0);
     }
 
     private @NotNull JPanel getjPanel(int i) {
