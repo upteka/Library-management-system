@@ -1,100 +1,47 @@
 package main.java.com.library.client.gui;
 
-import com.formdev.flatlaf.FlatLightLaf;
-import main.java.com.library.client.gui.effects.FadeEffect;
-
 import javax.swing.*;
 import java.awt.*;
 
-import static main.java.com.library.client.gui.effects.FadeEffect.applyFadeEffect;
-import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
+import static main.java.com.library.client.gui.impl.ToolsIMPL.setFrame;
 
 public class MainPage {
-    public static void main(String[] args) {
-        FlatLightLaf.setup();
-        loadCustomFont();
-        UIManager.put("ScrollBar.showButtons", true);
-        UIManager.put("TabbedPane.selectedBackground", Color.white);
+    public static final int WIDTH = 1100;
+    public static final int HEIGHT = 800;
+    public static MainPanel mainPanel = new MainPanel();
+    public static JFrame mainFrame = new JFrame("图书管理系统");
+    public static String[][] data = {
+            {"1", "Book1", "Author1", "ISBN1", "Available"},
+            {"2", "Book2", "Author2", "ISBN2", "Borrowed"},
+            {"3", "Book3", "Author3", "ISBN3", "Available"},
+            {"4", "Book4", "Author4", "ISBN4", "Borrowed"},
+            {"5", "Book5", "Author5", "ISBN5", "Available"},
+            {"6", "Book6", "Author6", "ISBN6", "Borrowed"},
+            {"7", "Book7", "Author7", "ISBN7", "Available"},
+            {"8", "Book8", "Author8", "ISBN8", "Borrowed"},
+            {"9", "Book9", "Author9", "ISBN9", "Available"},
+            {"10", "Book10", "Author10", "ISBN10", "Borrowed"},
+            {"11", "Book11", "Author11", "ISBN11", "Available"},
+            {"12", "Book12", "Author12", "ISBN12", "Borrowed"},
+            {"13", "Book13", "Author13", "ISBN13", "Available"},
+            {"14", "Book14", "Author14", "ISBN14", "Borrowed"},
+            {"15", "Book15", "Author15", "ISBN15", "Available"},
+            {"16", "Book16", "Author16", "ISBN16", "Borrowed"},
+            {"17", "Book17", "Author17", "ISBN17", "Available"},
+            {"18", "Book18", "Author18", "ISBN18", "Borrowed"},
+            {"19", "Book19", "Author19", "ISBN19", "Available"},
+            {"20", "Book20", "Author20", "ISBN20", "Borrowed"}
+    };
 
-        JFrame frame = new JFrame("图书管理系统");
-        setFrame(frame, 400, 600, null, false, JFrame.EXIT_ON_CLOSE);
+    public MainPage() {
+        setFrame(mainFrame, WIDTH, HEIGHT, new BorderLayout(), true, JFrame.EXIT_ON_CLOSE);
+        mainPanel.initializeWorkSpace(20, data);
+        mainFrame.add(mainPanel);
+        mainFrame.setVisible(true);
+    }
 
-        JLabel welcomeLabel = new JLabel("欢迎回来", JLabel.CENTER);
-        setCustomFont(welcomeLabel, 28, Font.PLAIN);
-        welcomeLabel.setBounds(100, 130, 200, 50);
-
-        JPanel loginPanel = new JPanel();
-        loginPanel.setBounds(60, 0, 280, 350);
-        loginPanel.setLayout(new GridBagLayout());
-        loginPanel.setOpaque(false);
-
-        JTextField usernameField = new JTextField(50);
-        setFormat(usernameField, loginPanel, new Insets(190, 20, 12, 20),
-                0, 0, 40, 15, 20, Font.PLAIN);
-
-        JPasswordField passwordField = new JPasswordField(50);
-        setFormat(passwordField, loginPanel, new Insets(0, 20, 12, 20),
-                0, 1, 40, 15, 20, Font.PLAIN);
-
-        JButton loginButton = new JButton("继续");
-        setColor(loginButton, Color.WHITE, new Color(15, 163, 127), null);
-        setFormat(loginButton, loginPanel, new Insets(0, 20, 20, 20),
-                0, 2, 1, 1, 40, 15,
-                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 14, Font.BOLD);
-
-        JLabel noAccountLabel = new JLabel("还没有账户?", SwingConstants.CENTER);
-        setColor(noAccountLabel, new Color(48, 48, 48), null, null);
-        setCustomFont(noAccountLabel, 12, Font.BOLD);
-        noAccountLabel.setBounds(50, 368, 300, 20);
-
-        JPanel loginPanel1 = new JPanel();
-        loginPanel1.setBounds(60, 380, 280, 100);
-        loginPanel1.setLayout(new GridBagLayout());
-        loginPanel1.setOpaque(false);
-
-        JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-        setFormat(separator, loginPanel1, new Insets(5, 20, 0, 20),
-                0, 0, 1, 0, 0, 0,
-                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0);
-
-        JButton signupButton = new JButton("注册");
-        setColor(signupButton, Color.WHITE, new Color(15, 163, 127), null);
-        setFormat(signupButton, loginPanel1, new Insets(0, 20, 20, 20),
-                0, 1, 0, 1, 40, 15,
-                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 14, Font.BOLD);
-
-        addFocusListenerToField(usernameField);
-        addFocusListenerToField(passwordField);
-
-        loginButton.addActionListener(_ -> {
-            frame.dispose();
-            new ShowTable();
-        });
-
-        signupButton.addActionListener(_ -> {
-            if (signupButton.getText().equals("注册")) {
-                signupButton.setText("登录");
-                Runnable fadeOutCallback = () -> {
-                    welcomeLabel.setText("注册");
-                    Runnable fadeInCallback = FadeEffect::checkAllAnimationsComplete;
-                    applyFadeEffect(welcomeLabel, true, 1, 0.1f, fadeInCallback);
-                };
-                applyFadeEffect(welcomeLabel, false, 1, 0.1f, fadeOutCallback);
-            } else {
-                Runnable fadeOutCallback = () -> {
-                    welcomeLabel.setText("欢迎回来");
-                    Runnable fadeInCallback = FadeEffect::checkAllAnimationsComplete;
-                    applyFadeEffect(welcomeLabel, true, 1, 0.1f, fadeInCallback);
-                };
-                signupButton.setText("注册");
-                applyFadeEffect(welcomeLabel, false, 1, 0.1f, fadeOutCallback);
-            }
-        });
-
-        frame.add(loginPanel);
-        frame.add(loginPanel1);
-        frame.add(welcomeLabel);
-        frame.add(noAccountLabel);
-        frame.setVisible(true);
+    public String[][] getData() {
+        // get data from sever
+        return null;
     }
 }

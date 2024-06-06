@@ -1,4 +1,4 @@
-package main.java.com.library.client.gui.view;
+package main.java.com.library.client.gui.view.workspace;
 
 import javax.swing.*;
 import java.awt.*;
