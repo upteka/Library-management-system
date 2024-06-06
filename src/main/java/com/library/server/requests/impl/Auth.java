@@ -51,13 +51,14 @@ public class Auth implements Request<User> {
                 return ResponseHelper.packResponse(action, false, "Invalid request type, expected User", null);
             }
             String username = user.getUsername();
+            String contact = user.getContact();
             String password = user.getPassword();
 
-            if (userService.validateUser(username, password)) {
+            if (userService.validateUser(username, password) || userService.validateUser(contact, password)) {
                 user = userService.getUser(username);
                 String jwtToken = JwtUtil.generateToken(user.getUserID(), user.getRole());
                 logger.info("Authentication success for user: {}", username);
-                return ResponseHelper.packResponse(action, true, "success", null, jwtToken);
+                return ResponseHelper.packResponse(action, true, "Authenticated Successfully", null, jwtToken);
             } else {
                 logger.info("Authentication failed for user: {}", username);
                 return ResponseHelper.packResponse(action, false, "Invalid username or password", null);

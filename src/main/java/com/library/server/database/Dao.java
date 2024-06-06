@@ -37,9 +37,17 @@ public interface Dao<T extends Entity> {
     T get(String id);
 
     /**
+     * 使用实体的 ID 从数据库中检索实体。
+     *
+     * @param limit 检索实体的数量
+     * @return 具有指定 ID 的实体的列表，如果不存在则返回 null
+     */
+    List<T> getAll(int limit);
+
+    /**
      * 从数据库中检索所有实体。
      *
-     * @return 所有实体的列表
+     * @return 所有实体的列表, 如果不存在则返回 null
      */
     List<T> getAll();
 
@@ -47,7 +55,7 @@ public interface Dao<T extends Entity> {
      * 更新数据库中的现有实体。
      *
      * @param entity 包含更新值的实体
-     * @return 如果实体更新成功，则返回 "success"；否则返回 "failed"
+     * @return 如果实体更新成功，则返回 "Success"；否则返回 "Failed"
      */
     String update(T entity);
 
@@ -59,4 +67,25 @@ public interface Dao<T extends Entity> {
      * @return 匹配指定字段和值的实体，如果不存在则返回 null
      */
     T getByField(String fieldName, Object value);
+
+    /**
+     * 使用特定的字段和值从数据库中检索实体(模糊匹配)。
+     *
+     * @param fieldName 要搜索的字段名称
+     * @param value     要搜索的字段值
+     * @param condition 匹配条件，"LIKE","<",">","<=",">="
+     * @return 匹配指定字段和值的实体的列表，如果不存在则返回 null
+     */
+    List<T> search(String fieldName, Object value, String condition);
+
+    /**
+     * 使用特定的字段和值从数据库中检索实体(模糊匹配)。
+     *
+     * @param fieldName 要搜索的字段名称
+     * @param value     要搜索的字段值
+     * @param condition 匹配条件，"LIKE","<",">","<=",">="
+     * @param limit     检索实体的数量
+     * @return 匹配指定字段和值的实体的列表，如果不存在则返回 null
+     */
+    List<T> search(String fieldName, Object value, String condition, int limit);
 }

@@ -24,7 +24,7 @@ public class BaseDao<T extends Entity> implements Dao<T> {
         this.type = type;
     }
 
-    private void setParameters(PreparedStatement stmt, Object... params) throws SQLException {
+    protected void setParameters(PreparedStatement stmt, Object... params) throws SQLException {
         LOGGER.debug("Setting parameters for PreparedStatement");
         for (int i = 0; i < params.length; i++) {
             LOGGER.debug("Parameter [{}]: {}", i + 1, params[i]);
@@ -36,7 +36,7 @@ public class BaseDao<T extends Entity> implements Dao<T> {
         }
     }
 
-    private T mapResultSetToEntity(ResultSet rs) throws SQLException {
+    protected T mapResultSetToEntity(ResultSet rs) throws SQLException {
         try {
             Constructor<T> constructor = type.getDeclaredConstructor();
             constructor.setAccessible(true);
@@ -116,47 +116,77 @@ public class BaseDao<T extends Entity> implements Dao<T> {
 
     @Override
     public String add(T entity) throws SQLException {
-        String query = "INSERT INTO " + type.getSimpleName().toLowerCase() + "s" + " (" + getFields() + ") VALUES (" + getPlaceholders() + ")";
+        String query = "INSERT INTO " + type.getSimpleName() + "s" + " (" + getFields() + ") VALUES (" + getPlaceholders() + ")";
         LOGGER.info("Executing query to add entity: {}", query);
         return executeUpdate(query, getFieldValues(entity)) ? "Success" : "Failed";
     }
 
     @Override
     public boolean delete(String id) {
-        String query = "DELETE FROM " + type.getSimpleName().toLowerCase() + "s WHERE " + getPrimaryKeyName() + " = ?";
+        String query = "DELETE FROM " + type.getSimpleName() + "s WHERE " + getPrimaryKeyName() + " = ?";
         LOGGER.info("Executing query to delete entity with id: {}", id);
         return executeUpdate(query, id);
     }
 
     @Override
     public T get(String id) {
-        String query = "SELECT * FROM " + type.getSimpleName().toLowerCase() + "s WHERE " + getPrimaryKeyName() + " = ?";
+        String query = "SELECT * FROM " + type.getSimpleName() + "s WHERE " + getPrimaryKeyName() + " = ?";
         LOGGER.info("Executing query to get entity with id: {}", id);
         return executeQueryForObject(query, id);
     }
 
     @Override
-    public List<T> getAll() {
-        String query = "SELECT * FROM " + type.getSimpleName().toLowerCase() + "s";
-        LOGGER.info("Executing query to get all entities");
+    public List<T> getAll(int limit) {
+        String query = "SELECT * FROM " + type.getSimpleName() + "s";
+        if (limit > 0) {
+            query += " LIMIT " + limit;
+        }
+        LOGGER.info("Executing query to get all entities with limit {}", limit);
         return executeQueryForList(query);
     }
 
     @Override
+    public List<T> getAll() {
+        return getAll(0); // 默认获取全部记录
+    }
+
+    @Override
     public String update(T entity) {
-        String query = "UPDATE " + type.getSimpleName().toLowerCase() + "s SET " + getUpdateFields() + " WHERE " + getPrimaryKeyName() + " = ?";
+        String query = "UPDATE " + type.getSimpleName() + "s SET " + getUpdateFields() + " WHERE " + getPrimaryKeyName() + " = ?";
         LOGGER.info("Executing query to update entity: {}", query);
         return executeUpdate(query, getFieldValuesWithId(entity)) ? "Success" : "Failed";
     }
 
     @Override
     public T getByField(String fieldName, Object value) {
-        String query = "SELECT * FROM " + type.getSimpleName().toLowerCase() + "s WHERE " + fieldName + " = ?";
+        String query = "SELECT * FROM " + type.getSimpleName() + "s WHERE " + fieldName + " = ?";
         LOGGER.info("Executing query to get entity by field [{}] with value [{}]: {}", fieldName, value, query);
         return executeQueryForObject(query, value);
     }
 
-    private String getFields() {
+    // 新增的 search 方法
+    @Override
+    public List<T> search(String fieldName, Object value, String condition, int limit) {
+        String query;
+        if ("LIKE".equalsIgnoreCase(condition)) {
+            query = "SELECT * FROM " + type.getSimpleName() + "s WHERE " + fieldName + " LIKE ?";
+            value = "%" + value + "%"; // 模糊搜索模式，前后加上百分号
+        } else {
+            query = "SELECT * FROM " + type.getSimpleName() + "s WHERE " + fieldName + " " + condition + " ?";
+        }
+        if (limit > 0) {
+            query += " LIMIT " + limit;
+        }
+        LOGGER.info("Executing search with field [{}], condition [{}], value [{}], and limit [{}]: {}", fieldName, condition, value, limit, query);
+        return executeQueryForList(query, value);
+    }
+
+    public List<T> search(String fieldName, Object value, String condition) {
+        return search(fieldName, value, condition, 0); // 默认获取全部记录
+    }
+
+
+    protected String getFields() {
         StringBuilder fields = new StringBuilder();
         for (Field field : type.getDeclaredFields()) {
             fields.append(field.getName()).append(", ");
@@ -166,7 +196,7 @@ public class BaseDao<T extends Entity> implements Dao<T> {
         return fieldsString;
     }
 
-    private String getPlaceholders() {
+    protected String getPlaceholders() {
         StringBuilder placeholders = new StringBuilder();
         for (Field field : type.getDeclaredFields()) {
             placeholders.append("?, ");
@@ -176,7 +206,7 @@ public class BaseDao<T extends Entity> implements Dao<T> {
         return placeholdersString;
     }
 
-    private String getUpdateFields() {
+    protected String getUpdateFields() {
         StringBuilder updateFields = new StringBuilder();
         for (Field field : type.getDeclaredFields()) {
             if (!field.getName().equals(getPrimaryKeyName())) {
@@ -188,7 +218,7 @@ public class BaseDao<T extends Entity> implements Dao<T> {
         return updateFieldsString;
     }
 
-    private Object[] getFieldValues(T entity) {
+    protected Object[] getFieldValues(T entity) {
         try {
             List<Object> values = new ArrayList<>();
             for (Field field : type.getDeclaredFields()) {
@@ -208,7 +238,7 @@ public class BaseDao<T extends Entity> implements Dao<T> {
         }
     }
 
-    private Object[] getFieldValuesWithId(T entity) {
+    protected Object[] getFieldValuesWithId(T entity) {
         try {
             List<Object> values = new ArrayList<>();
             for (Field field : type.getDeclaredFields()) {
@@ -235,7 +265,7 @@ public class BaseDao<T extends Entity> implements Dao<T> {
         }
     }
 
-    private String getPrimaryKeyName() {
+    protected String getPrimaryKeyName() {
         try {
             return type.getDeclaredConstructor().newInstance().getPrimaryKeyName();
         } catch (Exception e) {

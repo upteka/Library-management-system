@@ -45,4 +45,19 @@ public class BaseService<T extends Entity> implements Service<T> {
         return dao.getByField(field, name);
     }
 
+    @Override
+    public List<T> search(String fieldName, Object value, String condition, int limit) {
+        return dao.search(fieldName, value, condition, limit);
+    }
+
+    ;
+
+    @Override
+    public List<T> search(String fieldName, Object value, String condition) {
+        return dao.search(fieldName, value, condition);
+    }
+
+    ;
+
+
 }

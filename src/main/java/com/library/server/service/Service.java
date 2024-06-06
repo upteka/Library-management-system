@@ -58,4 +58,18 @@ public interface Service<T> {
      */
     T getByField(String fieldName, String value);
 
+    /**
+     * 使用特定的字段和值从数据库中检索实体(模糊匹配)。
+     *
+     * @param fieldName 要搜索的字段名称
+     * @param value     要搜索的字段值
+     * @param condition 搜索条件，如：LIKE、=、<、>等
+     * @param limit     限制返回结果的数量
+     * @return 匹配指定字段和值的实体列表
+     */
+
+    List<T> search(String fieldName, Object value, String condition, int limit);
+
+    List<T> search(String fieldName, Object value, String condition);
+
 }

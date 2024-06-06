@@ -21,7 +21,7 @@ public class DatabaseManager {
     private static final String DROP_BORROW_TRIGGER = "DROP TRIGGER IF EXISTS after_borrow_insert";
     private static final String DROP_RETURN_TRIGGER = "DROP TRIGGER IF EXISTS after_return_insert";
 
-    private static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS users ("
+    private static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS User ("
             + "userID VARCHAR(255) PRIMARY KEY,"
             + "email VARCHAR(255) NOT NULL,"
             + "phone VARCHAR(255) NOT NULL,"
@@ -30,7 +30,7 @@ public class DatabaseManager {
             + "role VARCHAR(50) NOT NULL"
             + ")";
 
-    private static final String CREATE_BOOKS_TABLE = "CREATE TABLE IF NOT EXISTS books ("
+    private static final String CREATE_BOOKS_TABLE = "CREATE TABLE IF NOT EXISTS Books ("
             + "bookID VARCHAR(255) PRIMARY KEY,"
             + "title VARCHAR(255) NOT NULL,"
             + "author VARCHAR(255) NOT NULL,"
@@ -42,7 +42,7 @@ public class DatabaseManager {
             + "introduction VARCHAR(255) NOT NULL"
             + ")";
 
-    private static final String CREATE_BORROW_RECORDS_TABLE = "CREATE TABLE IF NOT EXISTS borrow_records ("
+    private static final String CREATE_BORROW_RECORDS_TABLE = "CREATE TABLE IF NOT EXISTS BorrowRecords ("
             + "borrowID VARCHAR(255) PRIMARY KEY,"
             + "userID VARCHAR(255) NOT NULL,"
             + "bookID VARCHAR(255) NOT NULL,"
@@ -53,14 +53,14 @@ public class DatabaseManager {
             + "FOREIGN KEY (bookID) REFERENCES books(bookID)"
             + ")";
 
-    private static final String CREATE_RETURN_RECORDS_TABLE = "CREATE TABLE IF NOT EXISTS return_records ("
+    private static final String CREATE_RETURN_RECORDS_TABLE = "CREATE TABLE IF NOT EXISTS ReturnRecords ("
             + "returnID VARCHAR(255) PRIMARY KEY,"
             + "borrowID VARCHAR(255) NOT NULL,"
             + "returnDate TIMESTAMP NOT NULL,"
             + "FOREIGN KEY (borrowID) REFERENCES borrow_records(borrowID)"
             + ")";
 
-    private static final String CREATE_FAVORITES_TABLE = "CREATE TABLE IF NOT EXISTS favorites ("
+    private static final String CREATE_FAVORITES_TABLE = "CREATE TABLE IF NOT EXISTS Favorites ("
             + "favoriteID VARCHAR(255) PRIMARY KEY,"
             + "userID VARCHAR(255) NOT NULL,"
             + "bookID VARCHAR(255) NOT NULL,"

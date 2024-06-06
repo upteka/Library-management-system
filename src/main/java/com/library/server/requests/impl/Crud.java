@@ -78,11 +78,11 @@ public class Crud<T extends Entity> implements Request<T> {
         }
     }
 
-    private boolean checkPermissions(String jwtToken, String action, String entityName) {
+    protected boolean checkPermissions(String jwtToken, String action, String entityName) {
         return JwtUtil.canPerform(jwtToken, action, entityName);
     }
 
-    private ResponsePack<T> processAction(String action, String entityName, T data, String id) throws SQLException {
+    protected ResponsePack<T> processAction(String action, String entityName, T data, String id) throws SQLException {
         boolean success = false;
         String message = "";
         T result = null;
@@ -91,11 +91,6 @@ public class Crud<T extends Entity> implements Request<T> {
                 LOGGER.info("添加 {} 服务: {}", entityName, service);
                 message = service.add(data);
                 success = message.contains("Success");
-                break;
-            case "get":
-                result = service.get(id);
-                success = result != null;
-                message = success ? entityName + " 获取成功" : entityName + " 获取失败";
                 break;
             case "update":
                 success = service.update(data).startsWith("Success");
@@ -108,12 +103,11 @@ public class Crud<T extends Entity> implements Request<T> {
             default:
                 throw new IllegalArgumentException("未知的操作: " + action);
         }
-
         return new ResponsePack<>(action, message, result, success);
     }
 
     @SuppressWarnings("unchecked")
-    private BaseService<T> getServiceForEntity(String entityType) {
+    protected BaseService<T> getServiceForEntity(String entityType) {
         try {
             String serviceClassName = "main.java.com.library.server.service.impl." + entityType + "Service";
             Class<?> serviceClass = Class.forName(serviceClassName);

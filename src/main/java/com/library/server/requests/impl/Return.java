@@ -31,7 +31,7 @@ public class Return implements Request<ReturnRecord> {
      * 处理请求并返回响应对象。
      *
      * @param requestPack 包含请求数据的对象
-     * @return 包含响应数据的对象
+     * @return 包含响应数据的数据包对象
      */
     @Override
     public ResponsePack<ReturnRecord> handle(RequestPack<? extends Entity> requestPack) {

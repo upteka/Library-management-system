@@ -61,6 +61,16 @@ public class User implements Entity {
         return username;
     }
 
+    public String getContact() {
+        if (phone != null && !phone.isEmpty()) {
+            return phone;
+        } else if (email != null && !email.isEmpty()) {
+            return email;
+        }
+        return "";
+    }
+
+
     public void setUsername(String username) {
         this.username = username;
     }

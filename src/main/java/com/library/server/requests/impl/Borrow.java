@@ -30,14 +30,13 @@ public class Borrow implements Request<BorrowRecord> {
     @Override
     public ResponsePack<BorrowRecord> handle(RequestPack<? extends Entity> requestPack) {
         Entity entity = RequestHelper.unPackRequest(requestPack);
-        String jwtToken = requestPack.getJwtToken();
 
         if (!(entity instanceof BorrowRecord borrowRecord)) {
             logger.error("Invalid request type, expected BorrowRecord");
-            return ResponseHelper.packResponse(action, false, "Invalid request type, expected BorrowRecord", null, jwtToken);
+            return ResponseHelper.packResponse(action, false, "Invalid request type, expected BorrowRecord", null);
         }
 
-        return ResponseHelper.packResponse(action, true, borrowRecordService.borrowBook(borrowRecord), borrowRecordService.get(borrowRecord.getId()), jwtToken);
+        return ResponseHelper.packResponse(action, true, borrowRecordService.borrowBook(borrowRecord), borrowRecordService.get(borrowRecord.getId()));
 
     }
 }

@@ -55,11 +55,13 @@ public class UserService extends BaseService<User> {
     }
 
     public String registerUser(User user) throws SQLException {
-        if (isUserExists(user.getUsername())) {
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            return "Failed to register user: Username is required";
+        } else if (isUserExists(user.getUsername())) {
             return "Failed to register user: Username already exists";
-        } else if (isUserExists(user.getEmail())) {
+        } else if ((user.getEmail() != null && !user.getEmail().isEmpty()) && isUserExists(user.getEmail())) {
             return "Failed to register user: Email already exists";
-        } else if (isUserExists(user.getPhone())) {
+        } else if ((user.getPhone() != null && !user.getPhone().isEmpty()) && isUserExists(user.getPhone())) {
             return "Failed to register user: Phone number already exists";
         } else if (user.getPassword().length() < 8) {
             return "Failed to register user: Password must be at least 8 characters";
