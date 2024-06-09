@@ -14,7 +14,7 @@ import java.io.IOException;
  * ToolsIMPL 的工具方法可以快速设置组件的字体、边框、颜色、布局、边距、位置、关闭操作等。
  */
 public class ToolsIMPL implements Tools {
-    private static Font customFont;
+    public static Font customFont;
 
     /**
      * 加载自定义字体。
@@ -39,6 +39,7 @@ public class ToolsIMPL implements Tools {
      * @param style     字体样式 (如 Font.PLAIN, Font.BOLD)
      */
     public static void setCustomFont(JComponent component, float size, int style) {
+        if (size == 0 || style == -1) return;
         Font resizedFont = customFont.deriveFont(style, size);
         component.setFont(resizedFont);
     }

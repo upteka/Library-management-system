@@ -2,20 +2,21 @@ package main.java.com.library.client.gui.view.workspace;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
 
 public class DeleteDialog extends JDialog {
-    public DeleteDialog(JFrame parent, String id, String title, String author, String isbn) {
+    public DeleteDialog(JFrame parent, List<String> data) {
         super(parent, "删除确认", true);
         setDialog(this, 300, 400, new BorderLayout(), false, JDialog.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel(new GridBagLayout());
         JLabel warningLabel = new JLabel("确认删除书籍?");
-        JLabel idLabel = new JLabel("ID: " + id);
-        JLabel titleLabel = new JLabel("书名: " + title);
-        JLabel authorLabel = new JLabel("作者: " + author);
-        JLabel isbnLabel = new JLabel("ISBN: " + isbn);
+        JLabel idLabel = new JLabel("ID: " + data.get(0));
+        JLabel titleLabel = new JLabel("书名: " + data.get(1));
+        JLabel authorLabel = new JLabel("作者: " + data.get(2));
+        JLabel isbnLabel = new JLabel("ISBN: " + data.get(3));
         JButton confirmButton = new JButton("删除");
         JButton cancelButton = new JButton("取消");
 

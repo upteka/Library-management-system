@@ -15,12 +15,6 @@ public class ClientPanel extends JPanel {
         JButton button = new JButton("Button");
         GridBagConstraints gbc = new GridBagConstraints();
 
-
-
-        //TODO: 完成用户信息界面
-        // 所有工具方法参考 ToolsIMPL.java,
-        // 添加淡入淡出效果, 用法参考 FadeEffect.java
-        // 如果组件后续需要被外部调用以下方法操作, 请改用 addComponents()
     }
 
     // 额外添加组件

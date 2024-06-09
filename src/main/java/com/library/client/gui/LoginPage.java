@@ -11,8 +11,8 @@ import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
 
 public class LoginPage {
     public static void main(String[] args) {
-        FlatLightLaf.setup();
         loadCustomFont();
+        FlatLightLaf.setup();
         UIManager.put("ScrollBar.showButtons", true);
         UIManager.put("TabbedPane.selectedBackground", Color.white);
 
