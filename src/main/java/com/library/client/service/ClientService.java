@@ -16,14 +16,14 @@ import main.java.com.library.common.network.handlers.RequestHelper;
  * 注意：本示例仅供参考，实际开发中请根据实际情况进行修改
  */
 public class ClientService {
-    public static RequestPack<User> createAuthRequest() {
+    public static RequestPack<User> AuthRequest() {
         // 创建用户对象
         User user = new User("11222211", "testPassword", "admin", "222233@ex2", "232222");
         // 创建请求包
         return RequestHelper.packRequest("auth", user, "auth", "");
     }
 
-    public static RequestPack<Book> createAddBookRequest(String jwtToken) {
+    public static RequestPack<Book> AddBookRequest(String jwtToken) {
         // 创建图书对象
         Book book = new Book("123456789", "a book", "1232312312", 100, "introduction", "publisher");
         // 创建图书请求包

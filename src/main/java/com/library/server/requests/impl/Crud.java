@@ -1,9 +1,9 @@
 package main.java.com.library.server.requests.impl;
 
 import main.java.com.library.common.entity.Entity;
-import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
+import main.java.com.library.server.JwtUtil;
 import main.java.com.library.server.requests.Request;
 import main.java.com.library.server.service.impl.BaseService;
 import org.slf4j.Logger;
@@ -14,8 +14,8 @@ import java.sql.SQLException;
 
 /**
  * 该类实现了 {@link Request} 接口，以处理 CRUD 操作。
- * 它支持对实体执行「添加」、「获取」、「更新」、「删除」和「列出」等操作。
- *
+ * 它支持对实体执行「添加」、「获取(通过id)」、「更新」、「删除(通过id)」等操作。
+ * ---仅限管理员
  * @param <T> 实体的类型
  */
 public class Crud<T extends Entity> implements Request<T> {
@@ -66,20 +66,16 @@ public class Crud<T extends Entity> implements Request<T> {
             String id = data != null ? data.getId() : null;
             String jwtToken = requestPack.getJwtToken();
 
-            if (!checkPermissions(jwtToken, action, entityName)) {
-                return new ResponsePack<>(action, "权限不足，无法执行操作", null, false);
+            if (!JwtUtil.isaAdmin(jwtToken)) {
+                return new ResponsePack<>(action, "Insufficient permissions to perform the operation", null, false);
             }
-            LOGGER.info("处理 {} 操作对象: {}", action, entityName);
+            LOGGER.info("Processing {} action for entity: {}", action, entityName);
 
             return processAction(action, entityName, data, id);
         } catch (Exception e) {
-            LOGGER.error("处理操作时出错: {}", action, e);
-            return new ResponsePack<>(action, "处理操作时出错: " + e.getMessage(), null, false);
+            LOGGER.error("Error processing action: {}", action, e);
+            return new ResponsePack<>(action, "Error processing action: " + e.getMessage(), null, false);
         }
-    }
-
-    protected boolean checkPermissions(String jwtToken, String action, String entityName) {
-        return JwtUtil.canPerform(jwtToken, action, entityName);
     }
 
     protected ResponsePack<T> processAction(String action, String entityName, T data, String id) throws SQLException {
@@ -88,20 +84,24 @@ public class Crud<T extends Entity> implements Request<T> {
         T result = null;
         switch (action.toLowerCase()) {
             case "add":
-                LOGGER.info("添加 {} 服务: {}", entityName, service);
+                LOGGER.info("Adding service for {}: {}", entityName, service);
                 message = service.add(data);
                 success = message.contains("Success");
                 break;
             case "update":
                 success = service.update(data).startsWith("Success");
-                message = success ? entityName + " 更新成功" : entityName + " 更新失败";
+                message = success ? entityName + " updated successfully" : entityName + " update failed";
                 break;
             case "delete":
                 success = service.delete(id);
-                message = success ? entityName + " 删除成功" : entityName + " 删除失败";
+                message = success ? entityName + " deleted successfully" : entityName + " delete failed";
                 break;
+            case "get":
+                result = service.get(id);
+                success = result != null;
+                message = success ? entityName + " get successfully" : entityName + " get failed";
             default:
-                throw new IllegalArgumentException("未知的操作: " + action);
+                throw new IllegalArgumentException("Unknown action: " + action);
         }
         return new ResponsePack<>(action, message, result, success);
     }
@@ -113,8 +113,8 @@ public class Crud<T extends Entity> implements Request<T> {
             Class<?> serviceClass = Class.forName(serviceClassName);
             return (BaseService<T>) serviceClass.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            LOGGER.error("无法实例化服务类 {}", entityType, e);
-            throw new IllegalArgumentException("无法实例化服务类: " + e.getMessage(), e);
+            LOGGER.error("Failed to instantiate service class {}", entityType, e);
+            throw new IllegalArgumentException("Failed to instantiate service class: " + e.getMessage(), e);
         }
     }
 }

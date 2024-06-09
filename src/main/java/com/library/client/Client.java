@@ -23,7 +23,7 @@ public class Client {
                 ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())
         ) {
             // 发送和接收请求的示例调用
-            sendRequest(outputStream, inputStream, ClientService.createAuthRequest());
+            sendRequest(outputStream, inputStream, ClientService.AuthRequest());
             ResponsePack<?> authResponse = receiveResponse(inputStream);
             if (authResponse != null) {
                 LOGGER.info("Auth response received: {}", authResponse);
@@ -31,7 +31,7 @@ public class Client {
                 // 使用 authResponse 进行后续的业务处理
                 String jwtToken = authResponse.getJwtToken();
 
-                sendRequest(outputStream, inputStream, ClientService.createAddBookRequest(jwtToken));
+                sendRequest(outputStream, inputStream, ClientService.AddBookRequest(jwtToken));
                 ResponsePack<?> bookResponse = receiveResponse(inputStream);
                 if (bookResponse != null) {
                     LOGGER.info("Book response received: {}", bookResponse);

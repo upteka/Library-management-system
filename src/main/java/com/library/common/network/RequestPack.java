@@ -3,6 +3,8 @@ package main.java.com.library.common.network;
 import main.java.com.library.common.entity.Entity;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -14,12 +16,23 @@ public class RequestPack<T> implements Serializable {
     private T data;
     private String message;
     private String JwtToken;
+    private List<String> params;
 
-    public RequestPack(String action, T data, String message, String JwtToken) {
+
+    public RequestPack(String action, T data, String message, String JwtToken, String... params) {
         this.action = action;
         this.data = data;
         this.message = message;
         this.JwtToken = JwtToken;
+        this.params = Arrays.asList(params);
+    }
+
+    public List<String> getParams() {
+        return params;
+    }
+
+    public void setParams(String... params) {
+        this.params = Arrays.asList(params);
     }
 
     public RequestPack(String action, T data, String message) {

@@ -1,6 +1,7 @@
 package main.java.com.library.server.service;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -70,6 +71,26 @@ public interface Service<T> {
 
     List<T> search(String fieldName, Object value, String condition, int limit);
 
-    List<T> search(String fieldName, Object value, String condition);
-
+    /**
+     * 搜索方法，根据指定字段、值、条件等进行查询，并返回结果列表。
+     *
+     * @param fieldName        要查询的字段名。
+     * @param value            查询的值，如果为"0"则使用默认值。
+     * @param condition        查询条件（如"=", "LIKE"等）。
+     * @param limit            返回结果的限制条数，为 0 时不限制。
+     * @param sortField        排序字段名。
+     * @param sortOrder        排序顺序（"ASC"或"DESC"）。
+     * @param page             页码，从 1 开始，默认值为 1。
+     * @param pageSize         每页的记录数，默认值为 10。
+     * @param caseInsensitive  是否忽略大小写，默认值为 false。
+     * @param logicalOperator  自定义条件连接符（如"AND"、"OR"），默认值为"AND"。
+     * @param selectedFields   返回的字段数组，默认值为 null（选择所有字段）。
+     * @param distinct         是否去重，默认值为 false。
+     * @param startDate        时间范围查询的开始时间，默认值为 null。
+     * @param endDate          时间范围查询的结束时间，默认值为 null。
+     * @param dateField        用于时间范围查询的字段，默认值为 null。
+     * @param customEntityType 自定义搜索的实体类型，默认值为 null（使用默认实体类型）。
+     * @return 查询结果列表。
+     */
+    List<T> search(String fieldName, Object value, String condition, int limit, String sortField, String sortOrder, int page, int pageSize, boolean caseInsensitive, String logicalOperator, String[] selectedFields, boolean distinct, Timestamp startDate, Timestamp endDate, String dateField, Class<?> customEntityType);
 }

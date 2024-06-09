@@ -29,7 +29,7 @@ public class Book implements Entity {
         this.publisher = "";
         this.availableCount = 0;
         this.status = "unavailable";
-        this.bookID = generateBookID(title, author, ISBN, publisher);
+        this.bookID = generateBookID(ISBN);
     }
 
     /**
@@ -51,13 +51,12 @@ public class Book implements Entity {
         this.publisher = publisher;
         this.availableCount = count;
         this.status = count > 0 ? "available" : "unavailable";
-        this.bookID = generateBookID(title, author, ISBN, publisher);
+        this.bookID = generateBookID(ISBN);
     }
 
-    private String generateBookID(String title, String author, String ISBN, String publisher) {
+    private String generateBookID(String ISBN) {
         // 生成基于书籍信息的 Hash UUID
-        String combinedString = title + author + ISBN + publisher;
-        return UUID.nameUUIDFromBytes(combinedString.getBytes()).toString();
+        return UUID.nameUUIDFromBytes(ISBN.getBytes()).toString();
     }
 
     public String getBookID() {

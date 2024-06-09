@@ -1,4 +1,4 @@
-package main.java.com.library.common.network;
+package main.java.com.library.server;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,41 +7,21 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * @author upteka
+ * Jwt 工具类，用于生成和解析 JWT 令牌，并包含权限管理逻辑。
  */
 public class JwtUtil {
 
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // Generates a secure random key
     private static final long EXPIRATION_TIME = 3600_000; // 1 hour
 
-    private static final Map<String, Map<String, Boolean>> PERMISSIONS = new HashMap<>();
-
-    static {
-        Map<String, Boolean> adminPermissions = new HashMap<>();
-        adminPermissions.put("add", true);
-        adminPermissions.put("get", true);
-        adminPermissions.put("update", true);
-        adminPermissions.put("delete", true);
-
-        Map<String, Boolean> userPermissions = new HashMap<>();
-        userPermissions.put("add", false);
-        userPermissions.put("get", true);
-        userPermissions.put("update", false);
-        userPermissions.put("delete", false);
-
-        PERMISSIONS.put("admin", adminPermissions);
-        PERMISSIONS.put("user", userPermissions);
-    }
 
     public static String generateToken(String userID, String role) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userID);
-        claims.put("role", role);
-
+        Map<String, Object> claims = Map.of("userId", userID, "role", role);
         return Jwts.builder()
                 .claims(claims)
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -50,11 +30,11 @@ public class JwtUtil {
                 .compact();
     }
 
+
     public static Claims extractClaims(String token) {
         if (token == null || token.isEmpty()) {
             throw new IllegalArgumentException("Token cannot be null or empty");
         }
-
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .build()
@@ -62,28 +42,40 @@ public class JwtUtil {
                 .getPayload();
     }
 
+
     public static boolean isTokenExpired(String token) {
         if (token == null || token.isEmpty()) {
             return true; // Treat null or empty token as expired
         }
-
         return extractClaims(token).getExpiration().before(new Date());
     }
+
 
     public static String extractUserId(String token) {
         return extractClaims(token).get("userId", String.class);
     }
 
+
     public static String extractRole(String token) {
         return extractClaims(token).get("role", String.class);
     }
 
-    public static boolean isAdmin(String token) {
-        return "admin".equals(extractRole(token));
+
+    public static boolean canPerform(String jwtToken, String action) {
+        String role = extractRole(jwtToken);
+        return getPermissionsByRole(role).contains(action);
     }
 
-    public static boolean canPerform(String jwtToken, String action, String entity) {
+    public static boolean isaAdmin(String jwtToken) {
         String role = extractRole(jwtToken);
-        return PERMISSIONS.getOrDefault(role, new HashMap<>(4)).getOrDefault(action, false);
+        return role.equals("admin");
+    }
+
+    private static Set<String> getPermissionsByRole(String role) {
+        // 简单的权限映射，可以通过数据库或配置文件加载
+        return switch (role) {
+            case "admin" -> Set.of("add", "get", "update", "delete");
+            default -> new HashSet<>();
+        };
     }
 }

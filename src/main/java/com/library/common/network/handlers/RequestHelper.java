@@ -1,16 +1,15 @@
 package main.java.com.library.common.network.handlers;
 
-import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
-import main.java.com.library.common.network.ResponsePack;
+import main.java.com.library.server.JwtUtil;
 
 /**
  * @author PC
  */
 public class RequestHelper {
 
-    public static <T> RequestPack<T> packRequest(String action, T data, String message, String jwtToken) {
-        return new RequestPack<>(action, data, message, jwtToken);
+    public static <T> RequestPack<T> packRequest(String action, T data, String message, String jwtToken, String... params) {
+        return new RequestPack<>(action, data, message, jwtToken, params);
     }
 
 
@@ -26,9 +25,6 @@ public class RequestHelper {
         } else return !JwtUtil.isTokenExpired(jwtToken);
     }
 
-    public static <T> ResponsePack<T> makeResponse(RequestPack<T> requestPack, T data, String message, boolean isSuccess) {
-        return new ResponsePack<>(requestPack.getAction(), message, data, isSuccess, requestPack.getJwtToken());
-    }
 
 
 }

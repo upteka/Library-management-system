@@ -15,12 +15,12 @@ import java.sql.SQLException;
 
 public class Favorite implements Request<FavoriteRecord> {
     private static final Logger logger = LoggerFactory.getLogger(Favorite.class);
-    private final String action = "favorite";
+    private static final String ACTION = "favorite";
     private final BaseDao<FavoriteRecord> favoriteDao = new BaseDao<>(FavoriteRecord.class);
 
     @Override
     public String getAction() {
-        return action;
+        return ACTION;
     }
 
     @Override
@@ -28,24 +28,51 @@ public class Favorite implements Request<FavoriteRecord> {
         try {
             Entity entity = RequestHelper.unPackRequest(requestPack);
             if (!(entity instanceof FavoriteRecord favoriteRecord)) {
-                return ResponseHelper.packResponse(action, false, "Invalid request type, expected FavoriteRecord", null);
+                return ResponseHelper.packResponse(ACTION, false, "Invalid request type, expected FavoriteRecord", null);
             }
 
-            // 尝试添加收藏记录
-            favoriteDao.add(favoriteRecord);
+            // 验证请求参数
+            if (requestPack.getParams().size() != 1) {
+                return ResponseHelper.packResponse(ACTION, false, "Invalid request parameters, expected 1 parameter", null);
+            }
 
-            return ResponseHelper.packResponse(action, true, "Favorite added successfully", favoriteRecord);
+            String param = requestPack.getParams().getFirst();
+            return switch (param) {
+                case "favorite" -> handleFavorite(favoriteRecord);
+                case "unfavorite" -> handleUnfavorite(favoriteRecord);
+                default ->
+                        ResponseHelper.packResponse(ACTION, false, "Invalid request parameter, expected 'favorite' or 'unfavorite'", null);
+            };
         } catch (SQLException e) {
-            // 捕获唯一约束异常
-            if (e.getSQLState().equals("23505")) {
-                return ResponseHelper.packResponse(action, false, "Favorite record already exists", null);
-            } else {
-                logger.error("SQL error occurred: {}", e.getMessage(), e);
-                return ResponseHelper.packResponse(action, false, "Internal database error", null);
-            }
+            return handleSQLException(e);
         } catch (Exception e) {
-            logger.error("Failed to add favorite for request: {}", requestPack, e);
-            return ResponseHelper.packResponse(action, false, "Internal server error", null);
+            logger.error("Failed to process request: {}", requestPack, e);
+            return ResponseHelper.packResponse(ACTION, false, "Internal server error", null);
+        }
+    }
+
+    private ResponsePack<FavoriteRecord> handleFavorite(FavoriteRecord favoriteRecord) throws SQLException {
+        if (favoriteDao.get(favoriteRecord.getId()) != null) {
+            return ResponseHelper.packResponse(ACTION, false, "Favorite record already exists", null);
+        }
+        favoriteDao.add(favoriteRecord);
+        return ResponseHelper.packResponse(ACTION, true, "Favorite added successfully", favoriteRecord);
+    }
+
+    private ResponsePack<FavoriteRecord> handleUnfavorite(FavoriteRecord favoriteRecord) throws SQLException {
+        if (favoriteDao.get(favoriteRecord.getId()) == null) {
+            return ResponseHelper.packResponse(ACTION, false, "Favorite record does not exist", null);
+        }
+        favoriteDao.delete(favoriteRecord.getId());
+        return ResponseHelper.packResponse(ACTION, true, "Favorite removed successfully", favoriteRecord);
+    }
+
+    private ResponsePack<FavoriteRecord> handleSQLException(SQLException e) {
+        if ("23505".equals(e.getSQLState())) { // Unique constraint violation
+            return ResponseHelper.packResponse(ACTION, false, "Favorite record already exists", null);
+        } else {
+            logger.error("SQL error occurred: {}", e.getMessage(), e);
+            return ResponseHelper.packResponse(ACTION, false, "Internal database error", null);
         }
     }
 }

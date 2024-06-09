@@ -25,11 +25,11 @@ public class BookService extends BaseService<Book> {
             }
 
             // Check if the book already exists
-            Book existingBook = dao.get(book.getId());
+            Book existingBook = dao.getByField("ISBN", book.getISBN());
             logger.info("Checking if book with id " + book.getId() + " already exists.");
 
             if (existingBook != null) {
-                logger.info("Book with id " + book.getId() + " already exists. Updating count.");
+                logger.info("Book with ISBN " + book.getISBN() + " already exists. Updating count.");
                 int newCount = Optional.ofNullable(existingBook.getCount()).orElse(0) + Optional.ofNullable(book.getCount()).orElse(0);
                 int newAvailableCount = Optional.ofNullable(existingBook.getAvailableCount()).orElse(0) + Optional.ofNullable(book.getCount()).orElse(0);
 
@@ -56,6 +56,27 @@ public class BookService extends BaseService<Book> {
             logger.severe("Exception occurred while adding a book: " + e.getMessage());
             return "Error: An unexpected error occurred. " + e.getMessage();
         }
+    }
+
+    public String update(Book book) {
+        try {
+            String validationResult = validateBook(book);
+            if (!validationResult.equals("Valid")) {
+                return validationResult;
+            }
+
+            if ("Success".equals(dao.update(book))) {
+                logger.info("Book with id " + book.getId() + " updated successfully.");
+                return "Success: Book updated successfully.";
+            } else {
+                logger.severe("Failed to update book with id " + book.getId());
+                return "Error: Failed to update book.";
+            }
+        } catch (Exception e) {
+            logger.severe("Exception occurred while updating a book: " + e.getMessage());
+            return "Error: An unexpected error occurred. " + e.getMessage();
+        }
+
     }
 
     private String validateBook(Book book) {

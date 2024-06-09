@@ -5,6 +5,7 @@ import main.java.com.library.server.database.Dao;
 import main.java.com.library.server.service.Service;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class BaseService<T extends Entity> implements Service<T> {
@@ -50,14 +51,8 @@ public class BaseService<T extends Entity> implements Service<T> {
         return dao.search(fieldName, value, condition, limit);
     }
 
-    ;
-
     @Override
-    public List<T> search(String fieldName, Object value, String condition) {
-        return dao.search(fieldName, value, condition);
+    public List<T> search(String fieldName, Object value, String condition, int limit, String sortField, String sortOrder, int page, int pageSize, boolean caseInsensitive, String logicalOperator, String[] selectedFields, boolean distinct, Timestamp startDate, Timestamp endDate, String dateField, Class<?> customEntityType) {
+        return dao.search(fieldName, value, condition, limit, sortField, sortOrder, page, pageSize, caseInsensitive, logicalOperator, selectedFields, distinct, startDate, endDate, dateField, customEntityType);
     }
-
-    ;
-
-
 }
