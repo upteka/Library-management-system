@@ -67,10 +67,10 @@ public class SideBar extends JPanel {
         }
 
         if (toggleButton.isSelected()) {
-            applyFadeEffectSequentially(toggleOnly, true, 1, 0.15f, 0, () -> animateComponent(40, 194, () -> {
+            applyFadeEffectSequentially(toggleOnly, true, 1, 0.17f, 0, () -> animateComponent(40, 194, () -> {
                 updateSideBar(80, false);
                 addAll();
-                applyFadeEffectSequentially(all, true, 1, 0.15f, 0, this::refresh);
+                applyFadeEffectSequentially(all, true, 1, 0.17f, 0, this::refresh);
             }));
         } else {
             applyFadeEffectSequentially(all, false, 1, 0.2f, 0, () -> animateComponent(194, 40, () -> {
@@ -160,12 +160,12 @@ public class SideBar extends JPanel {
     }
 
     private enum ButtonEnum {
-        WORKSPACE("工作区", _ -> System.out.println("工作区 clicked")),
-        MY_BORROWINGS("我的借阅", _ -> System.out.println("我的借阅 clicked")),
-        MY_FAVORITES("我的收藏", _ -> System.out.println("我的收藏 clicked")),
-        MY_ACCOUNT("我的账户", _ -> System.out.println("我的账户 clicked")),
-        SETTINGS("设置", _ -> System.out.println("设置 clicked")),
-        ABOUT("关于", _ -> System.out.println("关于 clicked"));
+        WORKSPACE("工作区", _ -> mainPanel.showWorkSpace(false)),
+        SEARCH("搜索", _ -> mainPanel.showSearchPage()),
+        MY_BORROWINGS("我的借阅", _ -> mainPanel.showWorkSpace(true)),
+        MY_ACCOUNT("我的账户", _ -> mainPanel.showAccountPage()),
+        SETTINGS("设置", _ -> mainPanel.showSettingPage()),
+        ABOUT("关于", _ -> mainPanel.showAboutPage());
 
         private final String title;
         private final ActionListener action;
