@@ -2,19 +2,20 @@ package main.java.com.library.client.gui.view.workspace;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
 
 public class EditDialog extends JDialog {
-    public EditDialog(JFrame parent, String id, String title, String author, String isbn) {
+    public EditDialog(JFrame parent, List<String> data) {
         super(parent, "编辑图书信息", true);
         setDialog(this, 300, 400, new BorderLayout(), false, JDialog.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel(new GridBagLayout());
-        JTextField idField = new JTextField(id);
-        JTextField titleField = new JTextField(title);
-        JTextField authorField = new JTextField(author);
-        JTextField isbnField = new JTextField(isbn);
+        JTextField idField = new JTextField(data.get(0));
+        JTextField titleField = new JTextField(data.get(1));
+        JTextField authorField = new JTextField(data.get(2));
+        JTextField isbnField = new JTextField(data.get(3));
         JButton saveButton = new JButton("提交");
         JButton cancelButton = new JButton("取消");
 

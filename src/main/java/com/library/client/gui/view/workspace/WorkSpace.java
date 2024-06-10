@@ -5,43 +5,79 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-import static main.java.com.library.client.gui.MainPage.WIDTH;
 import static main.java.com.library.client.gui.MainPage.mainFrame;
+import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
 
-public class WorkSpace {
-    public static int SCROLL_VALUE = 0;
-    public static int CURRENT_WIDTH = 0;
-    public static int START_VALUE = 100;
-    public static WorkPanel workPanel = new WorkPanel();
+public class WorkSpace extends JPanel {
+    public static final int START_VALUE = 50;
+    public static int currentWidth = 0;
+    public static int scrollValue = 0;
+    public static int currentPage = 1;
+    public static int pageSize = 20;
+    public static WorkPanel workPanel = null;
+    public static TopPanel topPanel = null;
+    public static BottomPanel bottomPanel = null;
 
-    public WorkSpace(int panelCount, String[][] data) {
-        workPanel.initialize(panelCount, data);
+    public WorkSpace() {
+        setLayout(new GridBagLayout());
+
+        topPanel = new TopPanel();
+        bottomPanel = new BottomPanel();
+        workPanel = new WorkPanel();
+        workPanel.initialize();
+
+        SwingUtilities.invokeLater(() -> {
+            setFormat(topPanel, this, new Insets(0, 0, 0, 0), 0, 0,
+                    0, 0, 0, 20, GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
+            setFormat(WorkSpace.workPanel, this, new Insets(0, 0, 0, 0), 0, 1,
+                    1, 1, 0, 0, GridBagConstraints.SOUTH, GridBagConstraints.BOTH, 0, 0);
+            setFormat(bottomPanel, this, new Insets(0, 0, 0, 0), 0, 2,
+                    0, 0, 0, 20, GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
+            revalidate();
+            repaint();
+        });
 
         addActions();
+    }
+
+    public static void deleteAll() {
+        scrollValue = 0;
+        currentPage = 1;
+        pageSize = 20;
+
+        topPanel.removeAll();
+        bottomPanel.removeAll();
+        workPanel.deleteAll();
+
+        workPanel = null;
+        topPanel = null;
+        bottomPanel = null;
+
+        System.gc();
     }
 
     public void addActions() {
         mainFrame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                SCROLL_VALUE = workPanel.getVerticalScrollBar().getValue();
-                if (CURRENT_WIDTH != mainFrame.getWidth()) {
-                    CURRENT_WIDTH = mainFrame.getWidth();
-                    workPanel.updateLayout(Math.max(START_VALUE + mainFrame.getWidth() - WIDTH, 50));
+                scrollValue = workPanel.getVerticalScrollBar().getValue();
+                if (currentWidth != mainFrame.getWidth()) {
+                    currentWidth = mainFrame.getWidth();
+                    workPanel.updateLayout();
                 }
-                SwingUtilities.invokeLater(() -> workPanel.getVerticalScrollBar().setValue(SCROLL_VALUE));
+                SwingUtilities.invokeLater(() -> workPanel.getVerticalScrollBar().setValue(scrollValue));
             }
         });
 
         mainFrame.addWindowStateListener(e -> {
-            SCROLL_VALUE = workPanel.getVerticalScrollBar().getValue();
+            scrollValue = workPanel.getVerticalScrollBar().getValue();
             if ((e.getNewState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
-                if (CURRENT_WIDTH != mainFrame.getWidth()) {
-                    CURRENT_WIDTH = mainFrame.getWidth();
-                    workPanel.updateLayout(Math.max(START_VALUE + mainFrame.getWidth() - WIDTH, 50));
+                if (currentWidth != mainFrame.getWidth()) {
+                    currentWidth = mainFrame.getWidth();
+                    workPanel.updateLayout();
                 }
             }
-            SwingUtilities.invokeLater(() -> workPanel.getVerticalScrollBar().setValue(SCROLL_VALUE));
+            SwingUtilities.invokeLater(() -> workPanel.getVerticalScrollBar().setValue(scrollValue));
         });
     }
 }

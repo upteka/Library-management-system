@@ -14,7 +14,7 @@ import java.io.IOException;
  * ToolsIMPL 的工具方法可以快速设置组件的字体、边框、颜色、布局、边距、位置、关闭操作等。
  */
 public class ToolsIMPL implements Tools {
-    private static Font customFont;
+    public static Font customFont;
 
     /**
      * 加载自定义字体。
@@ -39,6 +39,7 @@ public class ToolsIMPL implements Tools {
      * @param style     字体样式 (如 Font.PLAIN, Font.BOLD)
      */
     public static void setCustomFont(JComponent component, float size, int style) {
+        if (size == 0 || style == -1) return;
         Font resizedFont = customFont.deriveFont(style, size);
         component.setFont(resizedFont);
     }
@@ -153,7 +154,7 @@ public class ToolsIMPL implements Tools {
         if (ipadx > 0) gbc.ipadx = ipadx;
         if (ipady > 0) gbc.ipady = ipady;
         if (insets != null) gbc.insets = insets;
-        if (font_size > 0 && font_style > 0) setCustomFont(component, font_size, font_style);
+        if (font_size > 0) setCustomFont(component, font_size, font_style);
 
         if (component != null && target != null)
             target.add(component, gbc);
@@ -182,7 +183,7 @@ public class ToolsIMPL implements Tools {
         gbc.gridy = gridy;
         gbc.insets = insets;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        if (font_size > 0 && font_style > 0)
+        if (font_size > 0)
             setCustomFont(component, font_size, font_style);
 
         if (component != null && target != null)
@@ -217,7 +218,7 @@ public class ToolsIMPL implements Tools {
         gbc.insets = insets;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.NORTH;
-        if (font_size > 0 && font_style > 0)
+        if (font_size > 0)
             setCustomFont(component, font_size, font_style);
 
         if (component != null && target != null)
