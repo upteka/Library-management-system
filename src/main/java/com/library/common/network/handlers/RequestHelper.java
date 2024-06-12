@@ -1,7 +1,7 @@
 package main.java.com.library.common.network.handlers;
 
+import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
-import main.java.com.library.server.JwtUtil;
 
 /**
  * @author PC

@@ -15,7 +15,11 @@ import org.slf4j.LoggerFactory;
 public class Return implements Request<ReturnRecord> {
     private static final Logger logger = LoggerFactory.getLogger(Return.class);
     private final String action = "return";
-    private final ReturnRecordService returnRecordService = new ReturnRecordService(); // 直接创建 ReturnService 实例
+    private final ReturnRecordService returnRecordService; // 直接创建 ReturnService 实例
+
+    public Return(ReturnRecordService returnRecordService) {
+        this.returnRecordService = returnRecordService;
+    }
 
     /**
      * 返回与此请求相关的操作。

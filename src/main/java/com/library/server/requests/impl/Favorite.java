@@ -16,7 +16,11 @@ import java.sql.SQLException;
 public class Favorite implements Request<FavoriteRecord> {
     private static final Logger logger = LoggerFactory.getLogger(Favorite.class);
     private static final String ACTION = "favorite";
-    private final BaseDao<FavoriteRecord> favoriteDao = new BaseDao<>(FavoriteRecord.class);
+    private final BaseDao<FavoriteRecord> favoriteDao;
+
+    public Favorite(BaseDao<FavoriteRecord> favoriteDao) {
+        this.favoriteDao = favoriteDao;
+    }
 
     @Override
     public String getAction() {
@@ -31,7 +35,6 @@ public class Favorite implements Request<FavoriteRecord> {
                 return ResponseHelper.packResponse(ACTION, false, "Invalid request type, expected FavoriteRecord", null);
             }
 
-            // 验证请求参数
             if (requestPack.getParams().size() != 1) {
                 return ResponseHelper.packResponse(ACTION, false, "Invalid request parameters, expected 1 parameter", null);
             }
