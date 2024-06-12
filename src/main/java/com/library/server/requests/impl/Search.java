@@ -35,7 +35,7 @@ public class Search<T extends Entity> implements Request<T> {
         }
 
         try {
-            if (params.getFirst().equalsIgnoreCase("search")) {
+            if (requestPack.getAction().equalsIgnoreCase("search")) {
                 SearchParameters searchParams = parseSearchParameters(params);
                 return searchEntities(searchParams);
             } else {
@@ -152,4 +152,6 @@ public class Search<T extends Entity> implements Request<T> {
             this.customEntityType = customEntityType;
         }
     }
+
+
 }

@@ -1,10 +1,10 @@
-package main.java.com.library.server;
+package main.java.com.library.common.network;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashSet;
@@ -16,7 +16,9 @@ import java.util.Set;
  */
 public class JwtUtil {
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // Generates a secure random key
+    private static final String SECRET = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"; // 固定密钥
+    // private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8)); // 使用固定密钥生成 Key
+    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     private static final long EXPIRATION_TIME = 3600_000; // 1 hour
 
 
@@ -77,5 +79,11 @@ public class JwtUtil {
             case "admin" -> Set.of("add", "get", "update", "delete");
             default -> new HashSet<>();
         };
+    }
+
+    public static boolean isTokenOwner(String jwtToken, String userId) {
+        // 解析 JWT 令牌并检查是否与 userId 匹配
+        String tokenUserId = extractUserId(jwtToken);
+        return userId.equals(tokenUserId);
     }
 }

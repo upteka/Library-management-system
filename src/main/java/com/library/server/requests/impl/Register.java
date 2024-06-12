@@ -2,11 +2,11 @@ package main.java.com.library.server.requests.impl;
 
 import main.java.com.library.common.entity.Entity;
 import main.java.com.library.common.entity.impl.User;
+import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
 import main.java.com.library.common.network.handlers.RequestHelper;
 import main.java.com.library.common.network.handlers.ResponseHelper;
-import main.java.com.library.server.JwtUtil;
 import main.java.com.library.server.requests.Request;
 import main.java.com.library.server.service.impl.UserService;
 import org.slf4j.Logger;
@@ -16,8 +16,11 @@ import org.slf4j.LoggerFactory;
 public class Register implements Request<User> {
     private static final Logger logger = LoggerFactory.getLogger(Register.class);
     private final String action = "register";
-    private final UserService userService = new UserService();
+    private final UserService userService; // 直接创建 ReturnService 实例
 
+    public Register(UserService userService) {
+        this.userService = userService;
+    }
     /**
      * 返回与此请求相关的操作。
      *

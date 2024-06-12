@@ -81,7 +81,7 @@ public class RequestPack<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "RequestPack [action=" + action + ", data=" + (data != null ? data.toString() : "null") + ", token=" + JwtToken + ", message=" + message + "]";
+        return "RequestPack [action=" + action + ", data=" + (data != null ? data.toString() : "null") + ", token=" + JwtToken + ", message=" + message + ", params=" + params + "]";
     }
 
     @Override

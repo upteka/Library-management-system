@@ -49,11 +49,12 @@ public class User implements Entity {
     }
 
 
+
     public String getUserID() {
         return userID;
     }
 
-    private void setUserID(String userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 

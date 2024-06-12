@@ -2,11 +2,13 @@ package main.java.com.library.server;
 
 
 import main.java.com.library.common.entity.Entity;
+import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
 import main.java.com.library.common.network.handlers.ResponseHelper;
 import main.java.com.library.server.requests.Request;
 import main.java.com.library.server.requests.impl.Crud;
+import main.java.com.library.server.service.impl.BaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +16,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Constructor;
 import java.net.Socket;
 
 
@@ -121,7 +124,12 @@ public class ClientHandler implements Runnable {
                 throw new ClassNotFoundException("Class " + requestClassName + " does not implement Request interface");
             }
 
-            Request<?> request = (Request<?>) requestClass.getDeclaredConstructor().newInstance();
+            String entityType = requestPack.getType();
+            BaseService<? extends Entity> service = getServiceForEntity(entityType);
+
+            Constructor<?> constructor = requestClass.getConstructor(BaseService.class);
+            Request<?> request = (Request<?>) constructor.newInstance(service);
+
             return request.handle(requestPack);
         } catch (ClassNotFoundException e) {
             LOGGER.warn("No handler found for action: {}", action, e);
@@ -129,6 +137,18 @@ public class ClientHandler implements Runnable {
         } catch (Exception e) {
             LOGGER.warn("Error processing request", e);
             return ResponseHelper.packResponse(action, false, "Error processing request: " + e.getMessage(), null);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private BaseService<? extends Entity> getServiceForEntity(String entityType) {
+        try {
+            String serviceClassName = "main.java.com.library.server.service.impl." + entityType + "Service";
+            Class<?> serviceClass = Class.forName(serviceClassName);
+            return (BaseService<? extends Entity>) serviceClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            LOGGER.error("Failed to instantiate service class {}", entityType, e);
+            throw new IllegalArgumentException("Failed to instantiate service class: " + e.getMessage(), e);
         }
     }
 

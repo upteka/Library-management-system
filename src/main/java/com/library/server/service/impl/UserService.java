@@ -25,7 +25,6 @@ public class UserService extends BaseService<User> {
         return super.getByField("phone", phone);
     }
 
-
     public User getUser(String identifier) {
         User user = getUserByUsername(identifier);
         if (user == null) {
@@ -38,7 +37,6 @@ public class UserService extends BaseService<User> {
         return user;
     }
 
-
     public boolean validateUser(String identifier, String password) {
         User user = getUser(identifier);
         return user != null && user.getPassword().equals(password);
@@ -47,7 +45,6 @@ public class UserService extends BaseService<User> {
     public boolean isUserExists(String identifier) {
         return getUser(identifier) != null;
     }
-
 
     public boolean isAdmin(String identifier) {
         User user = getUser(identifier);
@@ -75,5 +72,52 @@ public class UserService extends BaseService<User> {
         }
     }
 
+    public String update(User user) {
+        if (user.getId() == null) {
+            return "Failed to update user: User ID is required";
+        }
 
+        User existingUser = super.get(user.getId());
+        if (existingUser == null) {
+            return "Failed to update user: User does not exist";
+        }
+
+        if (user.getUsername() != null && !user.getUsername().isEmpty()) {
+            if (!user.getUsername().equals(existingUser.getUsername()) && isUserExists(user.getUsername())) {
+                return "Failed to update user: Username already exists";
+            }
+            existingUser.setUsername(user.getUsername());
+        }
+
+        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+            if (!user.getEmail().equals(existingUser.getEmail()) && isUserExists(user.getEmail())) {
+                return "Failed to update user: Email already exists";
+            }
+            existingUser.setEmail(user.getEmail());
+        }
+
+        if (user.getPhone() != null && !user.getPhone().isEmpty()) {
+            if (!user.getPhone().equals(existingUser.getPhone()) && isUserExists(user.getPhone())) {
+                return "Failed to update user: Phone number already exists";
+            }
+            existingUser.setPhone(user.getPhone());
+        }
+
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            if (user.getPassword().length() < 8) {
+                return "Failed to update user: Password must be at least 8 characters";
+            }
+            existingUser.setPassword(user.getPassword());
+        }
+
+        if (user.getRole() != null && !user.getRole().isEmpty()) {
+            existingUser.setRole(user.getRole());
+        }
+
+        if (super.update(existingUser).equals("Success")) {
+            return "Success: User updated successfully";
+        } else {
+            return "Failed to update user: Internal server error";
+        }
+    }
 }

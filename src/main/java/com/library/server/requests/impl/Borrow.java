@@ -17,9 +17,11 @@ import org.slf4j.LoggerFactory;
  */
 public class Borrow implements Request<BorrowRecord> {
     private static final Logger logger = LoggerFactory.getLogger(Borrow.class);
+    private final BorrowRecordService borrowRecordService;
 
-
-    final BorrowRecordService borrowRecordService = new BorrowRecordService();
+    Borrow(BorrowRecordService borrowRecordService) {
+        this.borrowRecordService = new BorrowRecordService();
+    }
     final String action = "borrow";
 
     @Override
