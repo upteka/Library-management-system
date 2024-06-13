@@ -5,7 +5,7 @@ import main.java.com.library.common.entity.Entity;
 
 public class FavoriteRecord implements Entity {
     private final String favoriteID;
-    private final String userID;
+    private String userID;
     private final String bookID;
 
     // 无参数构造器
@@ -15,14 +15,17 @@ public class FavoriteRecord implements Entity {
         this.bookID = null;
     }
 
-    public FavoriteRecord(String userID, String bookID) {
+    public FavoriteRecord(String bookID) {
         this.favoriteID = UlidCreator.getUlid().toString();
-        this.userID = userID;
         this.bookID = bookID;
     }
 
     public String getUserID() {
         return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getBookID() {
@@ -32,6 +35,11 @@ public class FavoriteRecord implements Entity {
     @Override
     public String getId() {
         return favoriteID;
+    }
+
+    @Override
+    public String getPrimaryKeyName() {
+        return "favoriteID";
     }
 
     @Override

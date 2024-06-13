@@ -97,4 +97,9 @@ public class BorrowRecord implements Entity {
     public String getId() {
         return borrowID;
     }
+
+    @Override
+    public String getPrimaryKeyName() {
+        return "borrowID";
+    }
 }

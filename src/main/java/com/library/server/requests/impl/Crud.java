@@ -103,19 +103,18 @@ public class Crud<T extends Entity> implements Request<T> {
      * 处理 CRUD 操作
      */
     protected ResponsePack<T> processAction(String action, String entityName, T data, String id, String jwtToken) throws SQLException {
-        boolean success = false;
-        String message = "";
+        boolean success;
+        String message;
         T result = null;
 
         switch (action.toLowerCase()) {
             case "add":
-                LOGGER.info("Adding service for {}: {}", entityName, service);
                 message = service.add(data);
                 success = message.contains("Success");
                 break;
             case "update":
-                success = service.update(data).startsWith("Success");
-                message = success ? entityName + " updated successfully" : entityName + " update failed";
+                message = service.update(data);
+                success = message.startsWith("Success");
                 break;
             case "delete":
                 success = service.delete(id);

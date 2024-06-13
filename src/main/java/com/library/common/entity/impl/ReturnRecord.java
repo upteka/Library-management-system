@@ -60,4 +60,9 @@ public class ReturnRecord implements Entity {
     public String getId() {
         return returnID;
     }
+
+    @Override
+    public String getPrimaryKeyName() {
+        return "returnID";
+    }
 }

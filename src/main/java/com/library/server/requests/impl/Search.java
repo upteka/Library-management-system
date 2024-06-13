@@ -49,25 +49,27 @@ public class Search<T extends Entity> implements Request<T> {
 
 
     private SearchParameters parseSearchParameters(List<String> params) throws ClassNotFoundException {
-        String fieldName = params.get(1);
-        Object value = "0".equals(params.get(2)) ? null : params.get(2);
-        String condition = params.get(3);
-        int limit = Integer.parseInt(params.get(4));
-        String sortField = params.size() > 5 ? params.get(5) : null;
-        String sortOrder = params.size() > 6 ? params.get(6) : null;
-        int page = params.size() > 7 ? Integer.parseInt(params.get(7)) : 1;
-        int pageSize = params.size() > 8 ? Integer.parseInt(params.get(8)) : 10;
-        boolean caseInsensitive = params.size() > 9 && Boolean.parseBoolean(params.get(9));
-        String logicalOperator = params.size() > 10 ? params.get(10) : "AND";
-        String[] selectedFields = params.size() > 11 ? params.subList(11, params.size()).toArray(new String[0]) : null;
-        boolean distinct = params.size() > 12 && Boolean.parseBoolean(params.get(12));
-        Timestamp startDate = params.size() > 13 ? Timestamp.valueOf(params.get(13)) : null;
-        Timestamp endDate = params.size() > 14 ? Timestamp.valueOf(params.get(14)) : null;
-        String dateField = params.size() > 15 ? params.get(15) : null;
-        Class<?> customEntityType = params.size() > 16 ? Class.forName(params.get(16)) : null;
 
+        String fieldName = params.get(0);  // 索引从 0 开始
+        String value = "0".equals(params.get(1)) ? null : params.get(1);
+        String condition = params.get(2);
+        int limit = Integer.parseInt(params.get(3));
+        String sortField = "null".equals(params.get(4)) ? null : params.get(4);
+        String sortOrder = "null".equals(params.get(5)) ? null : params.get(5);
+        int page = Integer.parseInt(params.get(6));
+        int pageSize = Integer.parseInt(params.get(7));
+        boolean caseInsensitive = Boolean.parseBoolean(params.get(8));
+        String logicalOperator = params.get(9);
+        String[] selectedFields = "null".equals(params.get(10)) ? null : params.subList(10, params.size()).toArray(new String[0]);
+        boolean distinct = Boolean.parseBoolean(params.get(11));
+        Timestamp startDate = "null".equals(params.get(12)) ? null : Timestamp.valueOf(params.get(12));
+        Timestamp endDate = "null".equals(params.get(13)) ? null : Timestamp.valueOf(params.get(13));
+        String dateField = "null".equals(params.get(14)) ? null : params.get(14);
+        Class<?> customEntityType = "null".equals(params.get(15)) ? null : Class.forName(params.get(15));
         return new SearchParameters(fieldName, value, condition, limit, sortField, sortOrder, page, pageSize, caseInsensitive, logicalOperator, selectedFields, distinct, startDate, endDate, dateField, customEntityType);
+
     }
+
 
     private ResponsePack<T> searchEntities(SearchParameters params) {
         List<T> entities = baseService.search(
@@ -85,6 +87,7 @@ public class Search<T extends Entity> implements Request<T> {
                 ((User) entity).setRole(null);
             }
         });
+
 
         if (!entities.isEmpty()) {
             return new ResponsePack<>(action, "获取实体成功", (T) new EntityList<>(entities), true);

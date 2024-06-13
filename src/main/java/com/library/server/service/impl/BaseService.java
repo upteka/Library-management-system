@@ -42,7 +42,6 @@ public class BaseService<T extends Entity> implements Service<T> {
 
     @Override
     public T getByField(String field, String name) {
-        // 实现获取特定字段值的方法
         return dao.getByField(field, name);
     }
 

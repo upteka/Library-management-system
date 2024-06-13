@@ -13,15 +13,15 @@ public class DatabaseManager {
     private static final String USER = "root";
     private static final String PASSWORD = "81780937ma";
 
-    private static final String DROP_USERS_TABLE = "DROP TABLE IF EXISTS users";
-    private static final String DROP_BOOKS_TABLE = "DROP TABLE IF EXISTS books";
-    private static final String DROP_BORROW_RECORDS_TABLE = "DROP TABLE IF EXISTS borrow_records";
-    private static final String DROP_RETURN_RECORDS_TABLE = "DROP TABLE IF EXISTS return_records";
-    private static final String DROP_FAVORITES_TABLE = "DROP TABLE IF EXISTS favorites";
+    private static final String DROP_USERS_TABLE = "DROP TABLE IF EXISTS Users";
+    private static final String DROP_BOOKS_TABLE = "DROP TABLE IF EXISTS Books";
+    private static final String DROP_BORROW_RECORDS_TABLE = "DROP TABLE IF EXISTS BorrowRecords";
+    private static final String DROP_RETURN_RECORDS_TABLE = "DROP TABLE IF EXISTS ReturnRecords";
+    private static final String DROP_FAVORITES_TABLE = "DROP TABLE IF EXISTS FavoriteRecords";
     private static final String DROP_BORROW_TRIGGER = "DROP TRIGGER IF EXISTS after_borrow_insert";
     private static final String DROP_RETURN_TRIGGER = "DROP TRIGGER IF EXISTS after_return_insert";
 
-    private static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS User ("
+    private static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS Users ("
             + "userID VARCHAR(255) PRIMARY KEY,"
             + "email VARCHAR(255) NOT NULL,"
             + "phone VARCHAR(255) NOT NULL,"
@@ -49,47 +49,47 @@ public class DatabaseManager {
             + "borrowDate TIMESTAMP NOT NULL,"
             + "returnDate TIMESTAMP,"
             + "returned BOOLEAN NOT NULL,"
-            + "FOREIGN KEY (userID) REFERENCES users(userID),"
-            + "FOREIGN KEY (bookID) REFERENCES books(bookID)"
+            + "FOREIGN KEY (userID) REFERENCES Users(userID),"
+            + "FOREIGN KEY (bookID) REFERENCES Books(bookID)"
             + ")";
 
     private static final String CREATE_RETURN_RECORDS_TABLE = "CREATE TABLE IF NOT EXISTS ReturnRecords ("
             + "returnID VARCHAR(255) PRIMARY KEY,"
             + "borrowID VARCHAR(255) NOT NULL,"
             + "returnDate TIMESTAMP NOT NULL,"
-            + "FOREIGN KEY (borrowID) REFERENCES borrow_records(borrowID)"
+            + "FOREIGN KEY (borrowID) REFERENCES BorrowRecords(borrowID)"
             + ")";
 
-    private static final String CREATE_FAVORITES_TABLE = "CREATE TABLE IF NOT EXISTS Favorites ("
+    private static final String CREATE_FAVORITES_TABLE = "CREATE TABLE IF NOT EXISTS FavoriteRecords ("
             + "favoriteID VARCHAR(255) PRIMARY KEY,"
             + "userID VARCHAR(255) NOT NULL,"
             + "bookID VARCHAR(255) NOT NULL,"
             + "UNIQUE KEY unique_favorite (userID, bookID),"
-            + "FOREIGN KEY (userID) REFERENCES users(userID),"
-            + "FOREIGN KEY (bookID) REFERENCES books(bookID)"
+            + "FOREIGN KEY (userID) REFERENCES Users(userID),"
+            + "FOREIGN KEY (bookID) REFERENCES Books(bookID)"
             + ")";
 
     private static final String CREATE_BORROW_TRIGGER = "CREATE TRIGGER after_borrow_insert "
-            + "AFTER INSERT ON borrow_records "
+            + "AFTER INSERT ON BorrowRecords "
             + "FOR EACH ROW "
             + "BEGIN "
-            + "    UPDATE books SET availableCount = availableCount - 1 "
+            + "    UPDATE Books SET availableCount = availableCount - 1 "
             + "    WHERE bookID = NEW.bookID;"
-            + "    IF (SELECT availableCount FROM books WHERE bookID = NEW.bookID) <= 0 THEN "
-            + "        UPDATE books SET status = 'unavailable' "
+            + "    IF (SELECT availableCount FROM Books WHERE bookID = NEW.bookID) <= 0 THEN "
+            + "        UPDATE Books SET status = 'unavailable' "
             + "        WHERE bookID = NEW.bookID; "
             + "    END IF; "
             + "END;";
 
     private static final String CREATE_RETURN_TRIGGER = "CREATE TRIGGER after_return_insert "
-            + "AFTER INSERT ON return_records "
+            + "AFTER INSERT ON ReturnRecords "
             + "FOR EACH ROW "
             + "BEGIN "
-            + "    UPDATE books SET availableCount = availableCount + 1 "
-            + "    WHERE bookID = (SELECT bookID FROM borrow_records WHERE borrowID = NEW.borrowID);"
-            + "    IF (SELECT availableCount FROM books WHERE bookID = (SELECT bookID FROM borrow_records WHERE borrowID = NEW.borrowID)) > 0 THEN "
-            + "        UPDATE books SET status = 'available' "
-            + "        WHERE bookID = (SELECT bookID FROM borrow_records WHERE borrowID = NEW.borrowID); "
+            + "    UPDATE Books SET availableCount = availableCount + 1 "
+            + "    WHERE bookID = (SELECT bookID FROM BorrowRecords WHERE borrowID = NEW.borrowID);"
+            + "    IF (SELECT availableCount FROM Books WHERE bookID = (SELECT bookID FROM BorrowRecords WHERE borrowID = NEW.borrowID)) > 0 THEN "
+            + "        UPDATE Books SET status = 'available' "
+            + "        WHERE bookID = (SELECT bookID FROM BorrowRecords WHERE borrowID = NEW.borrowID); "
             + "    END IF; "
             + "END;";
 

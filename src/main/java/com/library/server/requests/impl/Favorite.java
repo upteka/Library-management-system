@@ -2,6 +2,7 @@ package main.java.com.library.server.requests.impl;
 
 import main.java.com.library.common.entity.Entity;
 import main.java.com.library.common.entity.impl.FavoriteRecord;
+import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
 import main.java.com.library.common.network.handlers.RequestHelper;
@@ -31,9 +32,11 @@ public class Favorite implements Request<FavoriteRecord> {
     public ResponsePack<FavoriteRecord> handle(RequestPack<? extends Entity> requestPack) {
         try {
             Entity entity = RequestHelper.unPackRequest(requestPack);
+
             if (!(entity instanceof FavoriteRecord favoriteRecord)) {
                 return ResponseHelper.packResponse(ACTION, false, "Invalid request type, expected FavoriteRecord", null);
             }
+            favoriteRecord.setUserID(JwtUtil.extractUserId(requestPack.getJwtToken()));
 
             if (requestPack.getParams().size() != 1) {
                 return ResponseHelper.packResponse(ACTION, false, "Invalid request parameters, expected 1 parameter", null);
@@ -58,8 +61,10 @@ public class Favorite implements Request<FavoriteRecord> {
         if (favoriteDao.get(favoriteRecord.getId()) != null) {
             return ResponseHelper.packResponse(ACTION, false, "Favorite record already exists", null);
         }
-        favoriteDao.add(favoriteRecord);
-        return ResponseHelper.packResponse(ACTION, true, "Favorite added successfully", favoriteRecord);
+        if (favoriteDao.add(favoriteRecord).equals("Success")) {
+            return ResponseHelper.packResponse(ACTION, true, "Favorite record added", null);
+        }
+        return ResponseHelper.packResponse(ACTION, false, "Failed to add favorite record", favoriteRecord);
     }
 
     private ResponsePack<FavoriteRecord> handleUnfavorite(FavoriteRecord favoriteRecord) throws SQLException {
