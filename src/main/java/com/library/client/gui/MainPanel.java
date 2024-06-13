@@ -10,10 +10,12 @@ import main.java.com.library.common.network.ResponsePack;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
 import static main.java.com.library.client.gui.view.workspace.WorkSpace.scrollValue;
+import static main.java.com.library.client.gui.view.workspace.WorkSpace.workPanel;
 
 public class MainPanel extends JPanel {
     public static WorkSpace workSpace = null;
@@ -39,14 +41,13 @@ public class MainPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0);
     }
 
-    public void showWorkSpace(ResponsePack<?> responsePack, String action) {
+    public void showWorkSpace(ResponsePack<?> responsePack, String action) throws IOException, ClassNotFoundException {
         removeComponents();
         mainFrame.setTitle("图书管理系统 - 工作区");
-        if (responsePack != null) {
-            WorkSpace.workPanel.unpackResponse(responsePack, action);
-        }
-        WorkSpace.workPanel.updateLayout();
-        SwingUtilities.invokeLater(() -> WorkSpace.workPanel.getVerticalScrollBar().setValue(scrollValue));
+        if (responsePack != null) workPanel.unpackResponse(responsePack, action);
+        WorkSpace.showTopPanel = action.equals("User") || action.equals("BorrowRecord");
+        workPanel.updateLayout();
+        SwingUtilities.invokeLater(() -> workPanel.getVerticalScrollBar().setValue(scrollValue));
 
         setFormat(workSpace, this,
                 new Insets(0, 0, 0, 0), 1, 0, 1, 1, 0, 0,
@@ -88,6 +89,14 @@ public class MainPanel extends JPanel {
                 remove(component);
             }
         }
+        deleteAll(false);
+        System.gc();
+
+        workSpace = new WorkSpace();
+        settingPanel = new SettingPanel();
+        aboutPanel = new AboutPanel();
+        accountPanel = new AccountPanel();
+        searchPanel = new SearchPanel();
     }
 
     public GridBagConstraints getDefault() {
@@ -101,16 +110,17 @@ public class MainPanel extends JPanel {
         repaint();
     }
 
-    public void deleteAll() {
+    public void deleteAll(boolean isExit) {
         WorkSpace.deleteAll();
         searchPanel.deleteAll();
+        accountPanel.deleteAll();
 
         workSpace.removeAll();
         settingPanel.removeAll();
         aboutPanel.removeAll();
         accountPanel.removeAll();
         searchPanel.removeAll();
-        removeAll();
+        if (isExit) removeAll();
 
         workSpace = null;
         settingPanel = null;

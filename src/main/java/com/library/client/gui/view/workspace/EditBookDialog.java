@@ -7,8 +7,8 @@ import java.awt.*;
 
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
 
-public class EditDialog extends JDialog {
-    public EditDialog(JFrame parent, Book data) {
+public class EditBookDialog extends JDialog {
+    public EditBookDialog(JFrame parent, Book data) {
         super(parent, "编辑图书信息", true);
         setDialog(this, 300, 400, new BorderLayout(), false, JDialog.DISPOSE_ON_CLOSE);
 
@@ -19,8 +19,6 @@ public class EditDialog extends JDialog {
         JTextField authorField = new JTextField(data.getAuthor());
         JTextField publisherField = new JTextField(data.getPublisher());
         JTextField isbnField = new JTextField(data.getISBN());
-        JTextField countField = new JTextField(data.getCount());
-        JTextField restField = new JTextField(data.getAvailableCount());
         JButton saveButton = new JButton("提交");
         JButton cancelButton = new JButton("取消");
 
@@ -34,8 +32,6 @@ public class EditDialog extends JDialog {
         easySetFormat(authorField, panel, 2);
         easySetFormat(publisherField, panel, 3);
         easySetFormat(isbnField, panel, 4);
-        easySetFormat(countField, panel, 5);
-        easySetFormat(restField, panel, 6);
         easySetFormat(buttonPanel, panel, 7);
 
         setFormat(saveButton, buttonPanel, new Insets(10, 10, 10, 10), 0, 0, 1, 1, 0, 0, 0, 1, 14, Font.BOLD);

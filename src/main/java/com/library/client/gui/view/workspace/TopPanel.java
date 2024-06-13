@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
+import static main.java.com.library.client.gui.view.workspace.WorkSpace.workPanel;
 
 public class TopPanel extends JPanel {
     public TopPanel() {
@@ -13,10 +14,15 @@ public class TopPanel extends JPanel {
                 0, 0, 1, 1, 0, 0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0);
 
-        addButton("批量借阅", gbc, 0, _ -> batchBorrowAction());
-        addButton("批量归还", gbc, 1, _ -> batchReturnAction());
-        addButton("批量编辑", gbc, 2, _ -> batchEditAction());
-        addButton("批量删除", gbc, 3, _ -> batchDeleteAction());
+
+        if (WorkPanel.showType.equals("User")) {
+            addButton("用户", gbc, 0, _ -> switchToUserOnly());
+            addButton("管理员", gbc, 1, _ -> switchToAdminOnly());
+        }
+        if (WorkPanel.showType.equals("BorrowRecord")) {
+            addButton("正在借阅", gbc, 0, _ -> switchToBorrowing());
+            addButton("借阅记录", gbc, 1, _ -> switchToBorrowRecord());
+        }
     }
 
     private void addButton(String text, GridBagConstraints gbc, int gridx, ActionListener action) {
@@ -28,19 +34,23 @@ public class TopPanel extends JPanel {
         add(button, gbc);
     }
 
-    private void batchBorrowAction() {
-        System.out.println("批量借阅");
+    private void switchToUserOnly() {
+        WorkPanel.userOnly = true;
+        workPanel.updateLayout();
     }
 
-    private void batchReturnAction() {
-        System.out.println("批量归还");
+    private void switchToAdminOnly() {
+        WorkPanel.userOnly = true;
+        workPanel.updateLayout();
     }
 
-    private void batchEditAction() {
-        System.out.println("批量编辑");
+    private void switchToBorrowing() {
+        WorkPanel.borrowingOnly = true;
+        workPanel.updateLayout();
     }
 
-    private void batchDeleteAction() {
-        System.out.println("批量删除");
+    private void switchToBorrowRecord() {
+        WorkPanel.borrowingOnly = false;
+        workPanel.updateLayout();
     }
 }

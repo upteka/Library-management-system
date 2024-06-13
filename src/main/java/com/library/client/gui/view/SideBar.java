@@ -1,7 +1,8 @@
 package main.java.com.library.client.gui.view;
 
 import main.java.com.library.client.gui.view.workspace.WorkSpace;
-import main.java.com.library.common.entity.impl.Book;
+import main.java.com.library.common.entity.impl.BorrowRecord;
+import main.java.com.library.common.entity.impl.FavoriteRecord;
 import main.java.com.library.common.network.ResponsePack;
 
 import javax.swing.*;
@@ -11,8 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static main.java.com.library.client.gui.LoginPage.clientUtil;
-import static main.java.com.library.client.gui.LoginPage.response;
+import static main.java.com.library.client.gui.LoginPage.*;
 import static main.java.com.library.client.gui.MainPage.mainPanel;
 import static main.java.com.library.client.gui.effects.FadeEffect.applyFadeEffect;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setCustomFont;
@@ -168,18 +168,24 @@ public class SideBar extends JPanel {
     }
 
     private enum ButtonEnum {
-        WORKSPACE("工作区", _ -> mainPanel.showWorkSpace(null, "NORMAL")),
+        WORKSPACE("工作区", _ -> {
+            try {
+                mainPanel.showWorkSpace(null, "Book");
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }),
         SEARCH("搜索", _ -> mainPanel.showSearchPage()),
         MY_BORROWINGS("我的借阅", _ -> {
             try {
-                mainPanel.showWorkSpace(myBorrowings(), "BORROWED");
+                mainPanel.showWorkSpace(myBorrowings(), "BorrowRecord");
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }),
         MY_FAVORITES("我的收藏", _ -> {
             try {
-                mainPanel.showWorkSpace(myFavourites(), "NORMAL");
+                mainPanel.showWorkSpace(myFavourites(), "Book");
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -206,8 +212,8 @@ public class SideBar extends JPanel {
     }
 
     private static ResponsePack<?> myBorrowings() throws IOException, ClassNotFoundException {
-        clientUtil.sendRequest(packRequest("search", new Book(), "search", response.getJwtToken(),
-                "borrowID", "0", "LIKE", "0", "null", "ASC", "1", String.valueOf(WorkSpace.pageSize),
+        clientUtil.sendRequest(packRequest("search", new BorrowRecord(), "search", response.getJwtToken(),
+                "userID", currentUser.getId(), "LIKE", "0", "null", "ASC", "1", String.valueOf(WorkSpace.pageSize),
                 "false", "AND", "null", "false", "null", "null", "null", "null"));
         ResponsePack<?> responsePack = clientUtil.receiveResponse();
         if (responsePack.isSuccess()) {
@@ -219,8 +225,8 @@ public class SideBar extends JPanel {
     }
 
     private static ResponsePack<?> myFavourites() throws IOException, ClassNotFoundException {
-        clientUtil.sendRequest(packRequest("search", new Book(), "search", response.getJwtToken(),
-                "favorite", "0", "LIKE", "0", "null", "ASC", "1", String.valueOf(WorkSpace.pageSize),
+        clientUtil.sendRequest(packRequest("search", new FavoriteRecord(), "search", response.getJwtToken(),
+                "userID", currentUser.getId(), "LIKE", "0", "null", "ASC", "1", String.valueOf(WorkSpace.pageSize),
                 "false", "AND", "null", "false", "null", "null", "null", "null"));
         ResponsePack<?> responsePack = clientUtil.receiveResponse();
         if (responsePack.isSuccess()) {

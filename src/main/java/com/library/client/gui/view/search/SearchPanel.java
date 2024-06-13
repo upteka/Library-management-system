@@ -58,7 +58,7 @@ public class SearchPanel extends JPanel {
                     try {
                         searchResponse = searchRequest();
                         if (searchResponse.isSuccess()) {
-                            mainPanel.showWorkSpace(searchResponse, "NORMAL");
+                            mainPanel.showWorkSpace(searchResponse, "Book");
                         } else {
                             JOptionPane.showMessageDialog(null, searchResponse.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         }

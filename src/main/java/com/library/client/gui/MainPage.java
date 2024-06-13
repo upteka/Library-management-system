@@ -1,7 +1,5 @@
 package main.java.com.library.client.gui;
 
-import main.java.com.library.client.gui.view.workspace.BorrowDialog;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,14 +19,10 @@ public class MainPage {
         setFrame(mainFrame, WIDTH, HEIGHT, new BorderLayout(), true, JFrame.EXIT_ON_CLOSE);
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
-        SwingUtilities.invokeLater(() -> {
-            BorrowDialog dialog = new BorrowDialog(mainFrame, "1234567890");
-            dialog.setVisible(true);
-        });
     }
 
     public void deleteAll() {
-        mainPanel.deleteAll();
+        mainPanel.deleteAll(true);
         mainFrame.removeAll();
         mainFrame = null;
         mainPanel = null;
