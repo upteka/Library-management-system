@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
-import static main.java.com.library.client.gui.view.workspace.WorkPanel.dataList;
+import static main.java.com.library.client.gui.view.workspace.WorkPanel.*;
 import static main.java.com.library.client.gui.view.workspace.WorkSpace.*;
 
 public class BottomPanel extends JPanel {
@@ -41,7 +41,7 @@ public class BottomPanel extends JPanel {
     }
 
     private void goToNextPage() {
-        if (dataList.size() > currentPage * pageSize) {
+        if (totalCount > currentPage * pageSize) {
             currentPage++;
             updatePageLabel();
             workPanel.updateLayout();
@@ -59,10 +59,10 @@ public class BottomPanel extends JPanel {
     }
 
     public void updatePageLabel() {
-        if (dataList == null) {
+        if (bookList == null || userList == null) {
             pageLabel.setText("第 0 页 / 0页");
         } else {
-            int totalPages = (int) Math.ceil((double) dataList.size() / pageSize);
+            int totalPages = (int) Math.ceil((double) totalCount / pageSize);
             pageLabel.setText("第 " + currentPage + " 页 / " + totalPages + " 页");
         }
         revalidate();

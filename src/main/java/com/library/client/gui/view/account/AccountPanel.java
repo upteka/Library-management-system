@@ -1,5 +1,6 @@
 package main.java.com.library.client.gui.view.account;
 
+import com.github.f4b6a3.ulid.Ulid;
 import main.java.com.library.client.gui.LoginPage;
 import main.java.com.library.common.entity.impl.User;
 import main.java.com.library.common.network.JwtUtil;
@@ -7,9 +8,10 @@ import main.java.com.library.common.network.ResponsePack;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 
 import static main.java.com.library.client.gui.LoginPage.*;
 import static main.java.com.library.client.gui.MainPage.mainFrame;
@@ -22,24 +24,61 @@ public class AccountPanel extends JPanel {
     private static int passwordStatus;
     private static String confirmPassword;
 
-    private static JTextField usernameField = createTextField(currentUser.getUsername());
-    private static JTextField emailField = createTextField(currentUser.getEmail());
-    private static JTextField phoneField = createTextField(currentUser.getPhone());
-    private static JTextField passwordField = createTextField("请输入旧密码");
+    private static JTextField usernameField = null;
+    private static JTextField emailField = null;
+    private static JTextField phoneField = null;
+    private static JTextField passwordField = null;
+    private static JLabel passwordLabel = null;
 
     public AccountPanel() {
         setLayout(LAYOUT);
 
+        JPanel welcomePanel = new JPanel(LAYOUT);
         JPanel titlePanel = new JPanel(LAYOUT);
         JPanel editAccountPanel = new JPanel(LAYOUT);
 
         JButton passwordButton = setPasswordButton(passwordField);
-        JButton saveButton = new JButton("保存更改");
+        JButton saveButton = new JButton("提交");
         saveButton.putClientProperty("JButton.buttonType", "roundRect");
         JPanel userPanel = new JPanel(LAYOUT);
         JPanel emailPanel = new JPanel(LAYOUT);
         JPanel phonePanel = new JPanel(LAYOUT);
         JPanel passwordPanel = new JPanel(LAYOUT);
+
+        usernameField = createTextField(currentUser.getUsername());
+        emailField = createTextField(currentUser.getEmail());
+        phoneField = createTextField(currentUser.getPhone());
+        passwordField = createTextField("");
+        passwordLabel = new JLabel("请输入旧密码");
+
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        String greeting;
+        if (hour < 6) {
+            greeting = "夜深了，注意身体";
+        } else if (hour < 9) {
+            greeting = "早上好";
+        } else if (hour < 12) {
+            greeting = "上午好";
+        } else if (hour < 14) {
+            greeting = "中午好";
+        } else if (hour < 18) {
+            greeting = "下午好";
+        } else if (hour < 21) {
+            greeting = "傍晚好";
+        } else {
+            greeting = "晚上好";
+        }
+
+        int days = (int) (ChronoUnit.NANOS.between(Ulid.getInstant(currentUser.getUserID()), Instant.now()) / (24 * 60 * 60 * 1_000_000_000L));
+        if (days == 0) days = 1;
+
+        JLabel title = new JLabel(greeting + "，" + currentUser.getUsername());
+        JLabel title2 = new JLabel("今天是您加入我们的第 " + days + " 天, 祝您生活愉快！");
+        setFormat(title, welcomePanel, new Insets(0, 50, 10, 0),
+                0, 0, 1, 0, 0, 0, GridBagConstraints.WEST, 1, 36, 0);
+        setFormat(title2, welcomePanel, new Insets(0, 50, 0, 0),
+                0, 1, 18, 0);
+
 
         setFormat(new JLabel("用户名"), editAccountPanel, new Insets(0, 50, 10, 0),
                 0, 0, 18, Font.BOLD);
@@ -68,50 +107,51 @@ public class AccountPanel extends JPanel {
         putIntoPanel(usernameField, userPanel);
         putIntoPanel(emailField, emailPanel);
         putIntoPanel(phoneField, phonePanel);
-        putIntoPanel(passwordField, passwordPanel);
+        setFormat(passwordLabel, passwordPanel, new Insets(0, 50, 5, 0),
+                0, 0, 1, 0, 0, 0,
+                GridBagConstraints.EAST, GridBagConstraints.BOTH, 15, 0);
+        setFormat(passwordField, passwordPanel, new Insets(0, 50, 20, 0),
+                0, 1, 1, 0, 0, 0,
+                GridBagConstraints.EAST, GridBagConstraints.BOTH, 0, 0);
         setFormat(passwordButton, passwordPanel, new Insets(0, 50, 20, 200),
-                1, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0,
                 GridBagConstraints.EAST, GridBagConstraints.BOTH, 0, 0);
 
 
-        setFormat(titlePanel, this, new Insets(0, 0, 40, 0),
+        setFormat(welcomePanel, this, new Insets(0, 0, 40, 0),
                 0, 0, 1, 0, 0, 0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0);
+        setFormat(titlePanel, this, new Insets(0, 0, 40, 0),
+                0, 1, 1, 0, 0, 0,
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0);
         setFormat(editAccountPanel, this, new Insets(0, 0, 0, 0),
-                0, 1, 0, 0, 0, 0,
+                0, 2, 0, 0, 0, 0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0);
         setFormat(saveButton, phonePanel, new Insets(0, 50, 20, 50),
                 1, 0, 0, 0, 0, 0,
-                GridBagConstraints.EAST, GridBagConstraints.BOTH, 0, 0);
+                GridBagConstraints.EAST, GridBagConstraints.BOTH, 14, 0);
 
         saveButton.addActionListener(_ -> {
             try {
-                ResponsePack<?> responsePack = sendAccountRequest();
+                if (!isEmail(emailField.getText())) {
+                    JOptionPane.showMessageDialog(this, "请输入有效的邮箱");
+                    return;
+                }
+                if (!isPhone(phoneField.getText())) {
+                    JOptionPane.showMessageDialog(this, "请输入有效的手机号");
+                    return;
+                }
+                ResponsePack<?> responsePack = sendAccountRequest(false);
                 if (responsePack.isSuccess()) {
                     JOptionPane.showMessageDialog(this, "用户信息更新成功！");
+                    currentUser.setUsername(usernameField.getText());
+                    currentUser.setEmail(emailField.getText());
+                    currentUser.setPhone(phoneField.getText());
                 } else {
                     JOptionPane.showMessageDialog(this, "用户信息更新失败！" + responsePack.getMessage());
                 }
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
-            }
-        });
-    }
-
-    private static void addTextFieldEffect(JTextField field) {
-        field.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if (!field.isEditable()) {
-                    field.setForeground(Color.GRAY);
-                }
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (!field.isEditable()) {
-                    field.setForeground(Color.LIGHT_GRAY);
-                }
             }
         });
     }
@@ -122,7 +162,6 @@ public class AccountPanel extends JPanel {
         setCustomFont(field, 14, Font.PLAIN);
         field.putClientProperty("JComponent.roundRect", true);
         field.setMargin(new Insets(5, 7, 5, 7));
-        addTextFieldEffect(field);
         return field;
     }
 
@@ -132,68 +171,72 @@ public class AccountPanel extends JPanel {
                 GridBagConstraints.EAST, GridBagConstraints.BOTH, 0, 0);
     }
 
-    private static ResponsePack<?> sendAccountRequest() throws IOException, ClassNotFoundException {
-        User user = new User(usernameField.getText(), passwordField.getText(), "user", emailField.getText(), password);
+    private static ResponsePack<?> sendAccountRequest(boolean isChangePassword) throws IOException, ClassNotFoundException {
+        User user = new User();
+        if (isChangePassword) user.setPassword(passwordField.getText());
+        else user = new User(currentUser.getUsername(), "", "user", emailField.getText(), phoneField.getText());
         user.setUserID(JwtUtil.extractUserId(response.getJwtToken()));
         clientUtil.sendRequest(packRequest("update", user, "update", response.getJwtToken()));
         return clientUtil.receiveResponse();
     }
 
     private JButton setPasswordButton(JTextField field) {
-        JButton button = new JButton("编辑");
+        JButton button = new JButton("提交");
         setCustomFont(button, 14, Font.PLAIN);
         button.putClientProperty("JButton.buttonType", "roundRect");
-        field.setEditable(false);
-        field.setForeground(Color.LIGHT_GRAY);
         button.setMargin(new Insets(0, 14, 0, 14));
 
         passwordStatus = 0;
         button.addActionListener(_ -> {
-            if (field.isEditable()) {
-                if (passwordStatus == 0) {
-                    if (field.getText().equals(currentUser.getPassword())) {
-                        passwordStatus = 1;
-                        field.setText("请输入新密码");
-                    } else {
-                        passwordStatus = 0;
-                        JOptionPane.showMessageDialog(this, "旧密码错误, 请重试");
-                    }
-                } else if (passwordStatus == 1) {
-                    if (field.getText().equals(currentUser.getPassword())) {
-                        passwordStatus = 1;
-                        JOptionPane.showMessageDialog(this, "新密码不能与旧密码相同");
-                    } else {
-                        confirmPassword = field.getText();
-                        field.setText("请再次输入新密码");
-                        passwordStatus = 2;
-                    }
-                } else if (passwordStatus == 2) {
-                    if (field.getText().equals(confirmPassword)) {
-                        try {
-                            ResponsePack<?> responsePack = sendAccountRequest();
-                            if (responsePack.isSuccess()) {
-                                JOptionPane.showMessageDialog(this, "密码修改成功, 请重新登录");
-                                mainFrame.dispose();
-                                mainFrame = null;
-                                LoginPage.startUp();
-                            } else {
-                                JOptionPane.showMessageDialog(this, "密码更改失败！" + responsePack.getMessage());
-                            }
-                        } catch (IOException | ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "两次输入的密码不一致, 请重试");
-                        field.setText("请输入旧密码");
-                        passwordStatus = 1;
-                    }
+            if (passwordStatus == 0) {
+                if (field.getText().equals(password)) {
+                    passwordStatus = 1;
+                    passwordLabel.setText("请输入新密码");
+                    passwordField.setText("");
+                } else JOptionPane.showMessageDialog(this, "旧密码错误, 请重试");
+            } else if (passwordStatus == 1) {
+                if (field.getText().equals(password)) JOptionPane.showMessageDialog(this, "新密码不能与旧密码相同");
+                else if (field.getText().isEmpty()) JOptionPane.showMessageDialog(this, "密码不能为空");
+                else {
+                    confirmPassword = field.getText();
+                    passwordLabel.setText("请验证新密码");
+                    passwordField.setText("");
+                    passwordStatus = 2;
                 }
-            } else {
-                field.setForeground(Color.BLACK);
-                button.setText("提交");
-                field.setEditable(true);
+            } else if (passwordStatus == 2) {
+                if (field.getText().equals(confirmPassword)) {
+                    try {
+                        ResponsePack<?> responsePack = sendAccountRequest(true);
+                        if (responsePack.isSuccess()) {
+                            JOptionPane.showMessageDialog(this, "密码修改成功, 请重新登录");
+                            mainPage.deleteAll();
+                            mainFrame.dispose();
+                            mainFrame = null;
+                            mainPage = null;
+                            currentUser = null;
+                            password = null;
+                            LoginPage.startUp();
+                        } else JOptionPane.showMessageDialog(this, "密码修改失败！" + responsePack.getMessage());
+                    } catch (IOException | ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "两次输入的密码不一致, 请重试");
+                    passwordLabel.setText("请输入新密码");
+                    passwordStatus = 1;
+                }
             }
         });
         return button;
+    }
+
+    public void deleteAll() {
+        passwordStatus = 0;
+        usernameField = null;
+        emailField = null;
+        phoneField = null;
+        passwordField = null;
+        passwordLabel = null;
+        System.gc();
     }
 }

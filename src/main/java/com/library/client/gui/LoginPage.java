@@ -137,24 +137,26 @@ public class LoginPage {
                         return;
                     }
                     User user = new User(usernameField.getText(), passwordField.getText(), "user", email, phone);
-                    if (register(packRequest("register", user, "register", "").getData())) {
+                    ResponsePack<?> response = register(user);
+                    if (response.isSuccess()) {
                         JOptionPane.showMessageDialog(frame, "注册成功");
                     } else {
-                        JOptionPane.showMessageDialog(frame, "注册失败");
+                        JOptionPane.showMessageDialog(frame, "注册失败" + response.getMessage());
                     }
                 } else {
                     User user = new User(usernameField.getText(), passwordField.getText(), "user", "1");
-                    response = login(packRequest("register", user, "register", "").getData());
+                    response = login(user);
                     if (response.isSuccess()) {
-                        currentUser = user;
+                        currentUser = (User) response.getData();
                         password = passwordField.getText();
                         frame.dispose();
                         frame.removeAll();
                         frame = null;
                         System.gc();
+                        mainPage = new MainPage();
                         mainPage.initialize();
                     } else {
-                        JOptionPane.showMessageDialog(frame, response.getMessage());
+                        JOptionPane.showMessageDialog(frame, "登录失败\n" + response.getMessage());
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
@@ -173,10 +175,9 @@ public class LoginPage {
         component.setMargin(new Insets(0, 0, 0, 0));
     }
 
-    private static boolean register(User user) throws IOException, ClassNotFoundException {
+    private static ResponsePack<?> register(User user) throws IOException, ClassNotFoundException {
         clientUtil.sendRequest(packRequest("register", user, "register", ""));
-        ResponsePack<?> response = clientUtil.receiveResponse();
-        return response.isSuccess();
+        return clientUtil.receiveResponse();
     }
 
     private static ResponsePack<?> login(User user) throws IOException, ClassNotFoundException {

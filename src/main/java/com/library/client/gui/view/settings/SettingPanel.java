@@ -7,6 +7,7 @@ import main.java.com.library.client.gui.view.workspace.WorkSpace;
 import javax.swing.*;
 import java.awt.*;
 
+import static main.java.com.library.client.gui.LoginPage.*;
 import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
 import static main.java.com.library.client.gui.view.workspace.WorkSpace.bottomPanel;
@@ -26,15 +27,19 @@ public class SettingPanel extends JPanel {
 
         IntegerTextField itemsPerPage = new IntegerTextField(1, Integer.MAX_VALUE);
         JButton savePageNumber = new JButton("保存");
+        savePageNumber.putClientProperty("JButton.buttonType", "roundRect");
         JSlider pageSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 20);
 
-        JLabel otherLabel = new JLabel("其他设置");
+        JLabel otherLabel = new JLabel("用户设置");
         JSeparator separator1 = new JSeparator();
 
-        JButton borrowRecord = new JButton("借阅记录");
         JButton logout = new JButton("注销");
         JButton deleteAccount = new JButton("删除账户");
+        logout.putClientProperty("JButton.buttonType", "roundRect");
+        deleteAccount.putClientProperty("JButton.buttonType", "roundRect");
         deleteAccount.setForeground(Color.RED);
+        JLabel userType = new JLabel("当前用户类型: " + currentUser.getRole());
+
 
         setFormat(pageLabel, pagePanel, new Insets(0, 0, 0, 0),
                 0, 0, 16, Font.BOLD);
@@ -42,7 +47,7 @@ public class SettingPanel extends JPanel {
                 1, 0, 1, 0, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 0, 0);
         setFormat(pagePanel, this, new Insets(0, 20, 20, 0),
-                0, 0, 1, 0, 0, 0,
+                0, 1, 1, 0, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 0, 0);
 
 
@@ -56,7 +61,7 @@ public class SettingPanel extends JPanel {
                 3, 0, 1, 0, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 0, 0);
         setFormat(setPagePanel, this, new Insets(0, 0, 20, 0),
-                0, 1, 1, 0, 0, 0,
+                0, 2, 1, 0, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 0, 0);
 
 
@@ -66,22 +71,23 @@ public class SettingPanel extends JPanel {
                 1, 0, 1, 0, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 0, 0);
         setFormat(otherPanel, this, new Insets(0, 20, 20, 0),
-                0, 2, 1, 0, 0, 0,
+                0, 3, 1, 0, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 0, 0);
 
 
-        setFormat(borrowRecord, setOtherPanel, new Insets(0, 20, 0, 0),
-                0, 0, 0, 0);
-        setFormat(logout, setOtherPanel, new Insets(0, 20, 0, 0),
+        setFormat(userType, setOtherPanel, new Insets(0, 20, 0, 10),
+                0, 0, 16, 0);
+        setFormat(logout, setOtherPanel, new Insets(0, 20, 0, 10),
                 1, 0, 0, 0);
-        setFormat(deleteAccount, setOtherPanel, new Insets(0, 20, 0, 0),
+        setFormat(deleteAccount, setOtherPanel, new Insets(0, 20, 0, 10),
                 2, 0, 0, 0);
         setFormat(new JPanel(), setOtherPanel, new Insets(0, 20, 0, 0),
                 3, 0, 1, 0, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 0, 0);
         setFormat(setOtherPanel, this, new Insets(0, 20, 20, 0),
-                0, 3, 1, 0, 0, 0,
+                0, 4, 1, 0, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 0, 0);
+
 
         savePageNumber.addActionListener(_ -> {
             if (itemsPerPage.isValidInput()) {
@@ -99,7 +105,11 @@ public class SettingPanel extends JPanel {
         logout.addActionListener(_ -> {
             JOptionPane.showMessageDialog(this, "注销成功");
             mainFrame.dispose();
+            mainPage.deleteAll();
             mainFrame = null;
+            mainPage = null;
+            currentUser = null;
+            password = null;
             System.gc();
             LoginPage.startUp();
         });

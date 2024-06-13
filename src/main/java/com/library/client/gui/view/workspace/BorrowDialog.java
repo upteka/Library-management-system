@@ -24,7 +24,7 @@ public class BorrowDialog extends JDialog {
     private String BookID = null;
 
     public BorrowDialog(JFrame parent, String bookID) {
-        super(parent, "删除确认", true);
+        super(parent, "借阅", true);
         BookID = bookID;
         setTitle("借书时间选择");
         setLayout(new GridBagLayout());
@@ -93,7 +93,7 @@ public class BorrowDialog extends JDialog {
         gbc.gridwidth = 6;
         add(buttonPanel, gbc);
 
-        timeSlider = new JSlider(0, 43199, 0); // Total minutes in 29 days 23 hours 59 minutes
+        timeSlider = new JSlider(0, 43199, 0);
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 6;
@@ -125,6 +125,7 @@ public class BorrowDialog extends JDialog {
         pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setVisible(true);
     }
 
     private void updateSlider() {
@@ -158,7 +159,8 @@ public class BorrowDialog extends JDialog {
     }
 
     private ResponsePack<?> borrowRequest() throws IOException, ClassNotFoundException {
-        clientUtil.sendRequest(packRequest("borrow", new BorrowRecord(JwtUtil.extractUserId(response.getJwtToken()), BookID, getInstant(), false), "borrow", response.getJwtToken()));
+        clientUtil.sendRequest(packRequest("borrow", new BorrowRecord(JwtUtil.extractUserId(response.getJwtToken()),
+                BookID, getInstant(), false), "borrow", response.getJwtToken()));
         return clientUtil.receiveResponse();
     }
 
