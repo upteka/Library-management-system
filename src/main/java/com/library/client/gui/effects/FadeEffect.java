@@ -30,6 +30,7 @@ public class FadeEffect {
                     if (callback != null) {
                         callback.run();
                     }
+                    checkAllAnimationsComplete();
                 }
                 setComponentAlpha(component, alpha);
             }
@@ -50,6 +51,7 @@ public class FadeEffect {
                     if (callback != null) {
                         callback.run();
                     }
+                    checkAllAnimationsComplete();
                 }
                 setComponentAlpha(component, alpha);
             }
@@ -61,6 +63,12 @@ public class FadeEffect {
                 component.getForeground().getRed(),
                 component.getForeground().getGreen(),
                 component.getForeground().getBlue(),
+                (int) (255 * alpha)
+        ));
+        component.setBackground(new Color(
+                component.getBackground().getRed(),
+                component.getBackground().getGreen(),
+                component.getBackground().getBlue(),
                 (int) (255 * alpha)
         ));
         component.repaint();

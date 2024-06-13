@@ -16,8 +16,12 @@ import main.java.com.library.common.network.handlers.RequestHelper;
  * 注意：本示例仅供参考，实际开发中请根据实际情况进行修改
  */
 public class ClientService {
+    public static RequestPack<User> Register(String username, String password, String role, String email, String phone) {
+        User user = new User("11222211", "testPassword", "admin", "222233@ex2", "232222");
+        return RequestHelper.packRequest("auth", user, "auth", "");
+    }
+
     public static RequestPack<User> AuthRequest() {
-        // 创建用户对象
         User user = new User("11222211", "testPassword", "admin", "222233@ex2", "232222");
         // 创建请求包
         return RequestHelper.packRequest("auth", user, "auth", "");

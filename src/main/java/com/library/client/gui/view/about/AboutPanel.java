@@ -73,10 +73,18 @@ public class AboutPanel extends JPanel {
         gbc.anchor = GridBagConstraints.LINE_START;
         add(member2Label, gbc);
 
+        JLabel othersLabel = new JLabel("暂定");
+        setCustomFont(othersLabel, 16, Font.PLAIN);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        add(othersLabel, gbc);
+
         JLabel repoLabel = new JLabel("GitHub 仓库链接:");
         setCustomFont(repoLabel, 18, Font.BOLD);
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         add(repoLabel, gbc);
@@ -99,7 +107,7 @@ public class AboutPanel extends JPanel {
             }
         });
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         add(repoLink, gbc);

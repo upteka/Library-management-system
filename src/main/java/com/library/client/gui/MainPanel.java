@@ -5,8 +5,8 @@ import main.java.com.library.client.gui.view.about.AboutPanel;
 import main.java.com.library.client.gui.view.account.AccountPanel;
 import main.java.com.library.client.gui.view.search.SearchPanel;
 import main.java.com.library.client.gui.view.settings.SettingPanel;
-import main.java.com.library.client.gui.view.workspace.WorkPanel;
 import main.java.com.library.client.gui.view.workspace.WorkSpace;
+import main.java.com.library.common.network.ResponsePack;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,10 +39,12 @@ public class MainPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0);
     }
 
-    public void showWorkSpace(boolean borrowedOnly) {
+    public void showWorkSpace(ResponsePack<?> responsePack, String action) {
         removeComponents();
         mainFrame.setTitle("图书管理系统 - 工作区");
-        WorkPanel.borrowedOnly = borrowedOnly;
+        if (responsePack != null) {
+            WorkSpace.workPanel.unpackResponse(responsePack, action);
+        }
         WorkSpace.workPanel.updateLayout();
         SwingUtilities.invokeLater(() -> WorkSpace.workPanel.getVerticalScrollBar().setValue(scrollValue));
 
@@ -101,6 +103,7 @@ public class MainPanel extends JPanel {
 
     public void deleteAll() {
         WorkSpace.deleteAll();
+        searchPanel.deleteAll();
 
         workSpace.removeAll();
         settingPanel.removeAll();

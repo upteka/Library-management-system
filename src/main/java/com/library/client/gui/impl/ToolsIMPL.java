@@ -56,7 +56,6 @@ public class ToolsIMPL implements Tools {
             public void focusGained(FocusEvent e) {
                 field.setBorder(BorderFactory.createLineBorder(new Color(15, 163, 127), 1, true));
             }
-
             @Override
             public void focusLost(FocusEvent e) {
                 field.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true));
