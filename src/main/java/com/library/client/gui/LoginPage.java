@@ -1,17 +1,33 @@
 package main.java.com.library.client.gui;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import main.java.com.library.client.ClientUtil;
 import main.java.com.library.client.gui.effects.FadeEffect;
+import main.java.com.library.common.entity.impl.User;
+import main.java.com.library.common.network.ResponsePack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.util.regex.Pattern;
 
 import static main.java.com.library.client.gui.effects.FadeEffect.applyFadeEffect;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
+import static main.java.com.library.common.network.handlers.RequestHelper.packRequest;
 
 public class LoginPage {
     public static MainPage mainPage = new MainPage();
     public static JFrame frame = null;
+    private static Logger LOGGER = LoggerFactory.getLogger(LoginPage.class);
+    private static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+    private static final String PHONE_PATTERN = "^(\\+\\d{1,3}[- ]?)?\\d{10,13}$";
+    public static ResponsePack<?> response = null;
+    public static ClientUtil clientUtil = null;
+    public static User currentUser = null;
+    public static String password = null;
+
     public static void main(String[] args) {
         loadCustomFont();
         FlatLightLaf.setup();
@@ -19,13 +35,18 @@ public class LoginPage {
     }
 
     public static void startUp() {
+        response = null;
+        clientUtil = null;
+        currentUser = null;
         frame = new JFrame("图书管理系统");
         setFrame(frame, 400, 600, null, false, JFrame.EXIT_ON_CLOSE);
 
-        JTextField usernameField = new JTextField(14);
-        JPasswordField passwordField = new JPasswordField(14);
+        JTextField EmailOrPhone = new JTextField(13);
+        JTextField usernameField = new JTextField(13);
+        JPasswordField passwordField = new JPasswordField(13);
         setTextField(usernameField);
         setTextField(passwordField);
+        setTextField(EmailOrPhone);
         passwordField.setEchoChar('*');
         JPanel namePanel = new JPanel();
         JPanel passwordPanel = new JPanel();
@@ -34,19 +55,18 @@ public class LoginPage {
 
         JLabel welcomeLabel = new JLabel("欢迎回来", JLabel.CENTER);
         setCustomFont(welcomeLabel, 28, Font.PLAIN);
-        welcomeLabel.setBounds(100, 130, 200, 50);
 
         JPanel loginPanel = new JPanel(new GridBagLayout());
         loginPanel.setBounds(60, 0, 280, 350);
         loginPanel.setOpaque(false);
 
-        JButton loginButton = new JButton("继续");
-        setColor(loginButton, Color.WHITE, new Color(15, 163, 127), null);
+        JButton continueButton = new JButton("继续");
+        setColor(continueButton, Color.WHITE, new Color(15, 163, 127), null);
         setFormat(namePanel, loginPanel, new Insets(190, 0, 0, 0),
                 0, 0, 0, 0, 0, 0);
         setFormat(passwordPanel, loginPanel, new Insets(15, 0, 0, 0),
                 0, 1, 0, 0, 0, 0);
-        setFormat(loginButton, loginPanel, new Insets(15, 27, 0, 27),
+        setFormat(continueButton, loginPanel, new Insets(15, 27, 0, 27),
                 0, 2, 1, 0, 0, 15,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 14, Font.BOLD);
 
@@ -72,33 +92,74 @@ public class LoginPage {
 
         addFocusListenerToField(usernameField);
         addFocusListenerToField(passwordField);
+        addFocusListenerToField(EmailOrPhone);
 
-        //TODO 任意组件进行setText后布局会被意外更改, 暂时不知道原因
+        EmailOrPhone.setText("请输入手机号或邮箱");
+        welcomeLabel.setBounds(100, 130, 200, 50);
+        EmailOrPhone.setBounds(88, 145, 223, 31);
+
         signupButton.addActionListener(_ -> {
             if (signupButton.getText().equals("注册")) {
-                Runnable fadeOutCallback = () -> {
-                    signupButton.setText("登录");
+                signupButton.setText("登录");
+                applyFadeEffect(welcomeLabel, false, 1, 0.1f, () -> {
                     welcomeLabel.setText("注册");
-                    Runnable fadeInCallback = FadeEffect::checkAllAnimationsComplete;
-                    applyFadeEffect(welcomeLabel, true, 1, 0.1f, fadeInCallback);
-                };
-                applyFadeEffect(welcomeLabel, false, 1, 0.1f, fadeOutCallback);
+                    welcomeLabel.setBounds(100, 80, 200, 30);
+                    applyFadeEffect(welcomeLabel, true, 1, 0.1f, null);
+                });
+                frame.add(EmailOrPhone);
+                applyFadeEffect(EmailOrPhone, true, 1, 0.1f, null);
             } else {
                 signupButton.setText("注册");
-                Runnable fadeOutCallback = () -> {
+                applyFadeEffect(welcomeLabel, false, 1, 0.1f, () -> {
                     welcomeLabel.setText("欢迎回来");
-                    Runnable fadeInCallback = FadeEffect::checkAllAnimationsComplete;
-                    applyFadeEffect(welcomeLabel, true, 1, 0.1f, fadeInCallback);
-                };
-                applyFadeEffect(welcomeLabel, false, 1, 0.1f, fadeOutCallback);
+                    welcomeLabel.setBounds(100, 130, 200, 50);
+                    applyFadeEffect(welcomeLabel, true, 1, 0.1f, null);
+                });
+                applyFadeEffect(EmailOrPhone, false, 1, 0.1f, () -> {
+                    frame.remove(EmailOrPhone);
+                    frame.repaint();
+                });
             }
+            FadeEffect.checkAllAnimationsComplete();
         });
 
-        loginButton.addActionListener(_ -> {
-            frame.dispose();
-            frame.removeAll();
-            frame = null;
-            mainPage.initialize();
+        continueButton.addActionListener(_ -> {
+            try {
+                if (clientUtil == null) {
+                    clientUtil = new ClientUtil();
+                    LOGGER.info("ClientUtil initialized in static block");
+                }
+                if (signupButton.getText().equals("登录")) {
+                    String email = isEmail(EmailOrPhone.getText()) ? EmailOrPhone.getText() : "";
+                    String phone = isPhone(EmailOrPhone.getText()) ? EmailOrPhone.getText() : "";
+                    if (email.isEmpty() && phone.isEmpty()) {
+                        JOptionPane.showMessageDialog(frame, "请输入有效的手机号或邮箱");
+                        return;
+                    }
+                    User user = new User(usernameField.getText(), passwordField.getText(), "user", email, phone);
+                    if (register(packRequest("register", user, "register", "").getData())) {
+                        JOptionPane.showMessageDialog(frame, "注册成功");
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "注册失败");
+                    }
+                } else {
+                    User user = new User(usernameField.getText(), passwordField.getText(), "user", "1");
+                    response = login(packRequest("register", user, "register", "").getData());
+                    if (response.isSuccess()) {
+                        currentUser = user;
+                        password = passwordField.getText();
+                        frame.dispose();
+                        frame.removeAll();
+                        frame = null;
+                        System.gc();
+                        mainPage.initialize();
+                    } else {
+                        JOptionPane.showMessageDialog(frame, response.getMessage());
+                    }
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         frame.add(loginPanel);
@@ -108,7 +169,26 @@ public class LoginPage {
     }
 
     private static void setTextField(JTextField component) {
-        setCustomFont(component, 18, Font.PLAIN);
-        component.setMargin(new Insets(5, 7, 5, 7));
+        setCustomFont(component, 20, Font.PLAIN);
+        component.setMargin(new Insets(0, 0, 0, 0));
+    }
+
+    private static boolean register(User user) throws IOException, ClassNotFoundException {
+        clientUtil.sendRequest(packRequest("register", user, "register", ""));
+        ResponsePack<?> response = clientUtil.receiveResponse();
+        return response.isSuccess();
+    }
+
+    private static ResponsePack<?> login(User user) throws IOException, ClassNotFoundException {
+        clientUtil.sendRequest(packRequest("auth", user, "login", ""));
+        return clientUtil.receiveResponse();
+    }
+
+    public static boolean isEmail(String input) {
+        return Pattern.matches(EMAIL_PATTERN, input);
+    }
+
+    public static boolean isPhone(String input) {
+        return Pattern.matches(PHONE_PATTERN, input);
     }
 }

@@ -1,15 +1,23 @@
 package main.java.com.library.client.gui.view;
 
+import main.java.com.library.client.gui.view.workspace.WorkSpace;
+import main.java.com.library.common.entity.impl.Book;
+import main.java.com.library.common.network.ResponsePack;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static main.java.com.library.client.gui.LoginPage.clientUtil;
+import static main.java.com.library.client.gui.LoginPage.response;
 import static main.java.com.library.client.gui.MainPage.mainPanel;
 import static main.java.com.library.client.gui.effects.FadeEffect.applyFadeEffect;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setCustomFont;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
+import static main.java.com.library.common.network.handlers.RequestHelper.packRequest;
 
 public class SideBar extends JPanel {
     private static final GridBagLayout LAYOUT = new GridBagLayout();
@@ -160,9 +168,22 @@ public class SideBar extends JPanel {
     }
 
     private enum ButtonEnum {
-        WORKSPACE("工作区", _ -> mainPanel.showWorkSpace(false)),
+        WORKSPACE("工作区", _ -> mainPanel.showWorkSpace(null, "NORMAL")),
         SEARCH("搜索", _ -> mainPanel.showSearchPage()),
-        MY_BORROWINGS("我的借阅", _ -> mainPanel.showWorkSpace(true)),
+        MY_BORROWINGS("我的借阅", _ -> {
+            try {
+                mainPanel.showWorkSpace(myBorrowings(), "BORROWED");
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }),
+        MY_FAVORITES("我的收藏", _ -> {
+            try {
+                mainPanel.showWorkSpace(myFavourites(), "NORMAL");
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }),
         MY_ACCOUNT("我的账户", _ -> mainPanel.showAccountPage()),
         SETTINGS("设置", _ -> mainPanel.showSettingPage()),
         ABOUT("关于", _ -> mainPanel.showAboutPage());
@@ -181,6 +202,32 @@ public class SideBar extends JPanel {
 
         public ActionListener getAction() {
             return action;
+        }
+    }
+
+    private static ResponsePack<?> myBorrowings() throws IOException, ClassNotFoundException {
+        clientUtil.sendRequest(packRequest("search", new Book(), "search", response.getJwtToken(),
+                "borrowID", "0", "LIKE", "0", "null", "ASC", "1", String.valueOf(WorkSpace.pageSize),
+                "false", "AND", "null", "false", "null", "null", "null", "null"));
+        ResponsePack<?> responsePack = clientUtil.receiveResponse();
+        if (responsePack.isSuccess()) {
+            return responsePack;
+        } else {
+            JOptionPane.showMessageDialog(mainPanel, "获取我的借阅失败, 请重试！\n" + responsePack.getMessage());
+            return null;
+        }
+    }
+
+    private static ResponsePack<?> myFavourites() throws IOException, ClassNotFoundException {
+        clientUtil.sendRequest(packRequest("search", new Book(), "search", response.getJwtToken(),
+                "favorite", "0", "LIKE", "0", "null", "ASC", "1", String.valueOf(WorkSpace.pageSize),
+                "false", "AND", "null", "false", "null", "null", "null", "null"));
+        ResponsePack<?> responsePack = clientUtil.receiveResponse();
+        if (responsePack.isSuccess()) {
+            return responsePack;
+        } else {
+            JOptionPane.showMessageDialog(mainPanel, "获取我的收藏失败, 请重试！\n" + responsePack.getMessage());
+            return null;
         }
     }
 }

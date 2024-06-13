@@ -9,7 +9,7 @@ import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
 
 public class WorkSpace extends JPanel {
-    public static final int START_VALUE = 50;
+    public static final int START_VALUE = 100;
     public static int currentWidth = 0;
     public static int scrollValue = 0;
     public static int currentPage = 1;
@@ -27,8 +27,8 @@ public class WorkSpace extends JPanel {
         workPanel.initialize();
 
         SwingUtilities.invokeLater(() -> {
-            setFormat(topPanel, this, new Insets(0, 0, 0, 0), 0, 0,
-                    0, 0, 0, 20, GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
+//            setFormat(topPanel, this, new Insets(0, 0, 0, 0), 0, 0,
+//                    0, 0, 0, 20, GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
             setFormat(WorkSpace.workPanel, this, new Insets(0, 0, 0, 0), 0, 1,
                     1, 1, 0, 0, GridBagConstraints.SOUTH, GridBagConstraints.BOTH, 0, 0);
             setFormat(bottomPanel, this, new Insets(0, 0, 0, 0), 0, 2,

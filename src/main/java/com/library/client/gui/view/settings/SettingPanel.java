@@ -1,6 +1,7 @@
 package main.java.com.library.client.gui.view.settings;
 
 import main.java.com.library.client.gui.LoginPage;
+import main.java.com.library.client.gui.effects.IntegerTextField;
 import main.java.com.library.client.gui.view.workspace.WorkSpace;
 
 import javax.swing.*;
@@ -98,6 +99,8 @@ public class SettingPanel extends JPanel {
         logout.addActionListener(_ -> {
             JOptionPane.showMessageDialog(this, "注销成功");
             mainFrame.dispose();
+            mainFrame = null;
+            System.gc();
             LoginPage.startUp();
         });
     }

@@ -3,8 +3,8 @@ package main.java.com.library.client.gui.view.workspace;
 import javax.swing.*;
 import java.awt.*;
 
-import static main.java.com.library.client.gui.MainPage.dataList;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
+import static main.java.com.library.client.gui.view.workspace.WorkPanel.dataList;
 import static main.java.com.library.client.gui.view.workspace.WorkSpace.*;
 
 public class BottomPanel extends JPanel {
@@ -59,9 +59,8 @@ public class BottomPanel extends JPanel {
     }
 
     public void updatePageLabel() {
-        System.out.println("current page: " + currentPage + " page size: " + pageSize + " data size: " + dataList.size());
         if (dataList == null) {
-            pageLabel.setText("第0页 / 0页");
+            pageLabel.setText("第 0 页 / 0页");
         } else {
             int totalPages = (int) Math.ceil((double) dataList.size() / pageSize);
             pageLabel.setText("第 " + currentPage + " 页 / " + totalPages + " 页");
