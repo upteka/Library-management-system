@@ -4,6 +4,7 @@ import main.java.com.library.client.gui.effects.FadeEffect;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -72,14 +73,20 @@ public class SearchSettings extends JPanel {
 
     private void switchAction(JButton button, String status1, String status2) {
         button.putClientProperty("JButton.buttonType", "roundRect");
+        ActionListener[] listeners = button.getActionListeners();
+        for (ActionListener listener : listeners) {
+            button.removeActionListener(listener);
+        }
         button.addActionListener(_ -> {
             if (button.getText().equals(status1)) {
                 button.setText(status2);
             } else {
                 button.setText(status1);
             }
+            System.out.println(button.getText());
         });
     }
+
 
     public void fadeIn() {
         for (JButton button : buttons) {
