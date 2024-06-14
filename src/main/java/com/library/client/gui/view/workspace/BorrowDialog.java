@@ -32,7 +32,7 @@ public class BorrowDialog extends JDialog {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        JLabel label = new JLabel("借多久？");
+        JLabel label = new JLabel("请填写借阅时长");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 6;
@@ -102,12 +102,19 @@ public class BorrowDialog extends JDialog {
 
         okButton.addActionListener(_ -> {
             try {
+                Instant instant = getInstant();
+                Instant oneHourLater = Instant.now().plusSeconds(3600);
+
+                if (instant.isBefore(oneHourLater)) {
+                    JOptionPane.showMessageDialog(this, "借阅时间不得小于 1 小时");
+                    return;
+                }
                 ResponsePack<?> responsePack = borrowRequest();
                 if (responsePack.isSuccess()) {
                     JOptionPane.showMessageDialog(this, "借书成功！");
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "借书失败！" + responsePack.getMessage());
+                    JOptionPane.showMessageDialog(this, "借书失败！\n" + responsePack.getMessage());
                 }
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);

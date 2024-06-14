@@ -40,6 +40,8 @@ public class AccountPanel extends JPanel {
         JButton passwordButton = setPasswordButton(passwordField);
         JButton saveButton = new JButton("提交");
         saveButton.putClientProperty("JButton.buttonType", "roundRect");
+        JButton refreshButton = new JButton("刷新");
+        refreshButton.putClientProperty("JButton.buttonType", "roundRect");
         JPanel userPanel = new JPanel(LAYOUT);
         JPanel emailPanel = new JPanel(LAYOUT);
         JPanel phonePanel = new JPanel(LAYOUT);
@@ -82,15 +84,15 @@ public class AccountPanel extends JPanel {
 
         setFormat(new JLabel("用户名"), editAccountPanel, new Insets(0, 50, 10, 0),
                 0, 0, 18, Font.BOLD);
-        setFormat(userPanel, editAccountPanel, new Insets(0, 0, 0, 430),
+        setFormat(userPanel, editAccountPanel, new Insets(0, 0, 0, 425),
                 0, 1, 0, 0);
         setFormat(new JLabel("邮箱"), editAccountPanel, new Insets(0, 50, 10, 0),
                 0, 2, 18, Font.BOLD);
-        setFormat(emailPanel, editAccountPanel, new Insets(0, 0, 0, 430),
+        setFormat(emailPanel, editAccountPanel, new Insets(0, 0, 0, 425),
                 0, 3, 0, 0);
         setFormat(new JLabel("手机号"), editAccountPanel, new Insets(0, 50, 10, 0),
                 0, 4, 18, Font.BOLD);
-        setFormat(phonePanel, editAccountPanel, new Insets(0, 0, 0, 250),
+        setFormat(phonePanel, editAccountPanel, new Insets(0, 0, 0, 179),
                 0, 5, 0, 0);
         setFormat(new JLabel("修改密码"), editAccountPanel, new Insets(0, 50, 10, 0),
                 0, 6, 18, Font.BOLD);
@@ -113,7 +115,7 @@ public class AccountPanel extends JPanel {
         setFormat(passwordField, passwordPanel, new Insets(0, 50, 20, 0),
                 0, 1, 1, 0, 0, 0,
                 GridBagConstraints.EAST, GridBagConstraints.BOTH, 0, 0);
-        setFormat(passwordButton, passwordPanel, new Insets(0, 50, 20, 200),
+        setFormat(passwordButton, passwordPanel, new Insets(0, 50, 20, 180),
                 1, 1, 0, 0, 0, 0,
                 GridBagConstraints.EAST, GridBagConstraints.BOTH, 0, 0);
 
@@ -127,9 +129,18 @@ public class AccountPanel extends JPanel {
         setFormat(editAccountPanel, this, new Insets(0, 0, 0, 0),
                 0, 2, 0, 0, 0, 0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0);
-        setFormat(saveButton, phonePanel, new Insets(0, 50, 20, 50),
+        setFormat(saveButton, phonePanel, new Insets(0, 50, 20, 0),
                 1, 0, 0, 0, 0, 0,
                 GridBagConstraints.EAST, GridBagConstraints.BOTH, 14, 0);
+        setFormat(refreshButton, phonePanel, new Insets(0, 50, 20, 0),
+                2, 0, 0, 0, 0, 0,
+                GridBagConstraints.EAST, GridBagConstraints.BOTH, 14, 0);
+
+        refreshButton.addActionListener(_ -> {
+            usernameField.setText(currentUser.getUsername());
+            emailField.setText(currentUser.getEmail());
+            phoneField.setText(currentUser.getPhone());
+        });
 
         saveButton.addActionListener(_ -> {
             try {
@@ -148,7 +159,7 @@ public class AccountPanel extends JPanel {
                     currentUser.setEmail(emailField.getText());
                     currentUser.setPhone(phoneField.getText());
                 } else {
-                    JOptionPane.showMessageDialog(this, "用户信息更新失败！" + responsePack.getMessage());
+                    JOptionPane.showMessageDialog(this, "用户信息更新失败！\n" + responsePack.getMessage());
                 }
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -184,7 +195,6 @@ public class AccountPanel extends JPanel {
         JButton button = new JButton("提交");
         setCustomFont(button, 14, Font.PLAIN);
         button.putClientProperty("JButton.buttonType", "roundRect");
-        button.setMargin(new Insets(0, 14, 0, 14));
 
         passwordStatus = 0;
         button.addActionListener(_ -> {

@@ -170,7 +170,7 @@ public class SideBar extends JPanel {
     private enum ButtonEnum {
         WORKSPACE("工作区", _ -> {
             try {
-                mainPanel.showWorkSpace(null, "Book");
+                mainPanel.showWorkSpace(null, "KeepWorkSpace");
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

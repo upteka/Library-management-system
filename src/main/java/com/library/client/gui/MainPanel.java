@@ -42,7 +42,7 @@ public class MainPanel extends JPanel {
     }
 
     public void showWorkSpace(ResponsePack<?> responsePack, String action) throws IOException, ClassNotFoundException {
-        removeComponents();
+        removeComponents(action);
         mainFrame.setTitle("图书管理系统 - 工作区");
         if (responsePack != null) workPanel.unpackResponse(responsePack, action);
         WorkSpace.showTopPanel = action.equals("User") || action.equals("BorrowRecord");
@@ -56,47 +56,46 @@ public class MainPanel extends JPanel {
     }
 
     public void showSearchPage() {
-        removeComponents();
+        removeComponents("KeepWorkSpace");
         mainFrame.setTitle("图书管理系统 - 搜索");
         setFormat(searchPanel, this, getDefault(), 0, 0);
         refresh();
     }
 
     public void showSettingPage() {
-        removeComponents();
+        removeComponents("KeepWorkSpace");
         mainFrame.setTitle("图书管理系统 - 设置");
         setFormat(settingPanel, this, getDefault(), 0, 0);
         refresh();
     }
 
     public void showAboutPage() {
-        removeComponents();
+        removeComponents("KeepWorkSpace");
         mainFrame.setTitle("图书管理系统 - 关于");
         setFormat(aboutPanel, this, getDefault(), 0, 0);
         refresh();
     }
 
     public void showAccountPage() {
-        removeComponents();
-        mainFrame.setTitle("图书管理系统 - 关于");
+        removeComponents("KeepWorkSpace");
+        mainFrame.setTitle("图书管理系统 - 用户");
         setFormat(accountPanel, this, getDefault(), 0, 0);
         refresh();
     }
 
-    public void removeComponents() {
+    public void removeComponents(String action) {
         for (Component component : getComponents()) {
             if (!(component instanceof SideBar)) {
                 remove(component);
             }
         }
-        deleteAll(false);
-        System.gc();
-
-        workSpace = new WorkSpace();
-        settingPanel = new SettingPanel();
-        aboutPanel = new AboutPanel();
-        accountPanel = new AccountPanel();
-        searchPanel = new SearchPanel();
+        if (!action.equals("KeepWorkSpace")) {
+            WorkSpace.deleteAll();
+            workSpace.removeAll();
+            workSpace = null;
+            System.gc();
+            workSpace = new WorkSpace();
+        }
     }
 
     public GridBagConstraints getDefault() {
@@ -110,7 +109,7 @@ public class MainPanel extends JPanel {
         repaint();
     }
 
-    public void deleteAll(boolean isExit) {
+    public void deleteAll() {
         WorkSpace.deleteAll();
         searchPanel.deleteAll();
         accountPanel.deleteAll();
@@ -120,7 +119,7 @@ public class MainPanel extends JPanel {
         aboutPanel.removeAll();
         accountPanel.removeAll();
         searchPanel.removeAll();
-        if (isExit) removeAll();
+        removeAll();
 
         workSpace = null;
         settingPanel = null;
