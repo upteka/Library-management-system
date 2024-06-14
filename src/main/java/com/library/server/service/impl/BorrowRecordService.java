@@ -4,6 +4,7 @@ import main.java.com.library.common.entity.impl.Book;
 import main.java.com.library.common.entity.impl.BorrowRecord;
 import main.java.com.library.server.database.impl.BaseDao;
 
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -17,7 +18,7 @@ public class BorrowRecordService extends BaseService<BorrowRecord> {
         super(new BaseDao<>(BorrowRecord.class));
     }
 
-    public String borrowBook(BorrowRecord borrowRecord) {
+    public String borrowBook(BorrowRecord borrowRecord) throws SQLException {
         BookService bookService = new BookService();
 
 
@@ -28,7 +29,11 @@ public class BorrowRecordService extends BaseService<BorrowRecord> {
         if (!isValidReturnDate(borrowRecord.getReturnDate(), now)) {
             return "Failed to borrow book. Invalid return date.";
         } else if (book.isAvailable() || book.getCount() != 0) {
-            return super.update(borrowRecord);
+            if ("Success".equals(super.add(borrowRecord))) {
+                return "Successfully borrowed book.";
+            } else {
+                return "Failed to borrow book. Internal error.";
+            }
         } else {
             return "Failed to borrow book. Book is not available.";
         }

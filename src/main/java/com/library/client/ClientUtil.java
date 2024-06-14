@@ -41,7 +41,9 @@ public class ClientUtil {
     }
 
     public ResponsePack<?> receiveResponse() throws IOException, ClassNotFoundException {
-        return (ResponsePack<?>) inputStream.readObject();
+        ResponsePack<?> response = (ResponsePack<?>) inputStream.readObject();
+        LOGGER.info("Received response: {}", response);
+        return response;
     }
 
     public void close() {

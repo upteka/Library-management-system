@@ -10,7 +10,7 @@ import java.util.UUID;
  * 书籍 ID 是基于书籍信息的 Hash UUID。
  */
 public class Book implements Entity {
-    private final String bookID;
+    private String bookID;
     private String title;
     private String author;
     private String ISBN;
@@ -57,6 +57,10 @@ public class Book implements Entity {
     private String generateBookID(String ISBN) {
         // 生成基于书籍信息的 Hash UUID
         return UUID.nameUUIDFromBytes(ISBN.getBytes()).toString();
+    }
+
+    public void setBookID(String bookID) {
+        this.bookID = bookID;
     }
 
     public String getBookID() {

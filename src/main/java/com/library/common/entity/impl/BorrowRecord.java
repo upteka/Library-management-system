@@ -12,7 +12,7 @@ public class BorrowRecord implements Entity {
     private String bookID;
     private Instant borrowDate;
     private Instant returnDate;
-    private boolean Returned;
+    private boolean returned;
 
     // 无参数构造器
     public BorrowRecord() {
@@ -21,7 +21,7 @@ public class BorrowRecord implements Entity {
         this.userID = null;
         this.bookID = null;
         this.returnDate = null;
-        this.Returned = false;
+        this.returned = false;
     }
 
     // 公共构造器
@@ -31,15 +31,15 @@ public class BorrowRecord implements Entity {
         this.userID = userID;
         this.bookID = bookID;
         this.returnDate = returnDate;
-        this.Returned = Returned;
+        this.returned = Returned;
     }
 
     public boolean isReturned() {
-        return Returned;
+        return returned;
     }
 
     public void setReturned(boolean returned) {
-        Returned = returned;
+        this.returned = returned;
     }
 
     public String getBorrowID() {

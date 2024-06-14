@@ -11,6 +11,8 @@ import main.java.com.library.server.service.impl.BorrowRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
+
 
 /**
  * @author upteka
@@ -19,7 +21,7 @@ public class Borrow implements Request<BorrowRecord> {
     private static final Logger logger = LoggerFactory.getLogger(Borrow.class);
     private final BorrowRecordService borrowRecordService;
 
-    Borrow(BorrowRecordService borrowRecordService) {
+    public Borrow(BorrowRecordService borrowRecordService) {
         this.borrowRecordService = new BorrowRecordService();
     }
     final String action = "borrow";
@@ -30,15 +32,17 @@ public class Borrow implements Request<BorrowRecord> {
     }
 
     @Override
-    public ResponsePack<BorrowRecord> handle(RequestPack<? extends Entity> requestPack) {
+    public ResponsePack<BorrowRecord> handle(RequestPack<? extends Entity> requestPack) throws SQLException {
         Entity entity = RequestHelper.unPackRequest(requestPack);
 
         if (!(entity instanceof BorrowRecord borrowRecord)) {
             logger.error("Invalid request type, expected BorrowRecord");
             return ResponseHelper.packResponse(action, false, "Invalid request type, expected BorrowRecord", null);
         }
+        String message = borrowRecordService.borrowBook(borrowRecord);
+        boolean success = message.startsWith("Success");
 
-        return ResponseHelper.packResponse(action, true, borrowRecordService.borrowBook(borrowRecord), borrowRecordService.get(borrowRecord.getId()));
+        return ResponseHelper.packResponse(action, success, message, borrowRecordService.get(borrowRecord.getId()));
 
     }
 }

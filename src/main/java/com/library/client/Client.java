@@ -54,6 +54,8 @@ public class Client {
     }
 
     private static ResponsePack<?> receiveResponse(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
-        return (ResponsePack<?>) inputStream.readObject();
+        ResponsePack<?> response = (ResponsePack<?>) inputStream.readObject();
+        LOGGER.info("Received response: {}", response);
+        return response;
     }
 }

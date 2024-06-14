@@ -142,14 +142,18 @@ public class WorkPanel extends JScrollPane {
         if (action.equals("BorrowRecord")) {
             borrowRecordList = (List<BorrowRecord>) entityList.entities();
             for (BorrowRecord borrowRecord : borrowRecordList) {
-                clientUtil.sendRequest(packRequest("get", new Book(), borrowRecord.getBookID(), response.getJwtToken()));
+                Book book = new Book();
+                book.setBookID(borrowRecord.getBookID());
+                clientUtil.sendRequest(packRequest("get", book, borrowRecord.getBookID(), response.getJwtToken()));
                 @SuppressWarnings("unchecked")
                 ResponsePack<Book> response = (ResponsePack<Book>) clientUtil.receiveResponse();
                 bookList.add(response.getData());
             }
         } else if (action.equals("Favourite")) {
             for (BorrowRecord borrowRecord : borrowRecordList) {
-                clientUtil.sendRequest(packRequest("get", new Book(), borrowRecord.getBookID(), response.getJwtToken()));
+                Book book = new Book();
+                book.setBookID(borrowRecord.getBookID());
+                clientUtil.sendRequest(packRequest("get", book, borrowRecord.getBookID(), response.getJwtToken()));
                 @SuppressWarnings("unchecked")
                 ResponsePack<Book> response = (ResponsePack<Book>) clientUtil.receiveResponse();
                 bookList.add(response.getData());

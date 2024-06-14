@@ -1,12 +1,10 @@
 package main.java.com.library.server;
 
 import main.java.com.library.common.entity.Entity;
-import main.java.com.library.common.entity.impl.FavoriteRecord;
 import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
 import main.java.com.library.common.network.handlers.ResponseHelper;
-import main.java.com.library.server.database.impl.BaseDao;
 import main.java.com.library.server.requests.Request;
 import main.java.com.library.server.requests.impl.Crud;
 import main.java.com.library.server.service.impl.BaseService;
@@ -125,25 +123,11 @@ public class ClientHandler implements Runnable {
                 throw new ClassNotFoundException("Class " + requestClassName + " does not implement Request interface");
             }
 
-            // 动态获取服务类
             String entityType = requestPack.getType();
-            BaseService<? extends Entity> service = null;
+            BaseService<? extends Entity> service = getServiceForEntity(entityType);
 
-            if (!"FavoriteRecord".equals(entityType)) {
-                service = getServiceForEntity(entityType);
-            }
-
-            // 找到合适的构造函数
-            Constructor<?> constructor;
-            Request<?> request;
-            if ("FavoriteRecord".equals(entityType)) {
-                constructor = requestClass.getConstructor(BaseDao.class);
-                BaseDao<FavoriteRecord> favoriteDao = new BaseDao<>(FavoriteRecord.class);
-                request = (Request<?>) constructor.newInstance(favoriteDao);
-            } else {
-                constructor = getConstructor(requestClass, service.getClass());
-                request = (Request<?>) constructor.newInstance(service);
-            }
+            Constructor<?> constructor = getConstructor(requestClass, service.getClass());
+            Request<?> request = (Request<?>) constructor.newInstance(service);
 
             return request.handle(requestPack);
         } catch (ClassNotFoundException e) {

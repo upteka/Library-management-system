@@ -5,6 +5,7 @@ import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 
 /**
  * 该接口定义了处理各种类型请求的契约。
@@ -27,7 +28,7 @@ public interface Request<T> extends Serializable {
      * @param requestPack 包含请求数据的对象
      * @return 包含响应数据的对象
      */
-    ResponsePack<T> handle(RequestPack<? extends Entity> requestPack);
+    ResponsePack<T> handle(RequestPack<? extends Entity> requestPack) throws SQLException;
 
 //    ResponsePack<List<T>> handle(RequestPack<T> requestPack);
 }
