@@ -22,7 +22,7 @@ public class MainPage {
     }
 
     public void deleteAll() {
-        mainPanel.deleteAll(true);
+        mainPanel.deleteAll();
         mainFrame.removeAll();
         mainFrame = null;
         mainPanel = null;

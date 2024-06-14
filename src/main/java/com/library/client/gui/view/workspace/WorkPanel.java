@@ -2,9 +2,7 @@ package main.java.com.library.client.gui.view.workspace;
 
 import main.java.com.library.client.gui.MainPage;
 import main.java.com.library.common.entity.EntityList;
-import main.java.com.library.common.entity.impl.Book;
-import main.java.com.library.common.entity.impl.BorrowRecord;
-import main.java.com.library.common.entity.impl.User;
+import main.java.com.library.common.entity.impl.*;
 import main.java.com.library.common.network.ResponsePack;
 
 import javax.swing.*;
@@ -14,7 +12,9 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static main.java.com.library.client.gui.LoginPage.clientUtil;
 import static main.java.com.library.client.gui.LoginPage.response;
@@ -30,12 +30,13 @@ public class WorkPanel extends JScrollPane {
     private static final GridBagLayout LAYOUT = new GridBagLayout();
     public static final int[] START_VALUE = {150, 300, 300};
     private List<JPanel> panelList = new ArrayList<>();
-    private static JPanel content = null;
+    private static JPanel content;
     public static String showType = "Book";
     public static int totalCount = 0;
-    public static List<Book> bookList = null;
-    public static List<User> userList = null;
-    public static List<BorrowRecord> borrowRecordList = null;
+    public static List<Book> bookList;
+    public static List<User> userList;
+    public static List<BorrowRecord> borrowRecordList;
+    Set<String> favoriteSet = new HashSet<>();
     public static boolean userOnly = true;
     public static boolean borrowingOnly = true;
 
@@ -60,6 +61,7 @@ public class WorkPanel extends JScrollPane {
         bookList = null;
         userList = null;
         borrowRecordList = null;
+        favoriteSet.clear();
         System.gc();
     }
 
@@ -112,6 +114,7 @@ public class WorkPanel extends JScrollPane {
 
         totalCount = bookList == null ? userList.size() : bookList.size();
 
+        panelList.clear();
         for (int i = 0; i < totalCount; i++) panelList.add(new JPanel(LAYOUT));
 
         int startIndex = 0;
@@ -151,8 +154,18 @@ public class WorkPanel extends JScrollPane {
                 ResponsePack<Book> response = (ResponsePack<Book>) clientUtil.receiveResponse();
                 bookList.add(response.getData());
             }
+        } else if (action.equals("Book")) {
+            bookList = (List<Book>) entityList.entities();
+//            clientUtil.sendRequest(packRequest("search", new FavoriteRecord(), "search", response.getJwtToken(),
+//                    "userID", currentUser.getId(), "LIKE", "0", "null", "ASC", "1", String.valueOf(WorkSpace.pageSize),
+//                    "false", "AND", "null", "false", "null", "null", "null", "null"));
+//            @SuppressWarnings("unchecked")
+//            ResponsePack<FavoriteRecord> response = (ResponsePack<FavoriteRecord>) clientUtil.receiveResponse();
+//            @SuppressWarnings("unchecked")
+//            List<FavoriteRecord> record = (List<FavoriteRecord>) response.getData();
+//            for (FavoriteRecord favoriteRecord : record) favoriteSet.add(favoriteRecord.getBookID());
         } else if (action.equals("User")) userList = (List<User>) entityList.entities();
-        else if (action.equals("Book")) bookList = (List<Book>) entityList.entities();
+
         showType = action;
     }
 
@@ -176,13 +189,17 @@ public class WorkPanel extends JScrollPane {
         if (gbc != null) setFormat(borrowButton, p, gbc, 14, Font.BOLD);
         else setFormat(borrowButton, p, new Insets(0, START_VALUE[0], 0, 0), 6, 0, 20, 10, 14, Font.BOLD);
 
+        JButton favoriteButton = favoriteSet.contains(data.getBookID()) ? new JButton("已收藏") : new JButton("收藏");
+        setColor(favoriteButton, new Color(255, 179, 0), new Color(230, 230, 230), BorderFactory.createEmptyBorder());
+        setFormat(favoriteButton, p, new Insets(0, 20, 0, 0), 7, 0, 20, 10, 14, Font.BOLD);
+
         JButton detailButton = new JButton("详细信息");
         setColor(detailButton, new Color(72, 74, 77), new Color(230, 230, 230), BorderFactory.createEmptyBorder());
-        setFormat(detailButton, p, new Insets(0, 20, 0, 0), 7, 0, 20, 10, 14, Font.BOLD);
+        setFormat(detailButton, p, new Insets(0, 20, 0, 0), 8, 0, 20, 10, 14, Font.BOLD);
 
         JButton editButton = new JButton("管理 ▼");
         setColor(editButton, new Color(72, 74, 77), new Color(230, 230, 230), BorderFactory.createEmptyBorder());
-        setFormat(editButton, p, new Insets(0, 20, 0, 0), 8, 0, 20, 10, 14, Font.BOLD);
+        setFormat(editButton, p, new Insets(0, 20, 0, 0), 9, 0, 20, 10, 14, Font.BOLD);
 
         JPopupMenu dropdownMenu = new JPopupMenu();
         JMenuItem editInfo = new JMenuItem("编辑信息");
@@ -195,12 +212,29 @@ public class WorkPanel extends JScrollPane {
         editInfo.addActionListener(_ -> new EditBookDialog(mainFrame, data));
         deleteThis.addActionListener(_ -> new DeleteDialog(mainFrame, data));
         editButton.addActionListener(_ -> dropdownMenu.show(editButton, 0, editButton.getHeight()));
+
+        favoriteButton.addActionListener(_ -> {
+            try {
+                String action = favoriteButton.getText().equals("收藏") ? "favorite" : "unfavorite";
+                String message = favoriteButton.getText().equals("收藏") ? "收藏" : "取消收藏";
+                clientUtil.sendRequest(packRequest(action, new FavoriteRecord(data.getBookID()), action, response.getJwtToken()));
+                ResponsePack<?> favoriteResponse = clientUtil.receiveResponse();
+                if (favoriteResponse.isSuccess()) {
+                    JOptionPane.showMessageDialog(mainFrame, "已" + message, "提示", JOptionPane.INFORMATION_MESSAGE);
+                    favoriteButton.setText(favoriteButton.getText().equals("收藏") ? "已收藏" : "收藏");
+                } else
+                    JOptionPane.showMessageDialog(mainFrame, "操作失败！\n" + response.getMessage(), "提示", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private boolean showBorrowRecord(JPanel p, int i, GridBagConstraints gbc) {
         BorrowRecord borrowData = borrowRecordList.get(i);
         Book bookData = bookList.get(i);
         if (borrowingOnly && borrowData.isReturned()) return false;
+        if (!borrowingOnly && !borrowData.isReturned()) return false;
 
         Instant instant = borrowData.getBorrowDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.M.d HH:mm:ss");
@@ -215,19 +249,36 @@ public class WorkPanel extends JScrollPane {
         setFormat(setTextArea(bookData.getAuthor(), 100, 13), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);
         setFormat(setTextArea(bookData.getPublisher(), 100, 13), p, new Insets(0, 20, 0, 0), 2, 0, 0, 0);
         setFormat(setTextArea(formattedDateTime, 100, 13), p, new Insets(0, 20, 0, 0), 3, 0, 0, 0);
-        if (gbc != null) setFormat(returnButton, p, new Insets(0, START_VALUE[1], 0, 0), 6, 0, 0, 0);
-        else setFormat(returnButton, p, gbc, 0, 0);
+        if (gbc != null) setFormat(returnButton, p, gbc, 0, 0);
+        else setFormat(returnButton, p, new Insets(0, START_VALUE[1], 0, 0), 6, 0, 0, 0);
         setFormat(returnButton, p, new Insets(0, 20, 0, 0), 7, 0, 0, 0);
 
         detailButton.addActionListener(_ -> {
         }); //TODO: 显示详细信息
 
+        returnButton.addActionListener(_ -> {
+            try {
+                clientUtil.sendRequest(packRequest("return", new ReturnRecord(borrowData.getBorrowID()), "return", ""));
+                ResponsePack<?> returnResponse = clientUtil.receiveResponse();
+                if (returnResponse.isSuccess()) {
+                    JOptionPane.showMessageDialog(mainFrame, "归还成功！", "提示", JOptionPane.INFORMATION_MESSAGE);
+                    borrowData.setReturned(true);
+                    returnButton.setText("已归还");
+                    returnButton.setEnabled(false);
+                    setColor(returnButton, new Color(0, 255, 32), new Color(230, 230, 230), BorderFactory.createEmptyBorder());
+                } else
+                    JOptionPane.showMessageDialog(mainFrame, "归还失败！\n" + returnResponse.getMessage(), "提示", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
         return true;
     }
 
     private boolean showUser(JPanel p, int i, GridBagConstraints gbc) {
         User userData = userList.get(i);
         if (userOnly && userData.getRole().equals("admin")) return false;
+        if (!userOnly && userData.getRole().equals("user")) return false;
 
         setFormat(setTextArea(userData.getUserID(), 150, 21), p, new Insets(0, 20, 0, 0), 0, 0, 0, 0);
         setFormat(setTextArea(userData.getRole(), 100, 13), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);

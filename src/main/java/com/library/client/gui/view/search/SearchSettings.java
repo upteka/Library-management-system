@@ -83,7 +83,6 @@ public class SearchSettings extends JPanel {
             } else {
                 button.setText(status1);
             }
-            System.out.println(button.getText());
         });
     }
 
