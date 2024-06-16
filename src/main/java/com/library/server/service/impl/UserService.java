@@ -1,16 +1,18 @@
 package main.java.com.library.server.service.impl;
 
+import main.java.com.library.common.entity.impl.BorrowRecord;
 import main.java.com.library.common.entity.impl.User;
-import main.java.com.library.server.database.impl.BaseDao;
+import main.java.com.library.server.database.impl.UserDao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author PC
  */
 public class UserService extends BaseService<User> {
     public UserService() {
-        super(new BaseDao<>(User.class));
+        super(new UserDao(User.class));
     }
 
     public User getUserByUsername(String username) {
@@ -55,6 +57,10 @@ public class UserService extends BaseService<User> {
         if (user.getUsername() == null || user.getUsername().isEmpty()) {
             return "Failed to register user: Username is required";
         } else if (isUserExists(user.getUsername())) {
+            User existingUser = getUserByUsername(user.getUsername());
+            if (existingUser.isDeleted()) {
+                return "Failed to register user: User has already been deleted,try to register after 7 days";
+            }
             return "Failed to register user: Username already exists";
         } else if ((user.getEmail() != null && !user.getEmail().isEmpty()) && isUserExists(user.getEmail())) {
             return "Failed to register user: Email already exists";
@@ -63,7 +69,7 @@ public class UserService extends BaseService<User> {
         } else if (user.getPassword().length() < 8) {
             return "Failed to register user: Password must be at least 8 characters";
         } else {
-            user.setRole("admin");
+            user.setRole("user");
             if (super.add(user).equals("Success")) {
                 return "Success: User registered successfully";
             } else {
@@ -120,4 +126,31 @@ public class UserService extends BaseService<User> {
             return "Failed to update user: Internal server error";
         }
     }
+
+
+    @Override
+    public String delete(String userID) {
+        User existingUser = super.get(userID);
+        if (existingUser == null || existingUser.isDeleted()) {
+            return "Failed to delete user: User does not exist";
+        }
+
+        BorrowRecordService borrowRecordService = new BorrowRecordService();
+        List<BorrowRecord> borrowRecordList = borrowRecordService.search("userId", userID, "=", 0);
+
+        for (BorrowRecord borrowRecord : borrowRecordList) {
+            if (!borrowRecord.isReturned()) {
+                return "Failed to delete user: User has borrowed books, cannot delete user";
+            }
+        }
+
+        existingUser.setDeleted(true);
+        if (super.update(existingUser).equals("Success")) {
+            return "Success: User deleted successfully";
+        } else {
+            return "Failed to delete user: Internal server error";
+        }
+
+    }
+
 }

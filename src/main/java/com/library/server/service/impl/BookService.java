@@ -1,7 +1,7 @@
 package main.java.com.library.server.service.impl;
 
 import main.java.com.library.common.entity.impl.Book;
-import main.java.com.library.server.database.impl.BaseDao;
+import main.java.com.library.server.database.impl.BookDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,11 +10,9 @@ import java.util.Optional;
 public class BookService extends BaseService<Book> {
 
     private static final Logger logger = LoggerFactory.getLogger(BookService.class);
-    private final BaseDao<Book> dao;
 
     public BookService() {
-        super(new BaseDao<>(Book.class));
-        this.dao = new BaseDao<>(Book.class);
+        super(new BookDao(Book.class));
     }
 
     @Override
@@ -26,7 +24,7 @@ public class BookService extends BaseService<Book> {
             }
 
             // Check if the book already exists
-            Book existingBook = dao.getByField("ISBN", book.getISBN());
+            Book existingBook = super.getByField("ISBN", book.getISBN());
             logger.info("Checking if book with id " + book.getId() + " already exists.");
 
             if (existingBook != null) {

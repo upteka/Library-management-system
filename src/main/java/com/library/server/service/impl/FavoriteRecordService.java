@@ -3,7 +3,7 @@ package main.java.com.library.server.service.impl;
 import main.java.com.library.common.entity.impl.FavoriteRecord;
 import main.java.com.library.common.network.ResponsePack;
 import main.java.com.library.common.network.handlers.ResponseHelper;
-import main.java.com.library.server.database.impl.BaseDao;
+import main.java.com.library.server.database.impl.FavoriteRecordDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ public class FavoriteRecordService extends BaseService<FavoriteRecord> {
     private static final String ACTION = "favorite";
 
     public FavoriteRecordService() {
-        super(new BaseDao<>(FavoriteRecord.class));
+        super(new FavoriteRecordDao(FavoriteRecord.class));
     }
 
     public ResponsePack<FavoriteRecord> Favorite(FavoriteRecord favoriteRecord) throws SQLException {

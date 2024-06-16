@@ -10,6 +10,7 @@ public class User implements Entity {
     private String role; // "admin" or "user" or "root"
     private String phone;
     private String email; // optional
+    private boolean deleted; // "true" or "false"
 
     public User() {
         this.userID = UlidCreator.getUlid().toString();
@@ -17,6 +18,8 @@ public class User implements Entity {
         this.password = null;
         this.email = null;
         this.role = null;
+        this.deleted = false;
+        this.phone = null;
     }
 
     public User(String username, String password, String role, String email, String phone) {
@@ -29,6 +32,7 @@ public class User implements Entity {
         this.role = role;
         this.phone = phone;
         this.email = email;
+        this.deleted = false;
     }
 
     public User(String username, String password, String role, String contact) {
@@ -39,6 +43,7 @@ public class User implements Entity {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.deleted = false;
         if (contact.contains("@")) {
             this.email = contact;
             this.phone = "";
@@ -106,6 +111,14 @@ public class User implements Entity {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

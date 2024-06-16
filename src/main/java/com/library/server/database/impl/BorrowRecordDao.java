@@ -4,7 +4,7 @@ import main.java.com.library.common.entity.impl.BorrowRecord;
 
 
 public class BorrowRecordDao extends BaseDao<BorrowRecord> {
-    public BorrowRecordDao() {
+    public BorrowRecordDao(Class<BorrowRecord> borrowRecordClass) {
         super(BorrowRecord.class);
     }
 }

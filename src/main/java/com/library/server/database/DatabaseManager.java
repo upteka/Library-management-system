@@ -27,7 +27,8 @@ public class DatabaseManager {
             + "phone VARCHAR(255) NOT NULL,"
             + "username VARCHAR(255) UNIQUE NOT NULL,"
             + "password VARCHAR(255) NOT NULL,"
-            + "role VARCHAR(50) NOT NULL"
+            + "role VARCHAR(50) NOT NULL,"
+            + "deleted BOOLEAN DEFAULT FALSE"
             + ")";
 
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE IF NOT EXISTS Books ("
@@ -49,7 +50,7 @@ public class DatabaseManager {
             + "borrowDate TIMESTAMP NOT NULL,"
             + "returnDate TIMESTAMP,"
             + "returned BOOLEAN NOT NULL,"
-            + "FOREIGN KEY (userID) REFERENCES Users(userID),"
+            + "FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,,"
             + "FOREIGN KEY (bookID) REFERENCES Books(bookID)"
             + ")";
 
@@ -57,7 +58,7 @@ public class DatabaseManager {
             + "returnID VARCHAR(255) PRIMARY KEY,"
             + "borrowID VARCHAR(255) NOT NULL,"
             + "returnDate TIMESTAMP NOT NULL,"
-            + "FOREIGN KEY (borrowID) REFERENCES BorrowRecords(borrowID)"
+            + "FOREIGN KEY (borrowID) REFERENCES BorrowRecords(borrowID) ON DELETE CASCADE,"
             + ")";
 
     private static final String CREATE_FAVORITES_TABLE = "CREATE TABLE IF NOT EXISTS FavoriteRecords ("
@@ -144,6 +145,6 @@ public class DatabaseManager {
     }
 
     public static void main(String[] args) {
-        createTables();
+        resetDatabase();
     }
 }

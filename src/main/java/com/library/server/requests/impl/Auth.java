@@ -56,6 +56,9 @@ public class Auth implements Request<User> {
 
             if (userService.validateUser(username, password) || userService.validateUser(contact, password)) {
                 user = userService.getUser(username);
+                if (user.isDeleted()) {
+                    return ResponseHelper.packResponse(action, false, "User is deleted, please try to register again(7 days after deletion),or contact admin for recovery", null);
+                }
                 String jwtToken = JwtUtil.generateToken(user.getUserID(), user.getRole());
                 logger.info("Authentication success for user: {}", username);
                 return ResponseHelper.packResponse(action, true, "Authenticated Successfully", user, jwtToken);

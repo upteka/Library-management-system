@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BaseDao<T extends Entity> implements Dao<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseDao.class.getName());
-    private final Class<T> type;
+    protected final Class<T> type;
 
     public BaseDao(Class<T> type) {
         this.type = type;
@@ -122,10 +122,10 @@ public class BaseDao<T extends Entity> implements Dao<T> {
     }
 
     @Override
-    public boolean delete(String id) {
+    public String delete(String id) {
         String query = "DELETE FROM " + type.getSimpleName() + "s WHERE " + getPrimaryKeyName() + " = ?";
         LOGGER.info("Executing query to delete entity with id: {}", id);
-        return executeUpdate(query, id);
+        return executeUpdate(query, id) ? "Success" : "Failed";
     }
 
     @Override

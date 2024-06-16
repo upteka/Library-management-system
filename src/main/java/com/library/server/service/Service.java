@@ -23,9 +23,9 @@ public interface Service<T> {
      * 根据 ID 删除一个实体。
      *
      * @param entityId 要删除的实体 ID
-     * @return 如果删除成功则返回 true，否则返回 false
+     * @return 如果删除成功则返回 Success，否则返回 Failed+原因
      */
-    boolean delete(String entityId);
+    String delete(String entityId);
 
     /**
      * 根据 ID 获取一个实体。

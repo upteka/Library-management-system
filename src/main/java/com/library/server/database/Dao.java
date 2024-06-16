@@ -27,7 +27,7 @@ public interface Dao<T extends Entity> {
      * @param id 要删除的实体的 ID
      * @return 如果实体删除成功，则返回 true；否则返回 false
      */
-    boolean delete(String id);
+    String delete(String id);
 
     /**
      * 使用实体的 ID 从数据库中检索实体。

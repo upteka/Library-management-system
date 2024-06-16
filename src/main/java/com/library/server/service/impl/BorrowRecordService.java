@@ -2,7 +2,7 @@ package main.java.com.library.server.service.impl;
 
 import main.java.com.library.common.entity.impl.Book;
 import main.java.com.library.common.entity.impl.BorrowRecord;
-import main.java.com.library.server.database.impl.BaseDao;
+import main.java.com.library.server.database.impl.BorrowRecordDao;
 
 import java.sql.SQLException;
 import java.time.Duration;
@@ -15,7 +15,7 @@ public class BorrowRecordService extends BaseService<BorrowRecord> {
     private static final int MAX_BORROW_DAYS = 30;
 
     public BorrowRecordService() {
-        super(new BaseDao<>(BorrowRecord.class));
+        super(new BorrowRecordDao(BorrowRecord.class));
     }
 
     public String borrowBook(BorrowRecord borrowRecord) throws SQLException {

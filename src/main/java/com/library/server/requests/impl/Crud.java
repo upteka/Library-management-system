@@ -117,8 +117,8 @@ public class Crud<T extends Entity> implements Request<T> {
                 success = message.startsWith("Success");
                 break;
             case "delete":
-                success = service.delete(id);
-                message = success ? entityName + " deleted successfully" : entityName + " delete failed";
+                success = service.delete(id).contains("Success");
+                message = service.delete(id);
                 break;
             case "get":
                 result = service.get(id);

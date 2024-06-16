@@ -3,7 +3,7 @@ package main.java.com.library.server.service.impl;
 import main.java.com.library.common.entity.impl.Book;
 import main.java.com.library.common.entity.impl.BorrowRecord;
 import main.java.com.library.common.entity.impl.ReturnRecord;
-import main.java.com.library.server.database.impl.BaseDao;
+import main.java.com.library.server.database.impl.ReturnRecordDao;
 
 import java.sql.SQLException;
 import java.time.Instant;
@@ -12,7 +12,7 @@ public class ReturnRecordService extends BaseService<ReturnRecord> {
 
 
     public ReturnRecordService() {
-        super(new BaseDao<>(ReturnRecord.class));
+        super(new ReturnRecordDao(ReturnRecord.class));
     }
 
     public String returnBook(ReturnRecord returnRecord) throws SQLException {

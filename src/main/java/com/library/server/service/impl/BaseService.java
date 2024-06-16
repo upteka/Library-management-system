@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class BaseService<T extends Entity> implements Service<T> {
-    private final Dao<T> dao;
+    protected final Dao<T> dao;
 
     public BaseService(Dao<T> dao) {
         this.dao = dao;
@@ -21,7 +21,7 @@ public class BaseService<T extends Entity> implements Service<T> {
     }
 
     @Override
-    public boolean delete(String entityId) {
+    public String delete(String entityId) {
         return dao.delete(entityId);
     }
 
@@ -51,7 +51,9 @@ public class BaseService<T extends Entity> implements Service<T> {
     }
 
     @Override
-    public List<T> search(String fieldName, Object value, String condition, int limit, String sortField, String sortOrder, int page, int pageSize, boolean caseInsensitive, String logicalOperator, String[] selectedFields, boolean distinct, Timestamp startDate, Timestamp endDate, String dateField, Class<?> customEntityType) {
+    public List<T> search(String fieldName, Object value, String condition, int limit, String sortField, String sortOrder,
+                          int page, int pageSize, boolean caseInsensitive, String logicalOperator, String[] selectedFields, boolean distinct,
+                          Timestamp startDate, Timestamp endDate, String dateField, Class<?> customEntityType) {
         return dao.search(fieldName, value, condition, limit, sortField, sortOrder, page, pageSize, caseInsensitive, logicalOperator, selectedFields, distinct, startDate, endDate, dateField, customEntityType);
     }
 }
