@@ -14,6 +14,9 @@ import java.util.Objects;
 
 import static main.java.com.library.client.gui.LoginPage.clientUtil;
 import static main.java.com.library.client.gui.LoginPage.response;
+import static main.java.com.library.client.gui.MainPage.mainFrame;
+import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
+import static main.java.com.library.client.gui.view.workspace.BottomPanel.refreshPage;
 import static main.java.com.library.common.network.handlers.RequestHelper.packRequest;
 
 public class BorrowDialog extends JDialog {
@@ -106,16 +109,16 @@ public class BorrowDialog extends JDialog {
                 Instant oneHourLater = Instant.now().plusSeconds(3600);
 
                 if (instant.isBefore(oneHourLater)) {
-                    JOptionPane.showMessageDialog(this, "借阅时间不得小于 1 小时");
+                    Notification(mainFrame, "借阅时间不能小于1小时");
                     return;
                 }
                 ResponsePack<?> responsePack = borrowRequest();
                 if (responsePack.isSuccess()) {
-                    JOptionPane.showMessageDialog(this, "借书成功！");
+                    Notification(mainFrame, "借阅成功！");
                     dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "借书失败！\n" + responsePack.getMessage());
-                }
+                    refreshPage();
+                } else
+                    Notification(mainFrame, "借阅失败\n" + responsePack.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

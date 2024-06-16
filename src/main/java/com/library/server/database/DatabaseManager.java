@@ -11,7 +11,7 @@ public class DatabaseManager {
     private static final Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
     private static final String URL = "jdbc:mysql://localhost:3306/testlibrary";
     private static final String USER = "root";
-    private static final String PASSWORD = "81780937ma";
+    private static final String PASSWORD = "123456";
 
     private static final String DROP_USERS_TABLE = "DROP TABLE IF EXISTS Users";
     private static final String DROP_BOOKS_TABLE = "DROP TABLE IF EXISTS Books";
@@ -144,6 +144,6 @@ public class DatabaseManager {
     }
 
     public static void main(String[] args) {
-        resetDatabase();
+        createTables();
     }
 }

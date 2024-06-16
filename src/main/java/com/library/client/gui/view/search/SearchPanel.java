@@ -13,8 +13,11 @@ import java.io.IOException;
 
 import static main.java.com.library.client.gui.LoginPage.clientUtil;
 import static main.java.com.library.client.gui.LoginPage.response;
+import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.MainPage.mainPanel;
+import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
+import static main.java.com.library.client.gui.view.workspace.WorkPanel.isSearching;
 import static main.java.com.library.common.network.handlers.RequestHelper.packRequest;
 
 public class SearchPanel extends JPanel {
@@ -56,11 +59,15 @@ public class SearchPanel extends JPanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     try {
-                        searchResponse = searchRequest();
+                        searchResponse = searchRequest(1);
                         if (searchResponse.isSuccess()) {
-                            mainPanel.showWorkSpace(searchResponse, "Book");
+                            isSearching = true;
+                            mainPanel.showWorkSpace(searchResponse, "Book", 1);
                         } else {
-                            JOptionPane.showMessageDialog(null, searchResponse.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            if (searchResponse.getMessage().equals("未找到符合条件的实体"))
+                                Notification(mainFrame, "没有找到合适的结果");
+                            else
+                                Notification(mainFrame, "搜索失败\n" + searchResponse.getMessage());
                         }
                     } catch (IOException | ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
@@ -83,11 +90,13 @@ public class SearchPanel extends JPanel {
         }
     }
 
-    private ResponsePack<?> searchRequest() throws IOException, ClassNotFoundException {
+    public static ResponsePack<?> searchRequest(int page) throws IOException, ClassNotFoundException {
         clientUtil.sendRequest(packRequest("search", new Book(), "search", response.getJwtToken(),
                 settingPanel.getFieldName(), searchField.getText(), "LIKE", "0", "null", settingPanel.getSearchOrder(),
-                "1", String.valueOf(WorkSpace.pageSize), String.valueOf(settingPanel.isCaseInsensitive()), "AND",
+                String.valueOf(page), String.valueOf(WorkSpace.pageSize), String.valueOf(settingPanel.isCaseInsensitive()), "AND",
                 "null", String.valueOf(settingPanel.isDistinct()), "null", "null", "null", "null"));
+        System.out.println(settingPanel.isCaseInsensitive());
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return clientUtil.receiveResponse();
     }
 

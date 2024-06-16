@@ -12,11 +12,10 @@ public class WorkSpace extends JPanel {
     public static int currentWidth = 0;
     public static int scrollValue = 0;
     public static int currentPage = 1;
-    public static int pageSize = 20;
+    public static int pageSize = 10;
     public static WorkPanel workPanel = null;
     public static TopPanel topPanel = null;
     public static BottomPanel bottomPanel = null;
-    public static boolean showTopPanel = false;
 
     public WorkSpace() {
         setLayout(new GridBagLayout());
@@ -27,8 +26,6 @@ public class WorkSpace extends JPanel {
         workPanel.initialize();
 
         SwingUtilities.invokeLater(() -> {
-            if (showTopPanel) setFormat(topPanel, this, new Insets(0, 0, 0, 0), 0, 0,
-                    0, 0, 0, 20, GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
             setFormat(WorkSpace.workPanel, this, new Insets(0, 0, 0, 0), 0, 1,
                     1, 1, 0, 0, GridBagConstraints.SOUTH, GridBagConstraints.BOTH, 0, 0);
             setFormat(bottomPanel, this, new Insets(0, 0, 0, 0), 0, 2,
@@ -40,10 +37,18 @@ public class WorkSpace extends JPanel {
         addActions();
     }
 
+    public static void showTopPanel(JComponent component) {
+        topPanel.removeAll();
+        topPanel = null;
+        System.gc();
+        topPanel = new TopPanel();
+        setFormat(topPanel, component, new Insets(0, 0, 0, 0), 0, 0,
+                0, 0, 0, 20, GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
+    }
+
     public static void deleteAll() {
         scrollValue = 0;
         currentPage = 1;
-        pageSize = 20;
 
         topPanel.removeAll();
         bottomPanel.removeAll();

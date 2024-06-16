@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 import static main.java.com.library.client.gui.effects.FadeEffect.applyFadeEffect;
+import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
 import static main.java.com.library.common.network.handlers.RequestHelper.packRequest;
 
@@ -44,6 +45,8 @@ public class LoginPage {
         JTextField EmailOrPhone = new JTextField(13);
         JTextField usernameField = new JTextField(13);
         JPasswordField passwordField = new JPasswordField(13);
+        usernameField.setText("a");
+        passwordField.setText("aaaaaaaa");
         setTextField(usernameField);
         setTextField(passwordField);
         setTextField(EmailOrPhone);
@@ -130,18 +133,18 @@ public class LoginPage {
                     LOGGER.info("ClientUtil initialized in static block");
                 }
                 if (signupButton.getText().equals("登录")) {
-                    String email = isEmail(EmailOrPhone.getText()) ? EmailOrPhone.getText() : "";
-                    String phone = isPhone(EmailOrPhone.getText()) ? EmailOrPhone.getText() : "";
+                    String email = isEmail(EmailOrPhone.getText(), null) ? EmailOrPhone.getText() : "";
+                    String phone = isPhone(EmailOrPhone.getText(), null) ? EmailOrPhone.getText() : "";
                     if (email.isEmpty() && phone.isEmpty()) {
-                        JOptionPane.showMessageDialog(frame, "请输入有效的手机号或邮箱");
+                        Notification(frame, "请输入有效的手机号或邮箱");
                         return;
                     }
                     User user = new User(usernameField.getText(), passwordField.getText(), "user", email, phone);
                     ResponsePack<?> response = register(user);
                     if (response.isSuccess()) {
-                        JOptionPane.showMessageDialog(frame, "注册成功");
+                        Notification(frame, "注册成功");
                     } else {
-                        JOptionPane.showMessageDialog(frame, "注册失败" + response.getMessage());
+                        Notification(frame, "注册失败\n" + response.getMessage());
                     }
                 } else {
                     User user = new User(usernameField.getText(), passwordField.getText(), "user", "1");
@@ -156,7 +159,7 @@ public class LoginPage {
                         mainPage = new MainPage();
                         mainPage.initialize();
                     } else {
-                        JOptionPane.showMessageDialog(frame, "登录失败\n" + response.getMessage());
+                        Notification(frame, "登录失败\n" + response.getMessage());
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
@@ -185,11 +188,15 @@ public class LoginPage {
         return clientUtil.receiveResponse();
     }
 
-    public static boolean isEmail(String input) {
-        return Pattern.matches(EMAIL_PATTERN, input);
+    public static <T extends Window> boolean isEmail(String input, T parent) {
+        boolean result = Pattern.matches(EMAIL_PATTERN, input);
+        if (!result && parent != null) Notification(parent, "请输入有效的邮箱");
+        return result;
     }
 
-    public static boolean isPhone(String input) {
-        return Pattern.matches(PHONE_PATTERN, input);
+    public static <T extends Window> boolean isPhone(String input, T parent) {
+        boolean result = Pattern.matches(PHONE_PATTERN, input);
+        if (!result && parent != null) Notification(parent, "请输入有效的手机号");
+        return result;
     }
 }

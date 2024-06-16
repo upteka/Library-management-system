@@ -82,9 +82,9 @@ public class Search<T extends Entity> implements Request<T> {
         entities.forEach(entity -> {
             if (entity instanceof User) {
                 ((User) entity).setPassword(null);
-                ((User) entity).setPhone(null);
-                ((User) entity).setEmail(null);
-                ((User) entity).setRole(null);
+//                ((User) entity).setPhone(null);
+//                ((User) entity).setEmail(null);
+//                ((User) entity).setRole(null);
             }
         });
 

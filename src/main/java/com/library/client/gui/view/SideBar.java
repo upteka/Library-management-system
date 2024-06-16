@@ -3,6 +3,7 @@ package main.java.com.library.client.gui.view;
 import main.java.com.library.client.gui.view.workspace.WorkSpace;
 import main.java.com.library.common.entity.impl.BorrowRecord;
 import main.java.com.library.common.entity.impl.FavoriteRecord;
+import main.java.com.library.common.entity.impl.User;
 import main.java.com.library.common.network.ResponsePack;
 
 import javax.swing.*;
@@ -13,10 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static main.java.com.library.client.gui.LoginPage.*;
+import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.MainPage.mainPanel;
 import static main.java.com.library.client.gui.effects.FadeEffect.applyFadeEffect;
+import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setCustomFont;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
+import static main.java.com.library.client.gui.view.workspace.WorkPanel.isSearching;
+import static main.java.com.library.client.gui.view.workspace.WorkPanel.sortSearching;
+import static main.java.com.library.client.gui.view.workspace.WorkSpace.currentPage;
 import static main.java.com.library.common.network.handlers.RequestHelper.packRequest;
 
 public class SideBar extends JPanel {
@@ -49,7 +55,7 @@ public class SideBar extends JPanel {
 
     private void addAll() {
         GridBagConstraints g = getDefault();
-        g.insets = new Insets(40, 0, 40, 0);
+        g.insets = new Insets(30, 0, 30, 0);
         add(toggleButton, g);
 
         g.fill = GridBagConstraints.BOTH;
@@ -167,10 +173,10 @@ public class SideBar extends JPanel {
                 GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
     }
 
-    private enum ButtonEnum {
+    public enum ButtonEnum {
         WORKSPACE("工作区", _ -> {
             try {
-                mainPanel.showWorkSpace(null, "KeepWorkSpace");
+                mainPanel.showWorkSpace(null, "KeepWorkSpace", currentPage);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -178,19 +184,30 @@ public class SideBar extends JPanel {
         SEARCH("搜索", _ -> mainPanel.showSearchPage()),
         MY_BORROWINGS("我的借阅", _ -> {
             try {
-                mainPanel.showWorkSpace(myBorrowings(), "BorrowRecord");
+                fetchDataAndShow(new BorrowRecord(), "BorrowRecord", "借阅列表", currentPage);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }),
         MY_FAVORITES("我的收藏", _ -> {
             try {
-                mainPanel.showWorkSpace(myFavourites(), "Book");
+                fetchDataAndShow(new FavoriteRecord(), "FavoriteRecord", "收藏列表", currentPage);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }),
         MY_ACCOUNT("我的账户", _ -> mainPanel.showAccountPage()),
+        USER_MANAGEMENT("用户管理", _ -> {
+            try {
+                if (!currentUser.getRole().equals("admin")) {
+                    Notification(mainFrame, "权限不足！");
+                    return;
+                }
+                fetchDataAndShow(new User(), "User", "用户列表", currentPage);
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }),
         SETTINGS("设置", _ -> mainPanel.showSettingPage()),
         ABOUT("关于", _ -> mainPanel.showAboutPage());
 
@@ -209,31 +226,24 @@ public class SideBar extends JPanel {
         public ActionListener getAction() {
             return action;
         }
-    }
 
-    private static ResponsePack<?> myBorrowings() throws IOException, ClassNotFoundException {
-        clientUtil.sendRequest(packRequest("search", new BorrowRecord(), "search", response.getJwtToken(),
-                "userID", currentUser.getId(), "LIKE", "0", "null", "ASC", "1", String.valueOf(WorkSpace.pageSize),
-                "false", "AND", "null", "false", "null", "null", "null", "null"));
-        ResponsePack<?> responsePack = clientUtil.receiveResponse();
-        if (responsePack.isSuccess()) {
-            return responsePack;
-        } else {
-            JOptionPane.showMessageDialog(mainPanel, "获取我的借阅失败, 请重试！\n" + responsePack.getMessage());
-            return null;
-        }
-    }
-
-    private static ResponsePack<?> myFavourites() throws IOException, ClassNotFoundException {
-        clientUtil.sendRequest(packRequest("search", new FavoriteRecord(), "search", response.getJwtToken(),
-                "userID", currentUser.getId(), "LIKE", "0", "null", "ASC", "1", String.valueOf(WorkSpace.pageSize),
-                "false", "AND", "null", "false", "null", "null", "null", "null"));
-        ResponsePack<?> responsePack = clientUtil.receiveResponse();
-        if (responsePack.isSuccess()) {
-            return responsePack;
-        } else {
-            JOptionPane.showMessageDialog(mainPanel, "获取我的收藏失败, 请重试！\n" + responsePack.getMessage());
-            return null;
+        public static <T> void fetchDataAndShow(T entity, String showType, String title, int page) throws IOException, ClassNotFoundException {
+            isSearching = false;
+            sortSearching = false;
+            String value = currentUser.getId();
+            if (entity instanceof User) value = "";
+            clientUtil.sendRequest(packRequest("search", entity, "search", response.getJwtToken(),
+                    "userID", value, "LIKE", "0", "null", "ASC", String.valueOf(page), String.valueOf(WorkSpace.pageSize),
+                    "false", "AND", "null", "false", "null", "null", "null", "null"));
+            ResponsePack<?> responsePack = clientUtil.receiveResponse();
+            if (responsePack.isSuccess())
+                mainPanel.showWorkSpace(responsePack, showType, page);
+            else {
+                if (responsePack.getMessage().equals("未找到符合条件的实体")) {
+                    if (page > 1) Notification(mainFrame, "没有更多了");
+                    else mainPanel.showWorkSpace(null, showType, page);
+                } else Notification(mainFrame, "获取" + title + "失败, 请重试！\n" + responsePack.getMessage());
+            }
         }
     }
 }

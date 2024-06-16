@@ -46,7 +46,7 @@ public class Return implements Request<ReturnRecord> {
             }
             // 调用 ReturnService 的 returnBook 方法处理还书请求
             String result = returnRecordService.returnBook(returnRecord);
-            if (result.startsWith("Success")) {
+            if (result.contains("success")) {
                 return ResponseHelper.packResponse(action, true, result, returnRecord); // 成功时返回还书记录
             } else {
                 return ResponseHelper.packResponse(action, false, result, null);

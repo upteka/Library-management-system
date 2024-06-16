@@ -14,7 +14,7 @@ public class HoverInfoTool {
         textArea.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                showToolTip(textArea, e.getPoint(), info);
+                showToolTip(textArea, e.getPoint(), wrapText(info, 40));
             }
 
             @Override
@@ -53,5 +53,16 @@ public class HoverInfoTool {
                 }
             }
         });
+    }
+
+    private static String wrapText(String text, int maxLineLength) {
+        StringBuilder wrappedText = new StringBuilder();
+        int index = 0;
+        while (index < text.length()) {
+            int endIndex = Math.min(index + maxLineLength, text.length());
+            wrappedText.append(text, index, endIndex).append("\n");
+            index = endIndex;
+        }
+        return wrappedText.toString().trim();
     }
 }
