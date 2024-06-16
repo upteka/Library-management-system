@@ -40,6 +40,8 @@ public class SideBar extends JPanel {
             createButton(buttonEnum);
         }
         toggleButton.addActionListener(_ -> toggleButtonAction(toggleButton));
+        toggleButton.setBorderPainted(false);
+        toggleButton.setContentAreaFilled(false);
         add(toggleButton, setToggleButton(0));
     }
 
@@ -49,6 +51,7 @@ public class SideBar extends JPanel {
         button.setBorderPainted(false);
         button.setForeground(new Color(192, 192, 192));
         setCustomFont(button, 18, Font.BOLD);
+        setCustomFont(toggleButton, 18, Font.BOLD);
         button.addActionListener(buttonEnum.getAction());
         buttons.add(button);
     }
@@ -56,14 +59,17 @@ public class SideBar extends JPanel {
     private void addAll() {
         GridBagConstraints g = getDefault();
         g.insets = new Insets(30, 0, 30, 0);
+        toggleButton.setText("收起");
         add(toggleButton, g);
 
-        g.fill = GridBagConstraints.BOTH;
         for (int i = 0; i < buttons.size(); i++) {
             g.gridy = i + 1;
-            g.insets = new Insets(10, 0, 10, 0);
+            if (i == 0) g.insets = new Insets(0, 0, 10, 0);
+            else g.insets = new Insets(10, 0, 10, 0);
             buttons.get(i).setForeground(new Color(62, 62, 62, 0));
             add(buttons.get(i), g);
+
+            if (i == buttons.size() - 1) break;
 
             g.gridy = i + 2;
             g.insets = new Insets(0, 0, 0, 0);
@@ -81,13 +87,14 @@ public class SideBar extends JPanel {
         }
 
         if (toggleButton.isSelected()) {
-            applyFadeEffectSequentially(toggleOnly, true, 1, 0.17f, 0, () -> animateComponent(40, 194, () -> {
+            applyFadeEffectSequentially(toggleOnly, true, 1, 0.3f, 0, () -> animateComponent(40, 184, () -> {
                 updateSideBar(80, false);
                 addAll();
-                applyFadeEffectSequentially(all, true, 1, 0.17f, 0, this::refresh);
+                applyFadeEffectSequentially(all, true, 1, 0.3f, 0, this::refresh);
             }));
         } else {
-            applyFadeEffectSequentially(all, false, 1, 0.2f, 0, () -> animateComponent(194, 40, () -> {
+            applyFadeEffectSequentially(all, false, 1, 0.3f, 0, () -> animateComponent(184, 40, () -> {
+                toggleButton.setText("");
                 updateSideBar(0, true);
                 refresh();
             }));
@@ -157,8 +164,8 @@ public class SideBar extends JPanel {
     }
 
     private GridBagConstraints getDefault() {
-        return setFormat(null, null, new Insets(20, 0, 0, 0),
-                0, 0, 0, 0, 10, 30,
+        return setFormat(null, null, new Insets(0, 0, 20, 0),
+                0, 0, 0, 0, 0, 30,
                 GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
     }
 
@@ -242,7 +249,7 @@ public class SideBar extends JPanel {
                 if (responsePack.getMessage().equals("未找到符合条件的实体")) {
                     if (page > 1) Notification(mainFrame, "没有更多了");
                     else mainPanel.showWorkSpace(null, showType, page);
-                } else Notification(mainFrame, "获取" + title + "失败, 请重试！\n" + responsePack.getMessage());
+                } else Notification(mainFrame, "获取" + title + "失败, 请重试 " + responsePack.getMessage());
             }
         }
     }

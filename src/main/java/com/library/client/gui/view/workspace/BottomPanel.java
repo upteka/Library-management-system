@@ -119,9 +119,9 @@ public class BottomPanel extends JPanel {
             mainPanel.showWorkSpace(response, "Book", page);
         else {
             if (response.getMessage().equals("未找到符合条件的实体"))
-                Notification(mainFrame, "已经到顶了\n" + response.getMessage());
+                Notification(mainFrame, "已经到顶了");
             else
-                Notification(mainFrame, "搜索出错\n" + response.getMessage());
+                Notification(mainFrame, "搜索出错 " + response.getMessage());
         }
     }
 

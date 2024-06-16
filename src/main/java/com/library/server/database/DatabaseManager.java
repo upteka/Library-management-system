@@ -50,7 +50,7 @@ public class DatabaseManager {
             + "borrowDate TIMESTAMP NOT NULL,"
             + "returnDate TIMESTAMP,"
             + "returned BOOLEAN NOT NULL,"
-            + "FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,,"
+            + "FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,"
             + "FOREIGN KEY (bookID) REFERENCES Books(bookID)"
             + ")";
 
@@ -58,7 +58,7 @@ public class DatabaseManager {
             + "returnID VARCHAR(255) PRIMARY KEY,"
             + "borrowID VARCHAR(255) NOT NULL,"
             + "returnDate TIMESTAMP NOT NULL,"
-            + "FOREIGN KEY (borrowID) REFERENCES BorrowRecords(borrowID) ON DELETE CASCADE,"
+            + "FOREIGN KEY (borrowID) REFERENCES BorrowRecords(borrowID) ON DELETE CASCADE"
             + ")";
 
     private static final String CREATE_FAVORITES_TABLE = "CREATE TABLE IF NOT EXISTS FavoriteRecords ("
@@ -145,6 +145,6 @@ public class DatabaseManager {
     }
 
     public static void main(String[] args) {
-        resetDatabase();
+        createTables();
     }
 }

@@ -71,7 +71,7 @@ public class TopPanel extends JPanel {
             if (response.getMessage().equals("未找到符合条件的实体")) {
                 if (currentPage > 1) Notification(mainFrame, "没有更多了");
                 else mainPanel.showWorkSpace(null, showType, currentPage);
-            } else Notification(mainFrame, "获取失败, 请重试！\n" + response.getMessage());
+            } else Notification(mainFrame, "获取失败, 请重试 " + response.getMessage());
         }
     }
 }

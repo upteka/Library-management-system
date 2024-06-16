@@ -56,7 +56,7 @@ public class EditUserDialog extends JDialog {
                     Notification(this, "修改成功！");
                     refreshPage();
                 } else
-                    Notification(this, "修改失败！\n" + response.getMessage());
+                    Notification(this, "修改失败 " + response.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

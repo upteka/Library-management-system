@@ -29,6 +29,7 @@ public class EditBookDialog extends JDialog {
         JTextField publisherField = setArea(data.getPublisher(), 200);
         JTextField isbnField = setArea(data.getISBN(), 200);
         JTextField introductionField = setArea(data.getIntroduction(), 200);
+        JTextField countField = setArea(String.valueOf(data.getCount()), 200);
         JButton saveButton = new JButton("提交");
         JButton cancelButton = new JButton("取消");
 
@@ -42,6 +43,7 @@ public class EditBookDialog extends JDialog {
         easySetFormat(publisherField, panel, 3, "出版社");
         easySetFormat(isbnField, panel, 4, "ISBN");
         easySetFormat(introductionField, panel, 5, "简介");
+        easySetFormat(countField, panel, 6, "数量");
         setFormat(buttonPanel, panel, new Insets(10, 10, 10, 10), 0, 6, 1, 1, 0, 20, 0, 1, 14, Font.BOLD);
 
         setFormat(saveButton, buttonPanel, new Insets(10, 10, 10, 10), 0, 0, 1, 1, 15, 0, 0, 1, 14, Font.BOLD);
@@ -54,6 +56,7 @@ public class EditBookDialog extends JDialog {
             data.setPublisher(publisherField.getText());
             data.setISBN(isbnField.getText());
             data.setIntroduction(introductionField.getText());
+            data.setCount(Integer.parseInt(countField.getText()));
             try {
                 if (isAdd)
                     clientUtil.sendRequest(packRequest("add", data, "add", response.getJwtToken()));
@@ -67,7 +70,7 @@ public class EditBookDialog extends JDialog {
                         Notification(mainFrame, "修改成功！");
                     refreshPage();
                 } else
-                    Notification(this, "操作失败！\n" + response.getMessage());
+                    Notification(this, "操作失败 " + response.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

@@ -20,8 +20,7 @@ import static main.java.com.library.client.gui.LoginPage.*;
 import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.effects.HoverInfoTool.addDetailAction;
 import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
-import static main.java.com.library.client.gui.impl.ToolsIMPL.setColor;
-import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
+import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
 import static main.java.com.library.client.gui.view.workspace.BottomPanel.refreshPage;
 import static main.java.com.library.client.gui.view.workspace.WorkSpace.bottomPanel;
 import static main.java.com.library.client.gui.view.workspace.WorkSpace.pageSize;
@@ -72,12 +71,8 @@ public class WorkPanel extends JScrollPane {
         setColor(p, null, new Color(255, 255, 255), BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         switch (showType) {
             case "Book", "FavoriteRecord" -> showBook(p, i, gbc);
-            case "BorrowRecord" -> {
-                if (!showBorrowRecord(p, i, gbc)) return;
-            }
-            case "User" -> {
-                if (!showUser(p, i, gbc)) return;
-            }
+            case "BorrowRecord" -> showBorrowRecord(p, i, gbc);
+            case "User" -> showUser(p, i, gbc);
         }
         setFormat(p, content, new Insets(0, 0, 0, 0), 0, i, 1, 0, 0, 40, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, 0, 0);
     }
@@ -115,7 +110,9 @@ public class WorkPanel extends JScrollPane {
     public void updateLayout() {
         if (theresNothing) {
             content.removeAll();
-            content.add(new JLabel("There's nothing here."));
+            JLabel nothingLabel = new JLabel("There's nothing here.");
+            setCustomFont(nothingLabel, 20, 0);
+            content.add(nothingLabel);
             return;
         }
         if (bookList == null && userList == null) return;
@@ -125,6 +122,8 @@ public class WorkPanel extends JScrollPane {
         } else if (borrowRecordList != null) {
             totalCount = borrowRecordList.size();
         } else totalCount = bookList.size();
+
+        totalCount += 1;
 
         panelList.clear();
         for (int i = 0; i < totalCount; i++) panelList.add(new JPanel(LAYOUT));
@@ -203,12 +202,20 @@ public class WorkPanel extends JScrollPane {
     }
 
     private void showBook(JPanel p, int i, GridBagConstraints gbc) {
-        Book data = bookList.get(i);
+        if (i == 0) {
+            setFormat(setTextArea("标题", 130, 20), p, new Insets(0, 20, 0, 0), 0, 0, 0, 0);
+            setFormat(setTextArea("作者", 100, 13), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);
+            setFormat(setTextArea("出版社", 100, 13), p, new Insets(0, 20, 0, 0), 2, 0, 0, 0);
+            setFormat(setTextArea("余量", 60, 8), p, new Insets(0, 10, 0, 500), 3, 0, 0, 0);
+            return;
+        }
+
+        Book data = bookList.get(i - 1);
 
         setFormat(setTextArea(data.getTitle(), 130, 20), p, new Insets(0, 20, 0, 0), 0, 0, 0, 0);
         setFormat(setTextArea(data.getAuthor(), 100, 13), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);
         setFormat(setTextArea(data.getPublisher(), 100, 13), p, new Insets(0, 20, 0, 0), 2, 0, 0, 0);
-        setFormat(setTextArea("余量 " + data.getCount(), 60, 6), p, new Insets(0, 20, 0, 0), 3, 0, 0, 0);
+        setFormat(setTextArea(String.valueOf(data.getAvailableCount()), 60, 8), p, new Insets(0, 20, 0, 0), 3, 0, 0, 0);
         setFormat(setStatusColor(data.getStatus()), p, new Insets(0, 40, 0, 0), 4, 0, 10, 10, 0, 0);
 
         JButton borrowButton = new JButton("借阅");
@@ -270,7 +277,7 @@ public class WorkPanel extends JScrollPane {
                     Notification(mainFrame, "已" + message);
                     favoriteButton.setText(favoriteButton.getText().equals("收藏") ? "已收藏" : "收藏");
                 } else
-                    Notification(mainFrame, "操作失败！\n" + response.getMessage());
+                    Notification(mainFrame, "操作失败 " + response.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -284,15 +291,23 @@ public class WorkPanel extends JScrollPane {
                     Notification(mainFrame, "删除成功！");
                     refreshPage();
                 } else
-                    Notification(mainFrame, "操作失败！\n" + response.getMessage());
+                    Notification(mainFrame, "操作失败 " + response.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    private boolean showBorrowRecord(JPanel p, int i, GridBagConstraints gbc) {
-        BorrowRecord borrowData = borrowRecordList.get(i);
+    private void showBorrowRecord(JPanel p, int i, GridBagConstraints gbc) {
+        if (i == 0) {
+            setFormat(setTextArea("标题", 120, 22), p, new Insets(0, 0, 0, 0), 0, 0, 0, 0);
+            setFormat(setTextArea("作者", 120, 22), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);
+            setFormat(setTextArea("借阅时间", 200, 99), p, new Insets(0, 40, 0, 0), 3, 0, 0, 0);
+            setFormat(setTextArea("归还时间", 220, 99), p, new Insets(0, 20, 0, 180), 4, 0, 0, 0);
+            return;
+        }
+
+        BorrowRecord borrowData = borrowRecordList.get(i - 1);
         Book bookData = new Book();
         for (Book book : bookList)
             if (book.getBookID().equals(borrowData.getBookID())) {
@@ -349,16 +364,24 @@ public class WorkPanel extends JScrollPane {
                     returnButton.setEnabled(false);
                     setColor(returnButton, new Color(0, 255, 32), new Color(230, 230, 230), BorderFactory.createEmptyBorder());
                 } else
-                    Notification(mainFrame, "归还失败！\n" + returnResponse.getMessage());
+                    Notification(mainFrame, "归还失败 " + returnResponse.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         });
-        return true;
     }
 
-    private boolean showUser(JPanel p, int i, GridBagConstraints gbc) {
-        User userData = userList.get(i);
+    private void showUser(JPanel p, int i, GridBagConstraints gbc) {
+        if (i == 0) {
+            setFormat(setTextArea("用户ID", 100, 13), p, new Insets(0, 20, 0, 0), 0, 0, 0, 0);
+            setFormat(setTextArea("用户权限", 100, 13), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);
+            setFormat(setTextArea("用户名", 100, 13), p, new Insets(0, 20, 0, 0), 2, 0, 0, 0);
+            setFormat(setTextArea("邮箱", 100, 13), p, new Insets(0, 20, 0, 0), 4, 0, 0, 0);
+            setFormat(setTextArea("电话", 100, 13), p, new Insets(0, 20, 0, 300), 5, 0, 0, 0);
+            return;
+        }
+
+        User userData = userList.get(i - 1);
         String userName = userData.getUsername();
         if (userData.getUserID().equals(currentUser.getUserID()))
             userName = "(您) " + userData.getUsername();
@@ -404,7 +427,7 @@ public class WorkPanel extends JScrollPane {
                     Notification(mainFrame, "修改成功！");
                     refreshPage();
                 } else
-                    Notification(mainFrame, "修改失败！\n" + response.getMessage());
+                    Notification(mainFrame, "修改失败 " + response.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -423,12 +446,11 @@ public class WorkPanel extends JScrollPane {
                     Notification(mainFrame, "删除成功！");
                     refreshPage();
                 } else
-                    Notification(mainFrame, "删除失败\n" + response.getMessage());
+                    Notification(mainFrame, "删除失败 " + response.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         });
-        return true;
     }
 
     public static void showNull(String action) {
