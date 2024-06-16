@@ -8,11 +8,11 @@ public class IntegerTextField extends JTextField {
     final int minValue;
     final int maxValue;
 
-    public IntegerTextField(int minValue, int maxValue) {
+    public IntegerTextField(int minValue, int maxValue, int value) {
         super(10);
         this.minValue = minValue;
         this.maxValue = maxValue;
-        this.setText("20");
+        this.setText(String.valueOf(value));
         init();
     }
 

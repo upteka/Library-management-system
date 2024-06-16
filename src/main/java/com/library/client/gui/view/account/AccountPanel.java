@@ -15,6 +15,7 @@ import java.util.Calendar;
 
 import static main.java.com.library.client.gui.LoginPage.*;
 import static main.java.com.library.client.gui.MainPage.mainFrame;
+import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setCustomFont;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
 import static main.java.com.library.common.network.handlers.RequestHelper.packRequest;
@@ -144,22 +145,16 @@ public class AccountPanel extends JPanel {
 
         saveButton.addActionListener(_ -> {
             try {
-                if (!isEmail(emailField.getText())) {
-                    JOptionPane.showMessageDialog(this, "请输入有效的邮箱");
-                    return;
-                }
-                if (!isPhone(phoneField.getText())) {
-                    JOptionPane.showMessageDialog(this, "请输入有效的手机号");
-                    return;
-                }
+                if (!emailField.getText().isEmpty() && !isEmail(emailField.getText(), mainFrame)) return;
+                if (!phoneField.getText().isEmpty() && !isPhone(phoneField.getText(), mainFrame)) return;
                 ResponsePack<?> responsePack = sendAccountRequest(false);
                 if (responsePack.isSuccess()) {
-                    JOptionPane.showMessageDialog(this, "用户信息更新成功！");
+                    Notification(mainFrame, "用户信息更新成功！");
                     currentUser.setUsername(usernameField.getText());
                     currentUser.setEmail(emailField.getText());
                     currentUser.setPhone(phoneField.getText());
                 } else {
-                    JOptionPane.showMessageDialog(this, "用户信息更新失败！\n" + responsePack.getMessage());
+                    Notification(mainFrame, "用户信息更新失败！" + responsePack.getMessage());
                 }
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -203,10 +198,10 @@ public class AccountPanel extends JPanel {
                     passwordStatus = 1;
                     passwordLabel.setText("请输入新密码");
                     passwordField.setText("");
-                } else JOptionPane.showMessageDialog(this, "旧密码错误, 请重试");
+                } else Notification(mainFrame, "旧密码错误, 请重试");
             } else if (passwordStatus == 1) {
-                if (field.getText().equals(password)) JOptionPane.showMessageDialog(this, "新密码不能与旧密码相同");
-                else if (field.getText().isEmpty()) JOptionPane.showMessageDialog(this, "密码不能为空");
+                if (field.getText().equals(password)) Notification(mainFrame, "新密码不能与旧密码相同");
+                else if (field.getText().isEmpty()) Notification(mainFrame, "新密码不能为空");
                 else {
                     confirmPassword = field.getText();
                     passwordLabel.setText("请验证新密码");
@@ -218,20 +213,20 @@ public class AccountPanel extends JPanel {
                     try {
                         ResponsePack<?> responsePack = sendAccountRequest(true);
                         if (responsePack.isSuccess()) {
-                            JOptionPane.showMessageDialog(this, "密码修改成功, 请重新登录");
-                            mainPage.deleteAll();
+                            JOptionPane.showMessageDialog(mainFrame, "密码修改成功, 请重新登录");
                             mainFrame.dispose();
+                            mainPage.deleteAll();
                             mainFrame = null;
                             mainPage = null;
                             currentUser = null;
                             password = null;
                             LoginPage.startUp();
-                        } else JOptionPane.showMessageDialog(this, "密码修改失败！" + responsePack.getMessage());
+                        } else Notification(mainFrame, "密码修改失败\n" + responsePack.getMessage());
                     } catch (IOException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "两次输入的密码不一致, 请重试");
+                    Notification(mainFrame, "两次密码输入不一致, 请重试");
                     passwordLabel.setText("请输入新密码");
                     passwordStatus = 1;
                 }

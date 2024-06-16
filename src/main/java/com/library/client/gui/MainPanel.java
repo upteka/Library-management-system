@@ -5,6 +5,7 @@ import main.java.com.library.client.gui.view.about.AboutPanel;
 import main.java.com.library.client.gui.view.account.AccountPanel;
 import main.java.com.library.client.gui.view.search.SearchPanel;
 import main.java.com.library.client.gui.view.settings.SettingPanel;
+import main.java.com.library.client.gui.view.workspace.WorkPanel;
 import main.java.com.library.client.gui.view.workspace.WorkSpace;
 import main.java.com.library.common.network.ResponsePack;
 
@@ -14,8 +15,8 @@ import java.io.IOException;
 
 import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
-import static main.java.com.library.client.gui.view.workspace.WorkSpace.scrollValue;
-import static main.java.com.library.client.gui.view.workspace.WorkSpace.workPanel;
+import static main.java.com.library.client.gui.view.workspace.WorkPanel.showType;
+import static main.java.com.library.client.gui.view.workspace.WorkSpace.*;
 
 public class MainPanel extends JPanel {
     public static WorkSpace workSpace = null;
@@ -41,14 +42,16 @@ public class MainPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0);
     }
 
-    public void showWorkSpace(ResponsePack<?> responsePack, String action) throws IOException, ClassNotFoundException {
+    public void showWorkSpace(ResponsePack<?> responsePack, String action, int page) throws IOException, ClassNotFoundException {
         removeComponents(action);
         mainFrame.setTitle("图书管理系统 - 工作区");
-        if (responsePack != null) workPanel.unpackResponse(responsePack, action);
-        WorkSpace.showTopPanel = action.equals("User") || action.equals("BorrowRecord");
+        if (responsePack == null && !action.equals("KeepWorkSpace")) WorkPanel.showNull(action);
+        else workPanel.unpackResponse(responsePack, action);
+        topPanel.setVisible(false);
+        if (showType.equals("Book") || showType.equals("BorrowRecord")) WorkSpace.showTopPanel(workSpace);
+        WorkSpace.currentPage = page;
         workPanel.updateLayout();
         SwingUtilities.invokeLater(() -> workPanel.getVerticalScrollBar().setValue(scrollValue));
-
         setFormat(workSpace, this,
                 new Insets(0, 0, 0, 0), 1, 0, 1, 1, 0, 0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0);
@@ -82,6 +85,7 @@ public class MainPanel extends JPanel {
         setFormat(accountPanel, this, getDefault(), 0, 0);
         refresh();
     }
+
 
     public void removeComponents(String action) {
         for (Component component : getComponents()) {

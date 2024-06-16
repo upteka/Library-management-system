@@ -31,16 +31,16 @@ public class ReturnRecordService extends BaseService<ReturnRecord> {
         }
 
         // 更新借阅记录的归还时间
+        borrowRecord.setReturned(true);
         borrowRecord.setReturnDate(Instant.now());
         borrowRecordService.update(borrowRecord);
-
         returnRecord.setReturnDate(Instant.now());
         String addResult = super.add(returnRecord);
 
         if ("Success".equals(addResult)) {
             return "Book returned successfully";
         } else {
-            return "Failed to add return record";
+            return "Failed to add return record,Internal error";
         }
     }
 }

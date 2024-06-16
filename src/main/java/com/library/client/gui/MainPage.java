@@ -1,5 +1,7 @@
 package main.java.com.library.client.gui;
 
+import main.java.com.library.client.gui.view.workspace.WorkSpace;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -22,6 +24,7 @@ public class MainPage {
     }
 
     public void deleteAll() {
+        WorkSpace.pageSize = 10;
         mainPanel.deleteAll();
         mainFrame.removeAll();
         mainFrame = null;

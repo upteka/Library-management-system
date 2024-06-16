@@ -4,7 +4,7 @@ import com.github.f4b6a3.ulid.UlidCreator;
 import main.java.com.library.common.entity.Entity;
 
 public class FavoriteRecord implements Entity {
-    private final String favoriteID;
+    private String favoriteID;
     private String userID;
     private final String bookID;
 
@@ -18,6 +18,10 @@ public class FavoriteRecord implements Entity {
     public FavoriteRecord(String bookID) {
         this.favoriteID = UlidCreator.getUlid().toString();
         this.bookID = bookID;
+    }
+
+    public void setFavoriteID(String favoriteID) {
+        this.favoriteID = favoriteID;
     }
 
     public String getUserID() {
