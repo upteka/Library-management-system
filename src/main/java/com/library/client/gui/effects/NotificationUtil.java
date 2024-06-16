@@ -11,6 +11,9 @@ public class NotificationUtil {
     private static int lastNotificationY = -1;
 
     public static <T extends Window> void Notification(T parent, String message) {
+        String title = "Notification";
+        String body = message;
+
         JWindow window = new JWindow(parent);
         window.setLayout(new BorderLayout());
 
@@ -19,12 +22,16 @@ public class NotificationUtil {
         panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
 
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        setCustomFont(label, 14, 0);
-        panel.add(label, BorderLayout.CENTER);
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setOpaque(false);
+
+        JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
+        setCustomFont(titleLabel, 16, Font.BOLD);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
 
         JButton closeButton = new JButton("X");
-        closeButton.setMargin(new Insets(20, 0, 0, 0));
+        closeButton.setMargin(new Insets(0, 0, 0, 0));
         closeButton.setPreferredSize(new Dimension(20, 20));
         closeButton.setFocusPainted(false);
         closeButton.setContentAreaFilled(false);
@@ -40,33 +47,43 @@ public class NotificationUtil {
             }
         });
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        topPanel.setOpaque(false);
-        topPanel.add(closeButton);
+        titlePanel.add(closeButton, BorderLayout.EAST);
+        panel.add(titlePanel, BorderLayout.NORTH);
 
-        panel.add(topPanel, BorderLayout.NORTH);
+        JTextArea bodyArea = new JTextArea(body);
+        setCustomFont(bodyArea, 14, Font.PLAIN);
+        bodyArea.setWrapStyleWord(true);
+        bodyArea.setLineWrap(true);
+        bodyArea.setOpaque(false);
+        bodyArea.setEditable(false);
+        bodyArea.setFocusable(false);
+        bodyArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        JScrollPane scrollPane = new JScrollPane(bodyArea);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        panel.add(scrollPane, BorderLayout.CENTER);
         window.add(panel);
 
         Rectangle parentBounds = parent.getBounds();
-        int width = 200;
-        int height = 100;
+        int width = 300;
+        int height = 150;
 
         window.setSize(width, height);
 
         int x = parentBounds.x + parentBounds.width - width - 10;
         int y;
         if (lastNotificationY == -1) {
-            y = parentBounds.y + parentBounds.height - height - 60; // 上移 50 像素
+            y = parentBounds.y + parentBounds.height - height - 60;
         } else {
             y = lastNotificationY - height - 10;
         }
         lastNotificationY = y;
 
         window.setLocation(x, y);
-
         window.setVisible(true);
-
         notificationCount++;
 
         Timer timer = new Timer(delayTime, e -> {

@@ -118,7 +118,7 @@ public class BorrowDialog extends JDialog {
                     dispose();
                     refreshPage();
                 } else
-                    Notification(mainFrame, "借阅失败\n" + responsePack.getMessage());
+                    Notification(mainFrame, "借阅失败 " + responsePack.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

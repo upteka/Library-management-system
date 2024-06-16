@@ -221,7 +221,7 @@ public class AccountPanel extends JPanel {
                             currentUser = null;
                             password = null;
                             LoginPage.startUp();
-                        } else Notification(mainFrame, "密码修改失败\n" + responsePack.getMessage());
+                        } else Notification(mainFrame, "密码修改失败！" + responsePack.getMessage());
                     } catch (IOException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }

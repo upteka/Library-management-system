@@ -12,57 +12,78 @@ import static main.java.com.library.client.gui.impl.ToolsIMPL.setFormat;
 
 public class SearchSettings extends JPanel {
     private static final GridBagLayout LAYOUT = new GridBagLayout();
-    private static int currentField = 3;
-    private static final String[][] fieldParams = {{"bookID", "书本ID"}, {"title", "书名"}, {"author", "作者"}, {"publisher", "出版社"}, {"ISBN", "ISBN"}};
-    private static final JButton[] buttons = {new JButton("全部"), new JButton("ASC"), new JButton("不区分"), new JButton("不去重")};
-    private static final JLabel[] labels = {new JLabel("搜索字段"), new JLabel("排序顺序"), new JLabel("是否区分大小写"), new JLabel("是否去重")};
+    private static int currentField = 0;
+    private static int currentSort = 0;
+    private static final String[][] fieldNameParams = {{"bookID", "书本ID"}, {"title", "书名"}, {"author", "作者"}, {"publisher", "出版社"}, {"ISBN", "ISBN"}};
+    private static final String[][] sortFieldParams = {{"", "搜索字段"}, {"count", "总量"}, {"availableCount", "余量"}, {"status", "可借出"}};
+    private static final JButton[] buttons = {
+            new JButton("书本ID"),
+            new JButton("排序字段"),
+            new JButton("ASC"),
+            new JButton("区分"),
+            new JButton("去重")
+    };
+    private static final JLabel[] labels = {
+            new JLabel("搜索字段"),
+            new JLabel("排序字段"),
+            new JLabel("排序顺序"),
+            new JLabel("是否区分大小写"),
+            new JLabel("是否去重")
+    };
 
-    SearchSettings() {
+    public SearchSettings() {
         setLayout(LAYOUT);
 
         JPanel fieldNamePanel = new JPanel(LAYOUT);
+        JPanel searchFieldPanel = new JPanel(LAYOUT);
         JPanel searchOrderPanel = new JPanel(LAYOUT);
         JPanel caseInsensitivePanel = new JPanel(LAYOUT);
         JPanel distinctPanel = new JPanel(LAYOUT);
 
-        areaSelection();
-        putIntoPanel(buttons[0], fieldNamePanel, labels[0]);
+        createDropdown(buttons[0], fieldNameParams, 0, fieldNamePanel, labels[0]);
+        createDropdown(buttons[1], sortFieldParams, 1, searchFieldPanel, labels[1]);
 
-        switchAction(buttons[1], "ASC", "DESC");
-        putIntoPanel(buttons[1], searchOrderPanel, labels[1]);
+        switchAction(buttons[2], "ASC", "DESC");
+        putIntoPanel(buttons[2], searchOrderPanel, labels[2]);
 
-        switchAction(buttons[2], "区分", "不区分");
-        putIntoPanel(buttons[2], caseInsensitivePanel, labels[2]);
+        switchAction(buttons[3], "区分", "不区分");
+        putIntoPanel(buttons[3], caseInsensitivePanel, labels[3]);
 
-        switchAction(buttons[3], "去重", "不去重");
-        putIntoPanel(buttons[3], distinctPanel, labels[3]);
-
+        switchAction(buttons[4], "去重", "不去重");
+        putIntoPanel(buttons[4], distinctPanel, labels[4]);
 
         setFormat(fieldNamePanel, this, new Insets(0, 0, 20, 0), 0, 0, 0, 0);
-        setFormat(searchOrderPanel, this, new Insets(0, 0, 20, 0), 0, 1, 0, 0);
-        setFormat(caseInsensitivePanel, this, new Insets(0, 0, 20, 0), 0, 2, 0, 0);
-        setFormat(distinctPanel, this, new Insets(0, 0, 0, 0), 0, 3, 0, 0);
+        setFormat(searchFieldPanel, this, new Insets(0, 0, 20, 0), 0, 1, 0, 0);
+        setFormat(searchOrderPanel, this, new Insets(0, 0, 20, 0), 0, 2, 0, 0);
+        setFormat(caseInsensitivePanel, this, new Insets(0, 0, 20, 0), 0, 3, 0, 0);
+        setFormat(distinctPanel, this, new Insets(0, 0, 0, 0), 0, 4, 0, 0);
     }
 
-    private void areaSelection() {
-        buttons[0].putClientProperty("JButton.buttonType", "roundRect");
+    private void createDropdown(JButton button, String[][] params, int buttonIndex, JPanel panel, JLabel label) {
+        button.putClientProperty("JButton.buttonType", "roundRect");
         JPopupMenu dropdownMenu = new JPopupMenu();
-        for (int i = 0; i < 4; i++) {
-            JMenuItem item = new JMenuItem(fieldParams[i][1]);
+        for (int i = 0; i < params.length; i++) {
+            JMenuItem item = new JMenuItem(params[i][1]);
             int finalI = i;
             item.addActionListener(_ -> {
-                buttons[0].setText(fieldParams[finalI][1]);
-                currentField = finalI;
+                button.setText(params[finalI][1]);
+                if (buttonIndex == 0) {
+                    currentField = finalI;
+                } else {
+                    currentSort = finalI;
+                }
             });
             dropdownMenu.add(item);
         }
 
-        buttons[0].addMouseListener(new MouseAdapter() {
+        button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                dropdownMenu.show(buttons[0], e.getX(), e.getY());
+                dropdownMenu.show(button, e.getX(), e.getY());
             }
         });
+
+        putIntoPanel(button, panel, label);
     }
 
     private void putIntoPanel(JComponent component, JPanel panel, JLabel label) {
@@ -86,7 +107,6 @@ public class SearchSettings extends JPanel {
         });
     }
 
-
     public void fadeIn() {
         for (JButton button : buttons) {
             FadeEffect.applyFadeEffect(button, true, 1, 0.2f, null);
@@ -106,18 +126,23 @@ public class SearchSettings extends JPanel {
     }
 
     public String getFieldName() {
-        return fieldParams[currentField][0];
+        return fieldNameParams[currentField][0];
     }
 
-    public String getSearchOrder() {
-        return buttons[1].getText();
+    public String getSortField() {
+        if (currentSort == 0) return fieldNameParams[currentField][0];
+        return sortFieldParams[currentSort][0];
+    }
+
+    public boolean isAscendingOrder() {
+        return buttons[2].getText().equals("ASC");
     }
 
     public boolean isCaseInsensitive() {
-        return !buttons[2].getText().equals("不区分");
+        return buttons[3].getText().equals("不区分");
     }
 
     public boolean isDistinct() {
-        return !buttons[3].getText().equals("不去重");
+        return buttons[4].getText().equals("去重");
     }
 }

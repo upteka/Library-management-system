@@ -67,7 +67,7 @@ public class SearchPanel extends JPanel {
                             if (searchResponse.getMessage().equals("未找到符合条件的实体"))
                                 Notification(mainFrame, "没有找到合适的结果");
                             else
-                                Notification(mainFrame, "搜索失败\n" + searchResponse.getMessage());
+                                Notification(mainFrame, "搜索失败 " + searchResponse.getMessage());
                         }
                     } catch (IOException | ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
@@ -92,11 +92,9 @@ public class SearchPanel extends JPanel {
 
     public static ResponsePack<?> searchRequest(int page) throws IOException, ClassNotFoundException {
         clientUtil.sendRequest(packRequest("search", new Book(), "search", response.getJwtToken(),
-                settingPanel.getFieldName(), searchField.getText(), "LIKE", "0", "null", settingPanel.getSearchOrder(),
+                settingPanel.getFieldName(), searchField.getText(), "LIKE", "0", settingPanel.getSortField(), String.valueOf(settingPanel.isAscendingOrder()),
                 String.valueOf(page), String.valueOf(WorkSpace.pageSize), String.valueOf(settingPanel.isCaseInsensitive()), "AND",
                 "null", String.valueOf(settingPanel.isDistinct()), "null", "null", "null", "null"));
-        System.out.println(settingPanel.isCaseInsensitive());
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return clientUtil.receiveResponse();
     }
 

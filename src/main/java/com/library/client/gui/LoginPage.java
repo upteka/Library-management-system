@@ -45,8 +45,6 @@ public class LoginPage {
         JTextField EmailOrPhone = new JTextField(13);
         JTextField usernameField = new JTextField(13);
         JPasswordField passwordField = new JPasswordField(13);
-        usernameField.setText("a");
-        passwordField.setText("aaaaaaaa");
         setTextField(usernameField);
         setTextField(passwordField);
         setTextField(EmailOrPhone);
@@ -141,11 +139,10 @@ public class LoginPage {
                     }
                     User user = new User(usernameField.getText(), passwordField.getText(), "user", email, phone);
                     ResponsePack<?> response = register(user);
-                    if (response.isSuccess()) {
+                    if (response.isSuccess())
                         Notification(frame, "注册成功");
-                    } else {
-                        Notification(frame, "注册失败\n" + response.getMessage());
-                    }
+                    else
+                        Notification(frame, "注册失败 " + response.getMessage());
                 } else {
                     User user = new User(usernameField.getText(), passwordField.getText(), "user", "1");
                     response = login(user);
@@ -159,7 +156,7 @@ public class LoginPage {
                         mainPage = new MainPage();
                         mainPage.initialize();
                     } else {
-                        Notification(frame, "登录失败\n" + response.getMessage());
+                        Notification(frame, "登录失败 " + response.getMessage());
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
