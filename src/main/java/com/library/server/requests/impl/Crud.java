@@ -84,19 +84,14 @@ public class Crud<T extends Entity> implements Request<T> {
      */
     private boolean hasPermission(String entityName, T data, String jwtToken) {
         boolean isAdmin = JwtUtil.isaAdmin(jwtToken);
-        boolean isUser = entityName.equalsIgnoreCase("user");
         boolean isTokenOwner = data != null && JwtUtil.isTokenOwner(jwtToken, data.getId());
 
-        if (isAdmin) {
-            return true;
-        }
-        if (isUser && isTokenOwner) {
-            return true;
-        }
-        if (action.equalsIgnoreCase("get")) {
-            return true;
-        }
-        return false;
+        return switch (action.toLowerCase()) {
+            case "add", "delete" -> isAdmin;
+            case "update" -> isTokenOwner || isAdmin;
+            case "get" -> true;
+            default -> false;
+        };
     }
 
     /**

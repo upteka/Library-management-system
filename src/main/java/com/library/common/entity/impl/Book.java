@@ -14,7 +14,7 @@ public class Book implements Entity {
     private String title;
     private String author;
     private String ISBN;
-    private String status; // "available" or "unavailable"
+    private String status; // "available" / "unavailable" / "deleted"
     private Integer count;
     private String introduction;
     private String publisher;
