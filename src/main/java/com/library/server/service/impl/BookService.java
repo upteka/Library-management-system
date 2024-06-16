@@ -5,8 +5,6 @@ import main.java.com.library.server.database.impl.BookDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
-
 public class BookService extends BaseService<Book> {
 
     private static final Logger logger = LoggerFactory.getLogger(BookService.class);
@@ -25,12 +23,16 @@ public class BookService extends BaseService<Book> {
 
             // Check if the book already exists
             Book existingBook = super.getByField("ISBN", book.getISBN());
-            logger.info("Checking if book with id " + book.getId() + " already exists.");
+            logger.info("Checking if book with id {} already exists.", book.getId());
 
             if (existingBook != null) {
-                logger.info("Book with ISBN " + book.getISBN() + " already exists. Updating count.");
-                int newCount = Optional.ofNullable(existingBook.getCount()).orElse(0) + Optional.ofNullable(book.getCount()).orElse(0);
-                int newAvailableCount = Optional.ofNullable(existingBook.getAvailableCount()).orElse(0) + Optional.ofNullable(book.getCount()).orElse(0);
+                logger.info("Book with ISBN {} already exists. Updating count.", book.getISBN());
+                // Update existing book count
+                int existingCount = (existingBook.getCount() != null) ? existingBook.getCount() : 0;
+                int newBookCount = (book.getCount() != null) ? book.getCount() : 0;
+                int newCount = existingCount + newBookCount;
+                int existingAvailableCount = (existingBook.getAvailableCount() != null) ? existingBook.getAvailableCount() : 0;
+                int newAvailableCount = existingAvailableCount + newBookCount;
 
                 existingBook.setCount(newCount);
                 existingBook.setAvailableCount(newAvailableCount);
@@ -69,9 +71,8 @@ public class BookService extends BaseService<Book> {
             if (!validationResult.equals("Valid")) {
                 return validationResult;
             }
-
             if ("Success".equals(dao.update(book))) {
-                logger.info("Book with id " + book.getId() + " updated successfully.");
+                logger.info("Book with id {} updated successfully.", book.getId());
                 return "Success: Book updated successfully.";
             } else {
                 logger.error("Failed to update book with id {}", book.getId());
@@ -89,5 +90,23 @@ public class BookService extends BaseService<Book> {
             return "Error: Missing required field(s). Title, Author, Count, Publisher, and ISBN must be provided.";
         }
         return "Valid";
+    }
+
+    public String delete(Book book) {
+        Book existingBook = dao.get(book.getId());
+        if (existingBook == null) {
+            return "Error: Book with id " + book.getId() + " does not exist.";
+        }
+        if (existingBook.getAvailableCount() <= existingBook.getCount()) {
+            return "Error: The book has been borrowed and cannot be deleted.";
+        }
+        existingBook.setStatus("deleted");
+        if ("Success".equals(dao.update(existingBook))) {
+            logger.info("Book with id {} deleted successfully.", book.getId());
+            return "Success: Book deleted successfully.";
+        } else {
+            logger.error("Failed to delete book with id {}", book.getId());
+            return "Error: Failed to delete book.";
+        }
     }
 }

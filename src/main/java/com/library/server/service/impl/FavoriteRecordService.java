@@ -18,7 +18,7 @@ public class FavoriteRecordService extends BaseService<FavoriteRecord> {
     }
 
     public ResponsePack<FavoriteRecord> Favorite(FavoriteRecord favoriteRecord) throws SQLException {
-        if (get(favoriteRecord.getId()) != null) {
+        if (super.get(favoriteRecord.getId()) != null) {
             return ResponseHelper.packResponse(ACTION, false, "Favorite record already exists", null);
         }
         if (add(favoriteRecord).equals("Success")) {
@@ -28,7 +28,7 @@ public class FavoriteRecordService extends BaseService<FavoriteRecord> {
     }
 
     public ResponsePack<FavoriteRecord> unFavorite(FavoriteRecord favoriteRecord) throws SQLException {
-        if (get(favoriteRecord.getId()) == null) {
+        if (super.get(favoriteRecord.getId()) == null) {
             return ResponseHelper.packResponse(ACTION, false, "Favorite record does not exist", null);
         }
         delete(favoriteRecord.getId());
