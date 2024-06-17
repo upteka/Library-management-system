@@ -11,8 +11,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
+import static main.java.com.library.client.gui.LoginPage.authResponse;
 import static main.java.com.library.client.gui.LoginPage.clientUtil;
-import static main.java.com.library.client.gui.LoginPage.response;
 import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.MainPage.mainPanel;
 import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
@@ -23,13 +23,15 @@ import static main.java.com.library.common.network.handlers.RequestHelper.packRe
 public class SearchPanel extends JPanel {
     private static SearchSettings settingPanel = null;
     private static JTextField searchField = null;
-    private JPanel emptyTopPanel = new JPanel();
-    private JLabel emptyBottomPanel = new JLabel();
+    private final JPanel emptyTopPanel = new JPanel();
+    private final JLabel emptyBottomPanel = new JLabel();
     private ResponsePack<?> searchResponse;
 
     public SearchPanel() {
         setLayout(new GridBagLayout());
         fillEmptySpace();
+
+        setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
         JLabel title = new GradientLabel("Search Everywhere", new Color(74, 144, 226), new Color(144, 19, 254));
         setFormat(title, this, new Insets(0, 0, 0, 0), 0, 1, 0, 150,
@@ -91,7 +93,7 @@ public class SearchPanel extends JPanel {
     }
 
     public static ResponsePack<?> searchRequest(int page) throws IOException, ClassNotFoundException {
-        clientUtil.sendRequest(packRequest("search", new Book(), "search", response.getJwtToken(),
+        clientUtil.sendRequest(packRequest("search", new Book(), "search", authResponse.getJwtToken(),
                 settingPanel.getFieldName(), searchField.getText(), "LIKE", "0", settingPanel.getSortField(), String.valueOf(settingPanel.isAscendingOrder()),
                 String.valueOf(page), String.valueOf(WorkSpace.pageSize), String.valueOf(settingPanel.isCaseInsensitive()), "AND",
                 "null", String.valueOf(settingPanel.isDistinct()), "null", "null", "null", "null"));

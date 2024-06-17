@@ -1,11 +1,19 @@
 package main.java.com.library.client.gui.view.workspace;
 
 import main.java.com.library.common.entity.impl.Book;
+import main.java.com.library.common.network.ResponsePack;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
+import static main.java.com.library.client.gui.LoginPage.authResponse;
+import static main.java.com.library.client.gui.LoginPage.clientUtil;
+import static main.java.com.library.client.gui.MainPage.mainFrame;
+import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
+import static main.java.com.library.client.gui.view.workspace.BottomPanel.refreshPage;
+import static main.java.com.library.common.network.handlers.RequestHelper.packRequest;
 
 public class DeleteDialog extends JDialog {
     public DeleteDialog(JFrame parent, Book data) {
@@ -34,6 +42,20 @@ public class DeleteDialog extends JDialog {
         setFormat(cancelButton, buttonPanel, new Insets(10, 100, 10, 10), 1, 0, 1, 1, 0, 20, 0, 1, 14, Font.BOLD);
 
         cancelButton.addActionListener(_ -> dispose());
+
+        confirmButton.addActionListener(_ -> {
+            try {
+                clientUtil.sendRequest(packRequest("delete", data, "delete", authResponse.getJwtToken()));
+                ResponsePack<?> deleteResponse = clientUtil.receiveResponse();
+                if (deleteResponse.isSuccess()) {
+                    Notification(mainFrame, "删除成功！");
+                    refreshPage();
+                } else
+                    Notification(mainFrame, "操作失败 " + deleteResponse.getMessage());
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         add(panel);
         pack();

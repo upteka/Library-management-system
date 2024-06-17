@@ -27,7 +27,7 @@ public class BottomPanel extends JPanel {
     private final JButton pagePrevious = new JButton("上一页");
     private final JPanel pagePanel = new JPanel(new GridBagLayout());
     private final JLabel pageLabel = new JLabel();
-    private final HashMap<String, ShowTypeData<?>> showTypeMap = new HashMap<>();
+    private static final HashMap<String, ShowTypeData<?>> showTypeMap = new HashMap<>();
 
     public record ShowTypeData<T>(T entity, String title) {
     }
@@ -130,5 +130,7 @@ public class BottomPanel extends JPanel {
             searchNextOrPrevious(currentPage);
         else if (sortSearching)
             topPanel.sortedBorrowRequest(currentPage);
+        else if (!showType.isEmpty())
+            fetchDataAndShow(showTypeMap.get(showType).entity, showType, showTypeMap.get(showType).title, currentPage);
     }
 }

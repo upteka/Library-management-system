@@ -29,6 +29,7 @@ public class SideBar extends JPanel {
     private static final GridBagLayout LAYOUT = new GridBagLayout();
     private final List<JButton> buttons = new ArrayList<>();
     private final JToggleButton toggleButton = new JToggleButton("");
+    private Timer autoCloseTimer;
 
     public SideBar() {
         setLayout(LAYOUT);
@@ -40,7 +41,6 @@ public class SideBar extends JPanel {
             createButton(buttonEnum);
         }
         toggleButton.addActionListener(_ -> toggleButtonAction(toggleButton));
-        toggleButton.setBorderPainted(false);
         toggleButton.setContentAreaFilled(false);
         add(toggleButton, setToggleButton(0));
     }
@@ -164,8 +164,8 @@ public class SideBar extends JPanel {
     }
 
     private GridBagConstraints getDefault() {
-        return setFormat(null, null, new Insets(0, 0, 20, 0),
-                0, 0, 0, 0, 0, 30,
+        return setFormat(null, null, new Insets(0, 0, 0, 0),
+                0, 0, 0, 0, 0, 20,
                 GridBagConstraints.NORTH, GridBagConstraints.BOTH, 0, 0);
     }
 
@@ -239,7 +239,7 @@ public class SideBar extends JPanel {
             sortSearching = false;
             String value = currentUser.getId();
             if (entity instanceof User) value = "";
-            clientUtil.sendRequest(packRequest("search", entity, "search", response.getJwtToken(),
+            clientUtil.sendRequest(packRequest("search", entity, "search", authResponse.getJwtToken(),
                     "userID", value, "LIKE", "0", "null", "ASC", String.valueOf(page), String.valueOf(WorkSpace.pageSize),
                     "false", "AND", "null", "false", "null", "null", "null", "null"));
             ResponsePack<?> responsePack = clientUtil.receiveResponse();

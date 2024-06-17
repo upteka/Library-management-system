@@ -14,6 +14,7 @@ public class AboutPanel extends JPanel {
     public AboutPanel() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
         JLabel titleLabel = new JLabel("关于我们");
         setCustomFont(titleLabel, 24, Font.BOLD);

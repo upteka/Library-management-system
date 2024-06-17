@@ -1,5 +1,6 @@
 package main.java.com.library.client.gui.view.workspace;
 
+import com.github.f4b6a3.ulid.Ulid;
 import main.java.com.library.client.gui.MainPage;
 import main.java.com.library.common.entity.EntityList;
 import main.java.com.library.common.entity.impl.*;
@@ -28,7 +29,7 @@ import static main.java.com.library.common.network.handlers.RequestHelper.packRe
 
 public class WorkPanel extends JScrollPane {
     private static final GridBagLayout LAYOUT = new GridBagLayout();
-    public static final int[] START_VALUE = {100, 100, 100};
+    public static final int[] START_VALUE = {100, 100, 0};
     private List<JPanel> panelList = new ArrayList<>();
     private static JPanel content;
     public static String showType = "";
@@ -48,7 +49,7 @@ public class WorkPanel extends JScrollPane {
         setViewportView(content);
         getVerticalScrollBar().setUnitIncrement(16);
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
     }
 
     public void initialize() {
@@ -163,7 +164,7 @@ public class WorkPanel extends JScrollPane {
                 for (BorrowRecord borrowRecord : borrowRecordList) {
                     Book book = new Book();
                     book.setBookID(borrowRecord.getBookID());
-                    clientUtil.sendRequest(packRequest("get", book, "get", response.getJwtToken()));
+                    clientUtil.sendRequest(packRequest("get", book, "get", authResponse.getJwtToken()));
                     @SuppressWarnings("unchecked")
                     ResponsePack<Book> bookResponse = (ResponsePack<Book>) clientUtil.receiveResponse();
                     bookList.add(bookResponse.getData());
@@ -175,7 +176,7 @@ public class WorkPanel extends JScrollPane {
                 for (FavoriteRecord favoriteRecord : favoriteList) {
                     Book book = new Book();
                     book.setBookID(favoriteRecord.getBookID());
-                    clientUtil.sendRequest(packRequest("get", book, "get", response.getJwtToken()));
+                    clientUtil.sendRequest(packRequest("get", book, "get", authResponse.getJwtToken()));
                     @SuppressWarnings("unchecked")
                     ResponsePack<Book> response = (ResponsePack<Book>) clientUtil.receiveResponse();
                     bookList.add(response.getData());
@@ -184,7 +185,7 @@ public class WorkPanel extends JScrollPane {
             }
             case "Book" -> {
                 bookList = (List<Book>) entityList.entities();
-                clientUtil.sendRequest(packRequest("search", new FavoriteRecord(), "search", response.getJwtToken(),
+                clientUtil.sendRequest(packRequest("search", new FavoriteRecord(), "search", authResponse.getJwtToken(),
                         "userID", currentUser.getId(), "LIKE", "0", "null", "ASC", "1", String.valueOf(pageSize),
                         "false", "AND", "null", "false", "null", "null", "null", "null"));
                 EntityList<?> list = (EntityList<?>) clientUtil.receiveResponse().getData();
@@ -203,10 +204,11 @@ public class WorkPanel extends JScrollPane {
 
     private void showBook(JPanel p, int i, GridBagConstraints gbc) {
         if (i == 0) {
-            setFormat(setTextArea("标题", 130, 20), p, new Insets(0, 20, 0, 0), 0, 0, 0, 0);
+            setFormat(setTextArea("标题", 130, 20), p, new Insets(0, 60, 0, 0), 0, 0, 0, 0);
             setFormat(setTextArea("作者", 100, 13), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);
             setFormat(setTextArea("出版社", 100, 13), p, new Insets(0, 20, 0, 0), 2, 0, 0, 0);
             setFormat(setTextArea("余量", 60, 8), p, new Insets(0, 10, 0, 500), 3, 0, 0, 0);
+            setFormat(new JLabel(), p, new Insets(0, 0, 0, 0), 4, 0, 1, 0, 0, 0, 0, 1, 0, 0);
             return;
         }
 
@@ -270,28 +272,14 @@ public class WorkPanel extends JScrollPane {
                 String message = favoriteButton.getText().equals("收藏") ? "收藏" : "取消收藏";
                 if (favoriteButton.getText().equals("已收藏"))
                     favoriteRecord.setFavoriteID(favoriteMap.get(data.getBookID()));
-                clientUtil.sendRequest(packRequest("favorite", favoriteRecord, action, response.getJwtToken(), action));
+                clientUtil.sendRequest(packRequest("favorite", favoriteRecord, action, authResponse.getJwtToken(), action));
                 ResponsePack<?> favoriteResponse = clientUtil.receiveResponse();
                 if (favoriteResponse.isSuccess()) {
                     if (action.equals("favorite")) favoriteMap.put(data.getBookID(), favoriteRecord.getId());
                     Notification(mainFrame, "已" + message);
                     favoriteButton.setText(favoriteButton.getText().equals("收藏") ? "已收藏" : "收藏");
                 } else
-                    Notification(mainFrame, "操作失败 " + response.getMessage());
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        deleteThis.addActionListener(_ -> {
-            try {
-                clientUtil.sendRequest(packRequest("delete", data, "delete", response.getJwtToken()));
-                ResponsePack<?> deleteResponse = clientUtil.receiveResponse();
-                if (deleteResponse.isSuccess()) {
-                    Notification(mainFrame, "删除成功！");
-                    refreshPage();
-                } else
-                    Notification(mainFrame, "操作失败 " + response.getMessage());
+                    Notification(mainFrame, "操作失败 " + authResponse.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -300,10 +288,11 @@ public class WorkPanel extends JScrollPane {
 
     private void showBorrowRecord(JPanel p, int i, GridBagConstraints gbc) {
         if (i == 0) {
-            setFormat(setTextArea("标题", 120, 22), p, new Insets(0, 0, 0, 0), 0, 0, 0, 0);
+            setFormat(setTextArea("标题", 120, 22), p, new Insets(0, 60, 0, 0), 0, 0, 0, 0);
             setFormat(setTextArea("作者", 120, 22), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);
             setFormat(setTextArea("借阅时间", 200, 99), p, new Insets(0, 40, 0, 0), 3, 0, 0, 0);
             setFormat(setTextArea("归还时间", 220, 99), p, new Insets(0, 20, 0, 180), 4, 0, 0, 0);
+            setFormat(new JLabel(), p, new Insets(0, 0, 0, 0), 5, 0, 1, 0, 0, 0, 0, 1, 0, 0);
             return;
         }
 
@@ -355,7 +344,7 @@ public class WorkPanel extends JScrollPane {
 
         returnButton.addActionListener(_ -> {
             try {
-                clientUtil.sendRequest(packRequest("return", new ReturnRecord(borrowData.getBorrowID()), "return", response.getJwtToken()));
+                clientUtil.sendRequest(packRequest("return", new ReturnRecord(borrowData.getBorrowID()), "return", authResponse.getJwtToken()));
                 ResponsePack<?> returnResponse = clientUtil.receiveResponse();
                 if (returnResponse.isSuccess()) {
                     Notification(mainFrame, "归还成功！");
@@ -373,11 +362,13 @@ public class WorkPanel extends JScrollPane {
 
     private void showUser(JPanel p, int i, GridBagConstraints gbc) {
         if (i == 0) {
-            setFormat(setTextArea("用户ID", 100, 13), p, new Insets(0, 20, 0, 0), 0, 0, 0, 0);
-            setFormat(setTextArea("用户权限", 100, 13), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);
-            setFormat(setTextArea("用户名", 100, 13), p, new Insets(0, 20, 0, 0), 2, 0, 0, 0);
-            setFormat(setTextArea("邮箱", 100, 13), p, new Insets(0, 20, 0, 0), 4, 0, 0, 0);
-            setFormat(setTextArea("电话", 100, 13), p, new Insets(0, 20, 0, 300), 5, 0, 0, 0);
+            setFormat(setTextArea("用户ID", 100, 13), p, new Insets(0, 60, 0, 0), 0, 0, 0, 0);
+            setFormat(setTextArea("用户权限", 100, 13), p, new Insets(0, 10, 0, 0), 1, 0, 0, 0);
+            setFormat(setTextArea("用户名", 100, 13), p, new Insets(0, 10, 0, 0), 2, 0, 0, 0);
+            setFormat(setTextArea("邮箱", 100, 13), p, new Insets(0, 30, 0, 0), 3, 0, 0, 0);
+            setFormat(setTextArea("电话", 100, 13), p, new Insets(0, 20, 0, 0), 4, 0, 0, 0);
+            setFormat(setTextArea("注册时间", 100, 13), p, new Insets(0, 20, 0, 0), 5, 0, 0, 0);
+            setFormat(new JLabel(), p, new Insets(0, 0, 0, 0), 6, 0, 1, 0, 0, 0, 0, 1, 0, 0);
             return;
         }
 
@@ -387,10 +378,11 @@ public class WorkPanel extends JScrollPane {
             userName = "(您) " + userData.getUsername();
 
         setFormat(setTextArea(userData.getUserID(), 100, 13), p, new Insets(0, 20, 0, 0), 0, 0, 0, 0);
-        setFormat(setTextArea(userData.getRole(), 100, 13), p, new Insets(0, 20, 0, 0), 1, 0, 0, 0);
-        setFormat(setTextArea(userName, 100, 13), p, new Insets(0, 20, 0, 0), 2, 0, 0, 0);
-        setFormat(setTextArea(userData.getEmail(), 100, 13), p, new Insets(0, 20, 0, 0), 4, 0, 0, 0);
-        setFormat(setTextArea(userData.getPhone(), 100, 13), p, new Insets(0, 20, 0, 0), 5, 0, 0, 0);
+        setFormat(setTextArea(userData.getRole(), 100, 13), p, new Insets(0, 40, 0, 0), 1, 0, 0, 0);
+        setFormat(setTextArea(userName, 100, 13), p, new Insets(0, 0, 0, 0), 2, 0, 0, 0);
+        setFormat(setTextArea(userData.getEmail(), 100, 13), p, new Insets(0, 0, 0, 0), 3, 0, 0, 0);
+        setFormat(setTextArea(userData.getPhone(), 100, 13), p, new Insets(0, 40, 0, 0), 4, 0, 0, 0);
+        setFormat(setTextArea(getTimeString(Ulid.getInstant(userData.getUserID())), 100, 14), p, new Insets(0, 0, 0, 0), 5, 0, 0, 0);
 
         JButton editButton = new JButton("编辑信息");
         JButton roleButton = new JButton("更改权限");
@@ -412,15 +404,14 @@ public class WorkPanel extends JScrollPane {
         setFormat(roleButton, p, new Insets(0, 20, 0, 0), 7, 0, 20, 10, 14, Font.BOLD);
         setFormat(deleteButton, p, new Insets(0, 20, 0, 0), 8, 0, 20, 10, 14, Font.BOLD);
 
-        editButton.addActionListener(_ -> {
-            new EditUserDialog(mainFrame, userData);
-        });
+        editButton.addActionListener(_ -> new EditUserDialog(mainFrame, userData));
         roleButton.addActionListener(_ -> {
             try {
                 String newRole = userData.getRole().equals("admin") ? "user" : "admin";
                 User u = new User();
                 u.setRole(newRole);
-                clientUtil.sendRequest(packRequest("update", u, "update", response.getJwtToken()));
+                u.setUserID(userData.getUserID());
+                clientUtil.sendRequest(packRequest("update", u, "update", authResponse.getJwtToken()));
                 ResponsePack<?> response = clientUtil.receiveResponse();
                 if (response.isSuccess()) {
                     userData.setRole(newRole);
@@ -440,7 +431,7 @@ public class WorkPanel extends JScrollPane {
                 }
                 User u = new User();
                 u.setUserID(userData.getUserID());
-                clientUtil.sendRequest(packRequest("delete", u, "delete", response.getJwtToken()));
+                clientUtil.sendRequest(packRequest("delete", u, "delete", authResponse.getJwtToken()));
                 ResponsePack<?> response = clientUtil.receiveResponse();
                 if (response.isSuccess()) {
                     Notification(mainFrame, "删除成功！");
@@ -460,7 +451,7 @@ public class WorkPanel extends JScrollPane {
 
     public static String getTimeString(Instant instant) {
         var zonedDateTime = instant.atZone(ZoneId.systemDefault());
-        var formatter = DateTimeFormatter.ofPattern("yyyy年M月d日, HH:mm:ss", Locale.CHINESE);
+        var formatter = DateTimeFormatter.ofPattern("yyyy年M月d日  HH:mm:ss", Locale.CHINESE);
         return zonedDateTime.format(formatter);
     }
 }
