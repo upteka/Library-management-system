@@ -8,6 +8,7 @@ import static main.java.com.library.client.gui.impl.ToolsIMPL.setCustomFont;
 public class NotificationUtil {
     public static int delayTime = 2000;
     private static int notificationCount = 0;
+    private static int totalNotificationCount = 0; // Track total number of notifications generated
     private static int lastNotificationY = -1;
 
     public static <T extends Window> void Notification(T parent, String message) {
@@ -75,6 +76,10 @@ public class NotificationUtil {
 
         int x = parentBounds.x + parentBounds.width - width - 10;
         int y;
+        if (totalNotificationCount % 5 == 0) {
+            lastNotificationY = -1;
+        }
+
         if (lastNotificationY == -1) {
             y = parentBounds.y + parentBounds.height - height - 60;
         } else {
@@ -85,6 +90,7 @@ public class NotificationUtil {
         window.setLocation(x, y);
         window.setVisible(true);
         notificationCount++;
+        totalNotificationCount++;
 
         Timer timer = new Timer(delayTime, e -> {
             if (window.isVisible()) {
