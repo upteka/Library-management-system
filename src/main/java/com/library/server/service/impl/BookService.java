@@ -50,7 +50,9 @@ public class BookService extends BaseService<Book> {
 
             } else {
                 // Add new book
-                String addResult = super.add(book);
+                Book newBook = new Book(book.getTitle(), book.getAuthor(), book.getISBN(), book.getCount(), book.getIntroduction(), book.getPublisher());
+                newBook.setStatus(book.getCount() > 0 ? "available" : "unavailable");
+                String addResult = super.add(newBook);
                 if (addResult.equals("Success")) {
                     logger.info("New book added successfully.");
                     return "Success: Book added successfully.";
@@ -92,20 +94,21 @@ public class BookService extends BaseService<Book> {
         return "Valid";
     }
 
-    public String delete(Book book) {
-        Book existingBook = dao.get(book.getId());
+    public String delete(String id) {
+
+        Book existingBook = dao.get(id);
         if (existingBook == null) {
-            return "Error: Book with id " + book.getId() + " does not exist.";
+            return "Error: Book with id " + existingBook.getId() + " does not exist.";
         }
-        if (existingBook.getAvailableCount() <= existingBook.getCount()) {
+        if (existingBook.getAvailableCount() < existingBook.getCount()) {
             return "Error: The book has been borrowed and cannot be deleted.";
         }
         existingBook.setStatus("deleted");
         if ("Success".equals(dao.update(existingBook))) {
-            logger.info("Book with id {} deleted successfully.", book.getId());
+            logger.info("Book with id {} deleted successfully.", existingBook.getId());
             return "Success: Book deleted successfully.";
         } else {
-            logger.error("Failed to delete book with id {}", book.getId());
+            logger.error("Failed to delete book with id {}", existingBook.getId());
             return "Error: Failed to delete book.";
         }
     }

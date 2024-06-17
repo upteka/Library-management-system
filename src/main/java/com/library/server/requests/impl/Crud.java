@@ -1,6 +1,7 @@
 package main.java.com.library.server.requests.impl;
 
 import main.java.com.library.common.entity.Entity;
+import main.java.com.library.common.entity.impl.User;
 import main.java.com.library.common.network.JwtUtil;
 import main.java.com.library.common.network.RequestPack;
 import main.java.com.library.common.network.ResponsePack;
@@ -83,12 +84,13 @@ public class Crud<T extends Entity> implements Request<T> {
      * 检查用户权限
      */
     private boolean hasPermission(String entityName, T data, String jwtToken) {
+        boolean isUser = data instanceof User;
         boolean isAdmin = JwtUtil.isaAdmin(jwtToken);
         boolean isTokenOwner = data != null && JwtUtil.isTokenOwner(jwtToken, data.getId());
 
         return switch (action.toLowerCase()) {
-            case "add", "delete" -> isAdmin;
-            case "update" -> isTokenOwner || isAdmin;
+            case "add" -> isAdmin;
+            case "update", "delete" -> (isTokenOwner && isUser) || isAdmin;
             case "get" -> true;
             default -> false;
         };
