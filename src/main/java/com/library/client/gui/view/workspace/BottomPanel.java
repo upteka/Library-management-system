@@ -90,13 +90,15 @@ public class BottomPanel extends JPanel {
         });
         pagePrevious.addActionListener(_ -> {
             try {
+                if (currentPage == 1) {
+                    Notification(mainFrame, "已经是第一页了！");
+                    return;
+                }
                 if (isSearching) searchNextOrPrevious(currentPage - 1);
                 else if (sortSearching)
                     topPanel.sortedBorrowRequest(currentPage - 1);
                 else if (!showType.isEmpty()) {
-                    if (currentPage == 1) Notification(mainFrame, "已经是第一页了！");
-                    else
-                        fetchDataAndShow(showTypeMap.get(showType).entity, showType, showTypeMap.get(showType).title, currentPage - 1);
+                    fetchDataAndShow(showTypeMap.get(showType).entity, showType, showTypeMap.get(showType).title, currentPage - 1);
                 }
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);

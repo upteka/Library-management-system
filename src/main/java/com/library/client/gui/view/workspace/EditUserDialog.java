@@ -38,8 +38,8 @@ public class EditUserDialog extends JDialog {
         easySetFormat(phoneField, panel, 3, "手机号");
         setFormat(buttonPanel, panel, new Insets(5, 5, 5, 5), 0, 4, 1, 1, 0, 20, 0, 1, 14, Font.BOLD);
 
-        setFormat(saveButton, buttonPanel, new Insets(10, 10, 10, 10), 0, 0, 1, 1, 0, 15, 0, 1, 14, Font.BOLD);
-        setFormat(cancelButton, buttonPanel, new Insets(10, 10, 10, 10), 1, 0, 1, 1, 0, 15, 0, 1, 14, Font.BOLD);
+        setFormat(saveButton, buttonPanel, new Insets(10, 10, 10, 10), 0, 0, 1, 0, 0, 15, 0, 1, 14, Font.BOLD);
+        setFormat(cancelButton, buttonPanel, new Insets(10, 10, 10, 10), 1, 0, 1, 0, 0, 15, 0, 1, 14, Font.BOLD);
 
         cancelButton.addActionListener(_ -> dispose());
         saveButton.addActionListener(_ -> {
@@ -77,7 +77,7 @@ public class EditUserDialog extends JDialog {
 
     private JTextField setArea(String content, int width) {
         JTextField area = new JTextField(content);
-        area.setPreferredSize(new Dimension(width, 20));
+        area.setPreferredSize(new Dimension(width, 40));
         return area;
     }
 }

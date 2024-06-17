@@ -94,13 +94,13 @@ public class WorkPanel extends JScrollPane {
     private JPanel setStatusColor(String data) {
         JPanel statusPanel = new JPanel(LAYOUT);
         JLabel statusArea = new JLabel();
-        statusArea.setPreferredSize(new Dimension(55, 20));
+        statusArea.setPreferredSize(new Dimension(66, 20));
         if (data.equals("available")) {
-            statusArea.setText("Available");
+            statusArea.setText("  Available");
             statusArea.setForeground(new Color(45, 88, 42));
             statusPanel.setBackground(new Color(222, 234, 221));
         } else {
-            statusArea.setText("Borrowed");
+            statusArea.setText("Unavailable");
             statusArea.setForeground(new Color(130, 28, 18));
             statusPanel.setBackground(new Color(251, 228, 224));
         }
@@ -367,7 +367,7 @@ public class WorkPanel extends JScrollPane {
             setFormat(setTextArea("用户名", 100, 13), p, new Insets(0, 10, 0, 0), 2, 0, 0, 0);
             setFormat(setTextArea("邮箱", 100, 13), p, new Insets(0, 30, 0, 0), 3, 0, 0, 0);
             setFormat(setTextArea("电话", 100, 13), p, new Insets(0, 20, 0, 0), 4, 0, 0, 0);
-            setFormat(setTextArea("注册时间", 100, 13), p, new Insets(0, 20, 0, 0), 5, 0, 0, 0);
+            setFormat(setTextArea("注册时间", 100, 13), p, new Insets(0, 0, 0, 0), 5, 0, 0, 0);
             setFormat(new JLabel(), p, new Insets(0, 0, 0, 0), 6, 0, 1, 0, 0, 0, 0, 1, 0, 0);
             return;
         }
