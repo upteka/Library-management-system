@@ -103,6 +103,10 @@ public class WorkPanel extends JScrollPane {
             statusArea.setText("Unavailable");
             statusArea.setForeground(new Color(130, 28, 18));
             statusPanel.setBackground(new Color(251, 228, 224));
+            if (data.equals("deleted")) {
+                statusArea.setText("   Deleted");
+                statusArea.setForeground(new Color(48, 48, 48));
+            }
         }
         statusPanel.add(statusArea);
         return statusPanel;
