@@ -33,6 +33,7 @@ public class EditBookDialog extends JDialog {
         JButton saveButton = new JButton("提交");
         JButton cancelButton = new JButton("取消");
 
+        if (isAdd) idField.setText("书籍ID由服务器生成");
         idField.setEditable(false);
 
         setColor(saveButton, new Color(72, 74, 77), new Color(230, 230, 230), BorderFactory.createEmptyBorder());
@@ -52,6 +53,10 @@ public class EditBookDialog extends JDialog {
 
         cancelButton.addActionListener(_ -> dispose());
         saveButton.addActionListener(_ -> {
+            if (isbnField.getText().isEmpty()) {
+                Notification(this, "ISBN不能为空！");
+                return;
+            }
             data.setTitle(titleField.getText());
             data.setAuthor(authorField.getText());
             data.setPublisher(publisherField.getText());
@@ -59,7 +64,7 @@ public class EditBookDialog extends JDialog {
             data.setIntroduction(introductionField.getText());
             data.setCount(Integer.parseInt(countField.getText()));
             data.setAvailableCount(Integer.valueOf(countField.getText()));
-            data.setStatus("available");
+            if (isAdd) data.setBookID("");
             try {
                 if (isAdd)
                     clientUtil.sendRequest(packRequest("add", data, "add", authResponse.getJwtToken()));
@@ -69,9 +74,10 @@ public class EditBookDialog extends JDialog {
                 if (response.isSuccess()) {
                     if (isAdd)
                         Notification(mainFrame, "添加成功！");
-                    else
+                    else {
                         Notification(mainFrame, "修改成功！");
-                    refreshPage();
+                        refreshPage();
+                    }
                 } else
                     Notification(this, "操作失败 " + response.getMessage());
             } catch (IOException | ClassNotFoundException e) {
