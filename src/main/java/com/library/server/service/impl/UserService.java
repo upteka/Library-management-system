@@ -84,7 +84,7 @@ public class UserService extends BaseService<User> {
         }
 
         User existingUser = super.get(user.getId());
-        if (existingUser == null) {
+        if (existingUser == null || existingUser.isDeleted()) {
             return "Failed to update user: User does not exist";
         }
 
