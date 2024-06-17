@@ -25,10 +25,10 @@ public class AccountPanel extends JPanel {
     private static int passwordStatus;
     private static String confirmPassword;
 
-    private static JTextField usernameField = null;
-    private static JTextField emailField = null;
-    private static JTextField phoneField = null;
-    private static JTextField passwordField = null;
+    private static JTextField usernameField = new JTextField();
+    private static JTextField emailField = new JTextField();
+    private static JTextField phoneField = new JTextField();
+    private static JTextField passwordField = new JPasswordField();
     private static JLabel passwordLabel = null;
 
     public AccountPanel() {
@@ -37,6 +37,14 @@ public class AccountPanel extends JPanel {
         JPanel welcomePanel = new JPanel(LAYOUT);
         JPanel titlePanel = new JPanel(LAYOUT);
         JPanel editAccountPanel = new JPanel(LAYOUT);
+
+        setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
+        usernameField = createTextField(currentUser.getUsername());
+        emailField = createTextField(currentUser.getEmail());
+        phoneField = createTextField(currentUser.getPhone());
+        passwordField = createTextField("");
+        passwordLabel = new JLabel("请输入旧密码");
 
         JButton passwordButton = setPasswordButton(passwordField);
         JButton saveButton = new JButton("提交");
@@ -48,11 +56,6 @@ public class AccountPanel extends JPanel {
         JPanel phonePanel = new JPanel(LAYOUT);
         JPanel passwordPanel = new JPanel(LAYOUT);
 
-        usernameField = createTextField(currentUser.getUsername());
-        emailField = createTextField(currentUser.getEmail());
-        phoneField = createTextField(currentUser.getPhone());
-        passwordField = createTextField("");
-        passwordLabel = new JLabel("请输入旧密码");
 
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String greeting;
@@ -181,8 +184,8 @@ public class AccountPanel extends JPanel {
         User user = new User();
         if (isChangePassword) user.setPassword(passwordField.getText());
         else user = new User(currentUser.getUsername(), "", "user", emailField.getText(), phoneField.getText());
-        user.setUserID(JwtUtil.extractUserId(response.getJwtToken()));
-        clientUtil.sendRequest(packRequest("update", user, "update", response.getJwtToken()));
+        user.setUserID(JwtUtil.extractUserId(authResponse.getJwtToken()));
+        clientUtil.sendRequest(packRequest("update", user, "update", authResponse.getJwtToken()));
         return clientUtil.receiveResponse();
     }
 
@@ -237,10 +240,10 @@ public class AccountPanel extends JPanel {
 
     public void deleteAll() {
         passwordStatus = 0;
-        usernameField = null;
-        emailField = null;
-        phoneField = null;
-        passwordField = null;
+        usernameField.setText("");
+        emailField.setText("");
+        phoneField.setText("");
+        passwordField.setText("");
         passwordLabel = null;
         System.gc();
     }

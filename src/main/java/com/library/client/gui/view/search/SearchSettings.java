@@ -14,10 +14,10 @@ public class SearchSettings extends JPanel {
     private static final GridBagLayout LAYOUT = new GridBagLayout();
     private static int currentField = 0;
     private static int currentSort = 0;
-    private static final String[][] fieldNameParams = {{"bookID", "书本ID"}, {"title", "书名"}, {"author", "作者"}, {"publisher", "出版社"}, {"ISBN", "ISBN"}};
+    private static final String[][] fieldNameParams = {{"title", "书名"}, {"bookID", "书本ID"}, {"author", "作者"}, {"publisher", "出版社"}, {"ISBN", "ISBN"}};
     private static final String[][] sortFieldParams = {{"", "搜索字段"}, {"count", "总量"}, {"availableCount", "余量"}, {"status", "可借出"}};
     private static final JButton[] buttons = {
-            new JButton("书本ID"),
+            new JButton("书名"),
             new JButton("排序字段"),
             new JButton("ASC"),
             new JButton("区分"),

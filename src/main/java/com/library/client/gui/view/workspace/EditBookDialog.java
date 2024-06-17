@@ -7,8 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
+import static main.java.com.library.client.gui.LoginPage.authResponse;
 import static main.java.com.library.client.gui.LoginPage.clientUtil;
-import static main.java.com.library.client.gui.LoginPage.response;
 import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
 import static main.java.com.library.client.gui.impl.ToolsIMPL.*;
@@ -33,9 +33,11 @@ public class EditBookDialog extends JDialog {
         JButton saveButton = new JButton("提交");
         JButton cancelButton = new JButton("取消");
 
+        if (isAdd) idField.setText("书籍ID由服务器生成");
+        idField.setEditable(false);
+
         setColor(saveButton, new Color(72, 74, 77), new Color(230, 230, 230), BorderFactory.createEmptyBorder());
         setColor(cancelButton, new Color(72, 74, 77), new Color(230, 230, 230), BorderFactory.createEmptyBorder());
-
 
         easySetFormat(idField, panel, 0, "书籍ID");
         easySetFormat(titleField, panel, 1, "书名");
@@ -44,31 +46,38 @@ public class EditBookDialog extends JDialog {
         easySetFormat(isbnField, panel, 4, "ISBN");
         easySetFormat(introductionField, panel, 5, "简介");
         easySetFormat(countField, panel, 6, "数量");
-        setFormat(buttonPanel, panel, new Insets(10, 10, 10, 10), 0, 6, 1, 1, 0, 20, 0, 1, 14, Font.BOLD);
+        setFormat(buttonPanel, panel, new Insets(10, 10, 10, 10), 0, 7, 1, 1, 0, 20, 0, 1, 14, Font.BOLD);
 
         setFormat(saveButton, buttonPanel, new Insets(10, 10, 10, 10), 0, 0, 1, 1, 15, 0, 0, 1, 14, Font.BOLD);
         setFormat(cancelButton, buttonPanel, new Insets(10, 10, 10, 10), 1, 0, 1, 1, 15, 0, 0, 1, 14, Font.BOLD);
 
         cancelButton.addActionListener(_ -> dispose());
         saveButton.addActionListener(_ -> {
+            if (isbnField.getText().isEmpty()) {
+                Notification(this, "ISBN不能为空！");
+                return;
+            }
             data.setTitle(titleField.getText());
             data.setAuthor(authorField.getText());
             data.setPublisher(publisherField.getText());
             data.setISBN(isbnField.getText());
             data.setIntroduction(introductionField.getText());
             data.setCount(Integer.parseInt(countField.getText()));
+            data.setAvailableCount(Integer.valueOf(countField.getText()));
+            if (isAdd) data.setBookID("");
             try {
                 if (isAdd)
-                    clientUtil.sendRequest(packRequest("add", data, "add", response.getJwtToken()));
+                    clientUtil.sendRequest(packRequest("add", data, "add", authResponse.getJwtToken()));
                 else
-                    clientUtil.sendRequest(packRequest("update", data, "update", response.getJwtToken()));
+                    clientUtil.sendRequest(packRequest("update", data, "update", authResponse.getJwtToken()));
                 ResponsePack<?> response = clientUtil.receiveResponse();
                 if (response.isSuccess()) {
                     if (isAdd)
                         Notification(mainFrame, "添加成功！");
-                    else
+                    else {
                         Notification(mainFrame, "修改成功！");
-                    refreshPage();
+                        refreshPage();
+                    }
                 } else
                     Notification(this, "操作失败 " + response.getMessage());
             } catch (IOException | ClassNotFoundException e) {

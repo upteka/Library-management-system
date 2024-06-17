@@ -44,7 +44,7 @@ public class TopPanel extends JPanel {
                     throw new RuntimeException(e);
                 }
             });
-        } else if (showType.equals("Book"))
+        } else if (showType.equals("Book") && currentUser.getRole().equals("admin"))
             addButton("添加书籍", gbc, 0, _ -> new EditBookDialog(mainFrame, new Book(), true));
     }
 
@@ -61,7 +61,7 @@ public class TopPanel extends JPanel {
         sortSearching = true;
         isSearching = false;
         String order = borrowingOnly ? "ASC" : "DESC";
-        clientUtil.sendRequest(packRequest("search", new BorrowRecord(), "search", response.getJwtToken(),
+        clientUtil.sendRequest(packRequest("search", new BorrowRecord(), "search", authResponse.getJwtToken(),
                 "userID", currentUser.getId(), "LIKE", "0", "returned", order, String.valueOf(page), String.valueOf(WorkSpace.pageSize),
                 "false", "AND", "null", "false", "null", "null", "null", "null"));
         ResponsePack<?> response = clientUtil.receiveResponse();

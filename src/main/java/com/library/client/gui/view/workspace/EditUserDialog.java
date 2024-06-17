@@ -50,7 +50,7 @@ public class EditUserDialog extends JDialog {
                 user.setPassword(passwordField.getText());
                 user.setEmail(emailField.getText());
                 user.setPhone(phoneField.getText());
-                clientUtil.sendRequest(packRequest("update", user, "update", response.getJwtToken()));
+                clientUtil.sendRequest(packRequest("update", user, "update", authResponse.getJwtToken()));
                 ResponsePack<?> response = clientUtil.receiveResponse();
                 if (response.isSuccess()) {
                     Notification(this, "修改成功！");

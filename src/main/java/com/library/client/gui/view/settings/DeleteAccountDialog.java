@@ -69,7 +69,7 @@ public class DeleteAccountDialog extends JDialog {
             User u = new User();
             u.setUserID(currentUser.getUserID());
             try {
-                clientUtil.sendRequest(packRequest("delete", u, "delete", response.getJwtToken()));
+                clientUtil.sendRequest(packRequest("delete", u, "delete", authResponse.getJwtToken()));
                 ResponsePack<?> response = clientUtil.receiveResponse();
                 if (response.isSuccess()) {
                     Notification(mainFrame, "删除成功！");
@@ -83,7 +83,7 @@ public class DeleteAccountDialog extends JDialog {
                     currentUser = null;
                     password = null;
                     LoginPage.startUp();
-                } else JOptionPane.showMessageDialog(mainFrame, "删除失败！请检查您是否仍有未归还书籍。");
+                } else JOptionPane.showMessageDialog(mainFrame, "删除失败！" + response.getMessage());
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

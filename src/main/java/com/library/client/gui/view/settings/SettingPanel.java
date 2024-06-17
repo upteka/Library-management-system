@@ -25,8 +25,9 @@ public class SettingPanel extends JPanel {
         JPanel timePanelSettings = new JPanel(LAYOUT);
         JPanel otherPanel = new JPanel(LAYOUT);
         JPanel setOtherPanel = new JPanel(LAYOUT);
+        setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
-        JLabel pageLabel = new JLabel("每页显示数量");
+        JLabel pageLabel = new JLabel("每页显示数量  ");
         JSeparator separator = new JSeparator();
 
         IntegerTextField itemsPerPage = new IntegerTextField(1, Integer.MAX_VALUE, 10);
@@ -34,7 +35,7 @@ public class SettingPanel extends JPanel {
         savePageNumber.putClientProperty("JButton.buttonType", "roundRect");
         JSlider pageSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 10);
 
-        JLabel notificationLabel = new JLabel("弹框时长设置 (单位：毫秒)");
+        JLabel notificationLabel = new JLabel("弹框时长设置 (单位：毫秒)  ");
         JSeparator separator0 = new JSeparator();
 
         IntegerTextField timeDelay = new IntegerTextField(1, Integer.MAX_VALUE, 2000);
@@ -44,7 +45,7 @@ public class SettingPanel extends JPanel {
         saveTimeDelay.putClientProperty("JButton.buttonType", "roundRect");
         JSlider timeSlider = new JSlider(JSlider.HORIZONTAL, 1, 10000, 2000);
 
-        JLabel otherLabel = new JLabel("用户设置");
+        JLabel otherLabel = new JLabel("用户设置  ");
         JSeparator separator1 = new JSeparator();
 
         JButton logout = new JButton("注销");
@@ -53,7 +54,6 @@ public class SettingPanel extends JPanel {
         deleteAccount.putClientProperty("JButton.buttonType", "roundRect");
         deleteAccount.setForeground(Color.RED);
         JLabel userType = new JLabel("当前用户类型: " + currentUser.getRole());
-
 
         setFormat(pageLabel, pagePanel, new Insets(0, 0, 0, 0),
                 0, 0, 16, Font.BOLD);
@@ -136,9 +136,8 @@ public class SettingPanel extends JPanel {
         });
         saveTimeDelay.addActionListener(_ -> {
             if (timeDelay.isValidInput()) {
-                int value = Integer.parseInt(timeDelay.getText());
-                Notification(mainFrame, "弹框时长已设为 " + value / 1000.0 + " 秒");
-                delayTime = value;
+                delayTime = Integer.parseInt(timeDelay.getText());
+                Notification(mainFrame, "弹框时长已设为 " + delayTime / 1000.0 + " 秒");
             } else Notification(mainFrame, "请输入一个正整数");
         });
         pageSlider.addChangeListener(_ -> itemsPerPage.setText("" + pageSlider.getValue()));

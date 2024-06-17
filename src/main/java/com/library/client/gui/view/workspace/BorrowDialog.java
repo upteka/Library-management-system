@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
 
+import static main.java.com.library.client.gui.LoginPage.authResponse;
 import static main.java.com.library.client.gui.LoginPage.clientUtil;
-import static main.java.com.library.client.gui.LoginPage.response;
 import static main.java.com.library.client.gui.MainPage.mainFrame;
 import static main.java.com.library.client.gui.effects.NotificationUtil.Notification;
 import static main.java.com.library.client.gui.view.workspace.BottomPanel.refreshPage;
@@ -115,8 +115,8 @@ public class BorrowDialog extends JDialog {
                 ResponsePack<?> responsePack = borrowRequest();
                 if (responsePack.isSuccess()) {
                     Notification(mainFrame, "借阅成功！");
-                    dispose();
                     refreshPage();
+                    dispose();
                 } else
                     Notification(mainFrame, "借阅失败 " + responsePack.getMessage());
             } catch (IOException | ClassNotFoundException e) {
@@ -169,8 +169,8 @@ public class BorrowDialog extends JDialog {
     }
 
     private ResponsePack<?> borrowRequest() throws IOException, ClassNotFoundException {
-        clientUtil.sendRequest(packRequest("borrow", new BorrowRecord(JwtUtil.extractUserId(response.getJwtToken()),
-                BookID, getInstant(), false), "borrow", response.getJwtToken()));
+        clientUtil.sendRequest(packRequest("borrow", new BorrowRecord(JwtUtil.extractUserId(authResponse.getJwtToken()),
+                BookID, getInstant(), false), "borrow", authResponse.getJwtToken()));
         return clientUtil.receiveResponse();
     }
 
