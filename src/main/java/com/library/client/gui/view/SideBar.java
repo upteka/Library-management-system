@@ -191,6 +191,7 @@ public class SideBar extends JPanel {
         SEARCH("搜索", _ -> mainPanel.showSearchPage()),
         MY_BORROWINGS("我的借阅", _ -> {
             try {
+                currentPage = 1;
                 fetchDataAndShow(new BorrowRecord(), "BorrowRecord", "借阅列表", currentPage);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -198,6 +199,7 @@ public class SideBar extends JPanel {
         }),
         MY_FAVORITES("我的收藏", _ -> {
             try {
+                currentPage = 1;
                 fetchDataAndShow(new FavoriteRecord(), "FavoriteRecord", "收藏列表", currentPage);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -210,6 +212,7 @@ public class SideBar extends JPanel {
                     Notification(mainFrame, "权限不足！");
                     return;
                 }
+                currentPage = 1;
                 fetchDataAndShow(new User(), "User", "用户列表", currentPage);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
